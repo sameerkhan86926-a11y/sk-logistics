@@ -3,774 +3,1406 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#10213a">
-<title>SK Logistics | Transport Management</title>
+<meta name="theme-color" content="#090d16">
+<title>SK LOGISTICS | Enterprise TMS & Freight Ledger</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 :root {
-  --navy:#10213a;--blue:#2459d3;--bg:#f3f6fb;--white:#fff;
-  --text:#182235;--muted:#6c778b;--green:#13865b;--red:#d94343;
-  --orange:#dc8a16;--border:#e2e8f0;
+  --navy: #090e17;
+  --navy-surface: #101726;
+  --navy-border: #1e293b;
+  --accent: #2563eb;
+  --accent-light: #3b82f6;
+  --accent-glow: rgba(37, 99, 235, 0.2);
+  --success: #059669;
+  --success-bg: #ecfdf5;
+  --success-border: #a7f3d0;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --warning-border: #fde68a;
+  --info: #0284c7;
+  --info-bg: #f0f9ff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --bg-body: #f8fafc;
+  --card-bg: #ffffff;
+  --border-light: #e2e8f0;
+  --border-focus: #94a3b8;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --radius-lg: 12px;
+  --radius-md: 8px;
 }
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.topbar{background:var(--navy);color:white;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.brand{font-size:23px;font-weight:800}
-.brand small{display:block;font-size:11px;font-weight:400;letter-spacing:2px;margin-top:5px;color:#b8c8e5}
-.top-actions{display:flex;gap:8px;flex-wrap:wrap}
-.container{max-width:1400px;margin:auto;padding:22px}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding:0 0 16px}
-.tab{border:1px solid var(--border);background:white;color:var(--text);border-radius:9px;padding:11px 15px;white-space:nowrap;font-weight:700}
-.tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--bg-body);color:var(--text-main);-webkit-font-smoothing:antialiased;line-height:1.5}
+button,input,select,textarea{font-family:inherit}
+
+/* Header & Navigation */
+.app-header{background:var(--navy);border-bottom:1px solid var(--navy-border);position:sticky;top:0;z-index:100}
+.header-inner{max-width:1440px;margin:auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand-group{display:flex;align-items:center;gap:12px}
+.brand-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--accent-light),#1d4ed8);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;box-shadow:0 0 15px var(--accent-glow)}
+.brand-text h1{font-size:18px;font-weight:800;color:#fff;letter-spacing:0.5px}
+.brand-text p{font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:1.5px;text-transform:uppercase}
+.system-clock{background:rgba(255,255,255,0.06);padding:6px 12px;border-radius:20px;font-size:12px;color:#cbd5e1;font-family:var(--font-mono);display:flex;align-items:center;gap:8px}
+.header-actions{display:flex;align-items:center;gap:10px}
+
+/* Layout */
+.layout-container{max-width:1440px;margin:auto;padding:24px}
+.nav-pills{display:flex;gap:8px;padding-bottom:20px;border-bottom:1px solid var(--border-light);margin-bottom:24px;overflow-x:auto}
+.nav-pill{background:#fff;border:1px solid var(--border-light);color:var(--text-muted);padding:10px 18px;border-radius:var(--radius-md);font-weight:600;font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .15s ease}
+.nav-pill:hover{color:var(--accent);border-color:var(--accent)}
+.nav-pill.active{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:var(--shadow-md)}
+
+/* UI Components */
 .page{display:none}
-.page.active{display:block}
-.heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
-h1{font-size:25px;margin:0 0 6px}
-h2{font-size:19px;margin:0 0 16px}
-.subtitle{color:var(--muted);font-size:13px}
-.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:22px}
-.card,.panel{background:white;border:1px solid var(--border);border-radius:13px;padding:19px;min-width:0}
-.card-label{color:var(--muted);font-size:13px}
-.card-value{font-size:25px;font-weight:800;margin:12px 0 5px;overflow-wrap:anywhere}
-.card-note{font-size:12px;color:var(--muted)}
-.green{color:var(--green)}.red{color:var(--red)}.orange{color:var(--orange)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.btn{border:0;border-radius:8px;padding:11px 15px;background:var(--blue);color:white;font-weight:700}
-.btn.secondary{background:#eaf0ff;color:#214ab2}
-.btn.dark{background:var(--navy);color:white}
-.btn.success{background:var(--green)}
-.btn.danger{background:#fff0f0;color:var(--red)}
-.btn.small{padding:7px 10px;font-size:12px}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
-.field{display:flex;flex-direction:column;gap:7px}
-.field label{font-size:13px;font-weight:700}
-.field input,.field select,.field textarea,.search-input{width:100%;padding:12px;border:1px solid #d7dfeb;border-radius:8px;background:white;color:var(--text);min-width:0}
-.field textarea{min-height:85px;resize:vertical}
-.field.full{grid-column:1/-1}
-.section-title{grid-column:1/-1;border-bottom:1px solid var(--border);padding-bottom:9px;font-size:15px;font-weight:800;margin-top:8px}
-.form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
-.toolbar input{flex:1;min-width:160px}
-.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px}
-table{width:100%;border-collapse:collapse;background:white;font-size:13px}
-th,td{padding:12px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
-th{background:#f7f9fc;color:#526079;font-size:12px}
-tr:last-child td{border-bottom:0}
-.badge{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:800}
-.badge.Booked{background:#e8efff;color:#2459d3}
-.badge.InTransit{background:#fff0d8;color:#9b5a00}
-.badge.Delivered{background:#dcf7e9;color:#08794c}
-.badge.Cancelled{background:#ffe5e5;color:#b42323}
-.empty{padding:25px;text-align:center;color:var(--muted)}
-.quick-buttons{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
-.notice{background:#fff8e8;border:1px solid #f4dfac;padding:12px;border-radius:9px;color:#80530b;font-size:13px;line-height:1.5;margin-bottom:17px}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
-.hidden{display:none!important}
-.money-line{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
-.money-line:last-child{border:0}
-.total-line{font-weight:800;font-size:17px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#10213a;color:white;padding:13px 18px;border-radius:10px;z-index:1000;display:none;max-width:90%;text-align:center}
-@media(max-width:900px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){
-.container{padding:13px}.topbar{padding:16px}.brand{font-size:21px}
-.cards{gap:9px}.card{padding:13px}.card-value{font-size:20px}
-.grid2{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}
-.field.full,.section-title{grid-column:1}h1{font-size:22px}.btn{padding:10px 12px}
-}
-@media print{
-body *{visibility:hidden!important}
-#printArea,#printArea *{visibility:visible!important}
-#printArea{display:block!important;position:absolute;left:0;top:0;width:100%;padding:20px;background:white;color:black}
-#printArea h1{text-align:center}
-#printArea table{font-size:12px}
-#printArea th,#printArea td{border:1px solid #888;white-space:normal}
-.no-print{display:none!important}
+.page.active{display:block;animation:fadeIn .2s ease-in-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.panel{background:var(--card-bg);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);margin-bottom:24px}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border-light)}
+.panel-title{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+.metric-card{background:#fff;border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:18px;position:relative;overflow:hidden;box-shadow:var(--shadow-sm)}
+.metric-card::after{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--accent)}
+.metric-card.profit::after{background:var(--success)}
+.metric-card.alert::after{background:var(--danger)}
+.metric-card.warning::after{background:var(--warning)}
+.metric-label{font-size:12.5px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px}
+.metric-value{font-size:24px;font-weight:800;margin:8px 0 4px;font-family:var(--font-mono);letter-spacing:-0.5px}
+.metric-note{font-size:12px;color:var(--text-muted)}
+
+/* Buttons & Inputs */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:var(--radius-md);font-weight:600;font-size:13.5px;cursor:pointer;border:1px solid transparent;transition:all .15s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#1d4ed8}
+.btn-secondary{background:#fff;border-color:var(--border-light);color:var(--text-main)}
+.btn-secondary:hover{background:#f1f5f9}
+.btn-dark{background:var(--navy);color:#fff}
+.btn-dark:hover{background:var(--navy-surface)}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger-bg);color:var(--danger);border-color:var(--danger-border)}
+.btn-danger:hover{background:var(--danger);color:#fff}
+.btn-sm{padding:6px 10px;font-size:12px}
+
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.field-group{display:flex;flex-direction:column;gap:6px}
+.field-group.full{grid-column:1/-1}
+.field-group label{font-size:12.5px;font-weight:600;color:#334155}
+.field-group input,.field-group select,.field-group textarea,.search-box{border:1px solid var(--border-light);border-radius:var(--radius-md);padding:10px 14px;font-size:14px;background:#fff;outline:none;transition:border-color .15s}
+.field-group input:focus,.field-group select:focus,.field-group textarea:focus,.search-box:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.field-group textarea{resize:vertical;min-height:75px}
+.form-section-title{grid-column:1/-1;font-size:13.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;padding:12px 0 4px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:8px}
+
+/* Tables */
+.table-responsive{overflow-x:auto;border:1px solid var(--border-light);border-radius:var(--radius-md);background:#fff}
+table{width:100%;border-collapse:collapse;font-size:13px;text-align:left}
+th{background:#f8fafc;padding:12px 14px;font-weight:700;color:#475569;border-bottom:1px solid var(--border-light);white-space:nowrap;font-size:12px;text-transform:uppercase}
+td{padding:12px 14px;border-bottom:1px solid var(--border-light);white-space:nowrap;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fafc}
+
+/* Status Badges */
+.badge{padding:4px 9px;border-radius:12px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:5px;border:1px solid transparent}
+.badge-booked{background:var(--info-bg);color:var(--info);border-color:#bae6fd}
+.badge-transit{background:var(--warning-bg);color:var(--warning);border-color:var(--warning-border)}
+.badge-delivered{background:var(--success-bg);color:var(--success);border-color:var(--success-border)}
+.badge-cancelled{background:var(--danger-bg);color:var(--danger);border-color:var(--danger-border)}
+
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,14,23,0.7);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:all .2s ease}
+.modal-overlay.active{opacity:1;pointer-events:all}
+.modal-card{background:#fff;border-radius:var(--radius-lg);width:95%;max-width:550px;padding:24px;box-shadow:var(--shadow-xl);transform:scale(0.95);transition:transform .2s ease}
+.modal-overlay.active .modal-card{transform:scale(1)}
+
+/* Toast */
+.toast-box{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:12px 20px;border-radius:var(--radius-md);font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-xl);z-index:9999;transform:translateY(100px);opacity:0;transition:all .25s ease}
+.toast-box.show{transform:translateY(0);opacity:1}
+
+/* Quick Bar */
+.action-banner{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe;border-radius:var(--radius-md);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+
+/* Print Styles: Standard Consignment Bilti & Thermal Slip */
+@media print {
+  body *{visibility:hidden!important}
+  #printStation, #printStation *{visibility:visible!important}
+  #printStation{position:absolute;left:0;top:0;width:100%;margin:0;padding:0;background:#fff;display:block!important}
+  .no-print{display:none!important}
+  
+  .bilti-container{border:2px solid #000;padding:16px;margin-bottom:20px;page-break-after:always;font-family:Arial,sans-serif;font-size:12px}
+  .bilti-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px}
+  .bilti-title{text-align:center;flex-grow:1}
+  .bilti-title h2{font-size:22px;font-weight:900;margin:0;letter-spacing:1px}
+  .bilti-title p{font-size:11px;margin:2px 0}
+  .bilti-copy-label{border:1px solid #000;padding:4px 8px;font-weight:bold;font-size:11px;text-transform:uppercase}
+  .grid-table{width:100%;border-collapse:collapse;margin:8px 0}
+  .grid-table th, .grid-table td{border:1px solid #000;padding:6px 8px;text-align:left}
+  .grid-table th{background:#eee}
+  .bilti-signatures{display:flex;justify-content:space-between;margin-top:40px;padding-top:10px}
+  .signature-line{border-top:1px dashed #000;width:180px;text-align:center;font-size:11px;font-weight:bold}
+
+  /* Thermal Profile */
+  .thermal-receipt{width:80mm;margin:0 auto;font-family:'Courier New',Courier,monospace;font-size:12px;padding:5px}
+  .thermal-receipt h3{text-align:center;font-size:15px;margin:2px 0}
+  .thermal-receipt .divider{border-bottom:1px dashed #000;margin:5px 0}
 }
 </style>
 </head>
 <body>
 
-<header class="topbar no-print">
-  <div class="brand">SK LOGISTICS<small>TRANSPORT MANAGEMENT SYSTEM</small></div>
-  <div class="top-actions">
-    <button class="btn secondary" onclick="exportCSV()">Export CSV</button>
-    <button class="btn" onclick="openPage('newBooking')">+ New Booking</button>
+<header class="app-header no-print">
+  <div class="header-inner">
+    <div class="brand-group">
+      <div class="brand-icon"><i class="fa-solid fa-truck-fast"></i></div>
+      <div class="brand-text">
+        <h1>SK LOGISTICS</h1>
+        <p>Enterprise Fleet & Freight Ledger</p>
+      </div>
+    </div>
+    <div class="system-clock">
+      <i class="fa-regular fa-clock"></i>
+      <span id="liveTimestamp">--:--:--</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary btn-sm" onclick="exportDataBackup()" title="Download JSON Backup"><i class="fa-solid fa-cloud-arrow-down"></i> Backup</button>
+      <label class="btn btn-secondary btn-sm" style="cursor:pointer" title="Restore Data from JSON">
+        <i class="fa-solid fa-cloud-arrow-up"></i> Restore
+        <input type="file" id="importInput" style="display:none" onchange="importDataBackup(event)" accept=".json">
+      </label>
+      <button class="btn btn-primary btn-sm" onclick="openPage('newBooking')"><i class="fa-solid fa-plus"></i> New Booking</button>
+    </div>
   </div>
 </header>
 
-<main class="container no-print">
-<nav class="tabs">
-  <button class="tab active" data-page="dashboard" onclick="openPage('dashboard')">Dashboard</button>
-  <button class="tab" data-page="bookings" onclick="openPage('bookings')">Bookings</button>
-  <button class="tab" data-page="newBooking" onclick="openPage('newBooking')">New Booking</button>
-  <button class="tab" data-page="customers" onclick="openPage('customers')">Customers</button>
-  <button class="tab" data-page="accounts" onclick="openPage('accounts')">Hisab-Kitab</button>
-  <button class="tab" data-page="reports" onclick="openPage('reports')">Reports</button>
-</nav>
+<main class="layout-container no-print">
+  <nav class="nav-pills" role="tablist">
+    <button class="nav-pill active" data-page="dashboard" onclick="openPage('dashboard')"><i class="fa-solid fa-chart-pie"></i> Executive Overview</button>
+    <button class="nav-pill" data-page="bookings" onclick="openPage('bookings')"><i class="fa-solid fa-list-check"></i> Trip Operations</button>
+    <button class="nav-pill" data-page="newBooking" onclick="openPage('newBooking')"><i class="fa-solid fa-file-circle-plus"></i> Consignment Registry</button>
+    <button class="nav-pill" data-page="customers" onclick="openPage('customers')"><i class="fa-solid fa-users"></i> Client Master</button>
+    <button class="nav-pill" data-page="accounts" onclick="openPage('accounts')"><i class="fa-solid fa-scale-balanced"></i> Financial Ledger</button>
+    <button class="nav-pill" data-page="reports" onclick="openPage('reports')"><i class="fa-solid fa-chart-line"></i> P&L Reports</button>
+  </nav>
 
-<section id="dashboard" class="page active">
-  <div class="heading">
-    <div><h1>Business Dashboard</h1><div class="subtitle">SK Logistics ka transport aur payment overview</div></div>
-    <button class="btn" onclick="openPage('newBooking')">+ Add Booking</button>
-  </div>
-  <div class="cards">
-    <div class="card"><div class="card-label">Total Bookings</div><div class="card-value" id="dBookings">0</div><div class="card-note">All transport bookings</div></div>
-    <div class="card"><div class="card-label">Active Trips</div><div class="card-value orange" id="dActive">0</div><div class="card-note">Booked or in transit</div></div>
-    <div class="card"><div class="card-label">Delivered Trips</div><div class="card-value green" id="dDelivered">0</div><div class="card-note">Successfully delivered</div></div>
-    <div class="card"><div class="card-label">Estimated Profit</div><div class="card-value green" id="dProfit">₹0</div><div class="card-note">Freight minus costs</div></div>
-    <div class="card"><div class="card-label">Customer Collection Due</div><div class="card-value red" id="dDue">₹0</div><div class="card-note">Customer freight outstanding</div></div>
-    <div class="card"><div class="card-label">Truck Owner Payment Due</div><div class="card-value orange" id="dOwnerDue">₹0</div><div class="card-note">Owner freight outstanding</div></div>
-    <div class="card"><div class="card-label">Total Customer Freight</div><div class="card-value" id="dFreight">₹0</div><div class="card-note">Booking freight value</div></div>
-    <div class="card"><div class="card-label">Total Trip Expenses</div><div class="card-value" id="dExpenses">₹0</div><div class="card-note">Recorded trip expenses</div></div>
-  </div>
-  <div class="quick-buttons">
-    <button class="btn" onclick="openPage('newBooking')">Create Booking</button>
-    <button class="btn secondary" onclick="openPage('accounts')">Check Payments</button>
-    <button class="btn secondary" onclick="openPage('reports')">View Reports</button>
-  </div>
-  <div class="panel"><h2>Recent Bookings</h2><div id="recentBookings"></div></div>
-</section>
-
-<section id="bookings" class="page">
-  <div class="heading">
-    <div><h1>Transport Bookings</h1><div class="subtitle">Bookings search karo, status badlo aur bilti print karo.</div></div>
-    <button class="btn" onclick="openPage('newBooking')">+ New Booking</button>
-  </div>
-  <div class="toolbar">
-    <input class="search-input" id="bookingSearch" placeholder="LR number, customer, route ya vehicle search..." oninput="renderBookings()">
-    <select class="search-input" id="statusFilter" onchange="renderBookings()" style="max-width:190px">
-      <option value="">All Statuses</option><option value="Booked">Booked</option><option value="In Transit">In Transit</option><option value="Delivered">Delivered</option><option value="Cancelled">Cancelled</option>
-    </select>
-  </div>
-  <div class="panel"><div id="bookingTable"></div></div>
-</section>
-
-<section id="newBooking" class="page">
-  <div class="heading"><div><h1 id="formHeading">Create New Booking</h1><div class="subtitle">Transport details aur freight information bharo.</div></div></div>
-  <form id="bookingForm" class="panel">
-    <input type="hidden" id="editId">
-    <div class="form-grid">
-      <div class="section-title">1. Booking Information</div>
-      <div class="field"><label>Booking Date *</label><input id="bookingDate" type="date" required></div>
-      <div class="field"><label>Customer Name *</label><input id="customer" list="customerSuggestions" required placeholder="Customer ka naam"><datalist id="customerSuggestions"></datalist></div>
-      <div class="field"><label>Customer Mobile</label><input id="customerMobile" type="tel" maxlength="15" placeholder="Mobile number"></div>
-      <div class="field"><label>Pickup Location *</label><input id="pickup" required placeholder="Loading city"></div>
-      <div class="field"><label>Delivery Location *</label><input id="destination" required placeholder="Unloading city"></div>
-      <div class="field"><label>Goods / Material *</label><input id="goods" required placeholder="Goods ka naam"></div>
-      <div class="field"><label>Weight</label><input id="weight" placeholder="e.g. 5 Ton"></div>
-      <div class="field"><label>Vehicle Type</label><select id="vehicleType"><option value="Truck">Truck</option><option value="Container">Container</option><option value="Trailer">Trailer</option><option value="Pickup">Pickup</option><option value="Tata Ace">Tata Ace</option><option value="Other">Other</option></select></div>
-      <div class="field"><label>Vehicle Number</label><input id="vehicleNo" placeholder="e.g. HR55AB1234"></div>
-      <div class="section-title">2. Driver & Truck Owner</div>
-      <div class="field"><label>Driver Name</label><input id="driver" placeholder="Driver name"></div>
-      <div class="field"><label>Driver Mobile</label><input id="driverMobile" type="tel" maxlength="15"></div>
-      <div class="field"><label>Truck Owner Name</label><input id="owner" placeholder="Truck owner"></div>
-      <div class="field"><label>Truck Owner Mobile</label><input id="ownerMobile" type="tel" maxlength="15"></div>
-      <div class="field"><label>Trip Status</label><select id="status"><option>Booked</option><option>In Transit</option><option>Delivered</option><option>Cancelled</option></select></div>
-      <div class="field"><label>Expected Delivery Date</label><input id="deliveryDate" type="date"></div>
-      <div class="section-title">3. Freight & Payment</div>
-      <div class="field"><label>Customer Freight (₹) *</label><input id="freight" type="number" min="0" step="0.01" required value="0"></div>
-      <div class="field"><label>Truck Owner Freight (₹)</label><input id="ownerFreight" type="number" min="0" step="0.01" value="0"></div>
-      <div class="field"><label>Trip Expenses (₹)</label><input id="expenses" type="number" min="0" step="0.01" value="0"></div>
-      <div class="field"><label>Customer Amount Received (₹)</label><input id="received" type="number" min="0" step="0.01" value="0"></div>
-      <div class="field"><label>Owner Amount Paid (₹)</label><input id="paid" type="number" min="0" step="0.01" value="0"></div>
-      <div class="field"><label>Other Notes</label><input id="notes" placeholder="Optional details"></div>
-      <div class="field full"><div class="notice" id="profitPreview">Estimated profit: ₹0 | Customer due: ₹0 | Owner due: ₹0</div></div>
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="page active">
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-label">Total Freight Bookings</div>
+        <div class="metric-value" id="kpiBookings">0</div>
+        <div class="metric-note">Lifetime consignments</div>
+      </div>
+      <div class="metric-card warning">
+        <div class="metric-label">Active Deployments</div>
+        <div class="metric-value" id="kpiActive">0</div>
+        <div class="metric-note">In loading or transit</div>
+      </div>
+      <div class="metric-card profit">
+        <div class="metric-label">Delivered Successfully</div>
+        <div class="metric-value" id="kpiDelivered">0</div>
+        <div class="metric-note">POD confirmed</div>
+      </div>
+      <div class="metric-card profit">
+        <div class="metric-label">Estimated Net Yield</div>
+        <div class="metric-value" id="kpiNetProfit">₹0</div>
+        <div class="metric-note">Freight margin over fleet costs</div>
+      </div>
+      <div class="metric-card alert">
+        <div class="metric-label">Customer Receivables Due</div>
+        <div class="metric-value" id="kpiCustomerDue">₹0</div>
+        <div class="metric-note">Consignor collection pending</div>
+      </div>
+      <div class="metric-card warning">
+        <div class="metric-label">Truck Owner Payables</div>
+        <div class="metric-value" id="kpiOwnerDue">₹0</div>
+        <div class="metric-note">Freight balance owed to fleet</div>
+      </div>
     </div>
-    <div class="form-actions">
-      <button type="submit" class="btn" id="saveButton">Save Booking</button>
-      <button type="button" class="btn secondary" onclick="resetForm()">Clear Form</button>
-      <button type="button" class="btn dark" onclick="openPage('bookings')">Back to Bookings</button>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-bolt-lightning text-accent"></i> Real-time Consignment Stream</div>
+        <button class="btn btn-secondary btn-sm" onclick="openPage('bookings')">Inspect All Records</button>
+      </div>
+      <div id="recentBookingsContainer"></div>
     </div>
-  </form>
-</section>
+  </section>
 
-<section id="customers" class="page">
-  <div class="heading"><div><h1>Customer Management</h1><div class="subtitle">Customer list aur unka payment balance.</div></div></div>
-  <div class="toolbar"><input id="customerSearch" class="search-input" placeholder="Customer name ya mobile search..." oninput="renderCustomers()"></div>
-  <div class="panel"><div id="customerTable"></div></div>
-</section>
-
-<section id="accounts" class="page">
-  <div class="heading"><div><h1>Hisab-Kitab</h1><div class="subtitle">Customer collection aur truck owner payments.</div></div></div>
-  <div class="cards">
-    <div class="card"><div class="card-label">Customer Freight</div><div class="card-value" id="aFreight">₹0</div></div>
-    <div class="card"><div class="card-label">Customer Received</div><div class="card-value green" id="aReceived">₹0</div></div>
-    <div class="card"><div class="card-label">Customer Due</div><div class="card-value red" id="aDue">₹0</div></div>
-    <div class="card"><div class="card-label">Owner Payment Due</div><div class="card-value orange" id="aOwnerDue">₹0</div></div>
-  </div>
-  <div class="grid2">
-    <div class="panel"><h2>Customer Collection Pending</h2><div id="customerDues"></div></div>
-    <div class="panel"><h2>Truck Owner Payment Pending</h2><div id="ownerDues"></div></div>
-  </div>
-  <div class="notice" style="margin-top:18px">Payment update karne ke liye booking edit karo aur received ya paid amount update karke save karo.</div>
-</section>
-
-<section id="reports" class="page">
-  <div class="heading"><div><h1>Business Reports</h1><div class="subtitle">Freight, expenses aur estimated profit ka overview.</div></div><button class="btn" onclick="exportCSV()">Export CSV</button></div>
-  <div class="panel">
-    <div class="field" style="max-width:280px;margin-bottom:18px"><label>Report Period</label><select id="reportPeriod" onchange="renderReports()"><option value="all">All Bookings</option><option value="month">This Month</option><option value="today">Today</option><option value="year">This Year</option></select></div>
-    <div class="cards">
-      <div class="card"><div class="card-label">Bookings</div><div class="card-value" id="rCount">0</div></div>
-      <div class="card"><div class="card-label">Total Freight</div><div class="card-value" id="rFreight">₹0</div></div>
-      <div class="card"><div class="card-label">Total Costs</div><div class="card-value" id="rCosts">₹0</div></div>
-      <div class="card"><div class="card-label">Estimated Profit</div><div class="card-value green" id="rProfit">₹0</div></div>
+  <!-- BOOKINGS -->
+  <section id="bookings" class="page">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-list-check"></i> Freight Movement Roster</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input class="search-box" id="globalTripSearch" placeholder="Search LR, Party, Route, Vehicle..." oninput="renderBookingsTable()" style="min-width:280px">
+          <select class="search-box" id="statusFilterSelector" onchange="renderBookingsTable()">
+            <option value="">All Statuses</option>
+            <option value="Booked">Booked</option>
+            <option value="In Transit">In Transit</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" onclick="exportCSV()"><i class="fa-solid fa-file-excel"></i> Export Master CSV</button>
+        </div>
+      </div>
+      <div id="masterBookingsTable"></div>
     </div>
-    <div id="reportSummary"></div>
-  </div>
-</section>
+  </section>
+
+  <!-- NEW/EDIT BOOKING -->
+  <section id="newBooking" class="page">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <i class="fa-solid fa-file-signature"></i>
+          <span id="bookingFormModeText">Generate Consignment Note</span>
+        </div>
+        <div id="bookingEditBadge" style="display:none" class="badge badge-booked">Editing Record</div>
+      </div>
+
+      <form id="consignmentForm">
+        <input type="hidden" id="entry_recordId">
+        <div class="form-grid">
+          <div class="form-section-title"><i class="fa-solid fa-calendar-check"></i> 1. Booking Metadata</div>
+          <div class="field-group">
+            <label>Booking Date *</label>
+            <input type="date" id="entry_bookingDate" required>
+          </div>
+          <div class="field-group">
+            <label>Consignor / Party Name *</label>
+            <input type="text" id="entry_customer" list="customerDirectoryList" placeholder="Firm or client name" required>
+            <datalist id="customerDirectoryList"></datalist>
+          </div>
+          <div class="field-group">
+            <label>Consignor Contact</label>
+            <input type="tel" id="entry_customerMobile" placeholder="WhatsApp / Mobile No." maxlength="15">
+          </div>
+
+          <div class="form-section-title"><i class="fa-solid fa-route"></i> 2. Origin, Route & Cargo Specification</div>
+          <div class="field-group">
+            <label>Loading Point (From) *</label>
+            <input type="text" id="entry_pickup" placeholder="City or Warehouse hub" required>
+          </div>
+          <div class="field-group">
+            <label>Unloading Point (To) *</label>
+            <input type="text" id="entry_destination" placeholder="Destination point" required>
+          </div>
+          <div class="field-group">
+            <label>Material / Commodity *</label>
+            <input type="text" id="entry_goods" placeholder="Goods nature & packing" required>
+          </div>
+          <div class="field-group">
+            <label>Weight / Packages</label>
+            <input type="text" id="entry_weight" placeholder="e.g. 14.50 MT / 400 Bags">
+          </div>
+          <div class="field-group">
+            <label>Fleet Configuration</label>
+            <select id="entry_vehicleType">
+              <option value="Open Truck 14 Wheeler">Open Truck (Multi-Axle)</option>
+              <option value="Taurus 10 Wheeler">Taurus (10 Wheeler)</option>
+              <option value="Container 32ft MX">Container 32ft MX</option>
+              <option value="Container 32ft SXL">Container 32ft SXL</option>
+              <option value="Trailer 40ft High Bed">Trailer 40ft</option>
+              <option value="Eicher 17-19ft">Eicher 17-19ft</option>
+              <option value="Pickup / Bolero Maxi">Pickup / Bolero Maxi</option>
+              <option value="Tata Ace">Tata Ace</option>
+              <option value="Other">Custom Rig</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Registration Number</label>
+            <input type="text" id="entry_vehicleNo" placeholder="e.g. NL01AB1234" style="text-transform:uppercase">
+          </div>
+
+          <div class="form-section-title"><i class="fa-solid fa-user-shield"></i> 3. Fleet Carrier & Driver Logistics</div>
+          <div class="field-group">
+            <label>Driver In-Charge</label>
+            <input type="text" id="entry_driver" placeholder="Driver full name">
+          </div>
+          <div class="field-group">
+            <label>Driver Phone No.</label>
+            <input type="tel" id="entry_driverMobile" placeholder="Contact number" maxlength="15">
+          </div>
+          <div class="field-group">
+            <label>Vehicle Owner / Broker</label>
+            <input type="text" id="entry_owner" placeholder="Owner / Supplier name">
+          </div>
+          <div class="field-group">
+            <label>Owner Phone No.</label>
+            <input type="tel" id="entry_ownerMobile" placeholder="Owner contact" maxlength="15">
+          </div>
+          <div class="field-group">
+            <label>Transit Status</label>
+            <select id="entry_status">
+              <option value="Booked">Booked</option>
+              <option value="In Transit">In Transit</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Expected Unloading Date</label>
+            <input type="date" id="entry_deliveryDate">
+          </div>
+
+          <div class="form-section-title"><i class="fa-solid fa-indian-rupee-sign"></i> 4. Commercial & Financials</div>
+          <div class="field-group">
+            <label>Consignor Billed Freight (₹) *</label>
+            <input type="number" id="entry_freight" step="0.01" min="0" value="0" required>
+          </div>
+          <div class="field-group">
+            <label>Truck Hire Cost (₹)</label>
+            <input type="number" id="entry_ownerFreight" step="0.01" min="0" value="0">
+          </div>
+          <div class="field-group">
+            <label>Direct Trip Expenses (₹)</label>
+            <input type="number" id="entry_expenses" step="0.01" min="0" value="0">
+          </div>
+          <div class="field-group">
+            <label>Customer Advance / Received (₹)</label>
+            <input type="number" id="entry_received" step="0.01" min="0" value="0">
+          </div>
+          <div class="field-group">
+            <label>Advance Paid to Truck (₹)</label>
+            <input type="number" id="entry_paid" step="0.01" min="0" value="0">
+          </div>
+          <div class="field-group">
+            <label>Trip Remarks / Terms</label>
+            <input type="text" id="entry_notes" placeholder="Special handling or payment remarks">
+          </div>
+
+          <div class="field-group full">
+            <div class="action-banner" id="liveFinancePreview">
+              <div>
+                <strong>Yield Preview: </strong>
+                <span id="previewMargin">Margin: ₹0</span>
+              </div>
+              <div>
+                <span id="previewClientBalance">Client Due: ₹0</span> |
+                <span id="previewOwnerBalance">Owner Due: ₹0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap">
+          <button type="submit" class="btn btn-primary" id="saveBookingSubmitBtn"><i class="fa-solid fa-check"></i> Finalize & Post Consignment</button>
+          <button type="button" class="btn btn-secondary" onclick="resetEntryForm()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          <button type="button" class="btn btn-dark" onclick="openPage('bookings')"><i class="fa-solid fa-arrow-left"></i> Back to Roster</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- CUSTOMERS -->
+  <section id="customers" class="page">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-building-user"></i> Client Freight Directory</div>
+        <input class="search-box" id="customerSearchInput" placeholder="Filter client name or phone..." oninput="renderCustomerMaster()">
+      </div>
+      <div id="customerMasterTable"></div>
+    </div>
+  </section>
+
+  <!-- ACCOUNTS -->
+  <section id="accounts" class="page">
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-label">Gross Billed Freight</div>
+        <div class="metric-value" id="accGrossFreight">₹0</div>
+        <div class="metric-note">Consignor billing aggregate</div>
+      </div>
+      <div class="metric-card profit">
+        <div class="metric-label">Total Realized Collection</div>
+        <div class="metric-value" id="accRealizedCollection">₹0</div>
+        <div class="metric-note">Received in bank / cash</div>
+      </div>
+      <div class="metric-card alert">
+        <div class="metric-label">Outstanding Customer Dues</div>
+        <div class="metric-value" id="accOutstandingReceivables">₹0</div>
+        <div class="metric-note">Actionable market balances</div>
+      </div>
+      <div class="metric-card warning">
+        <div class="metric-label">Supplier Payables Balance</div>
+        <div class="metric-value" id="accTruckOwnerPayables">₹0</div>
+        <div class="metric-note">Pending fleet settlement</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title text-danger"><i class="fa-solid fa-hand-holding-dollar"></i> Customer Recoveries Due</div>
+        </div>
+        <div id="receivableDuesList"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title text-warning"><i class="fa-solid fa-money-bill-transfer"></i> Carrier Balances Payable</div>
+        </div>
+        <div id="payableDuesList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPORTS -->
+  <section id="reports" class="page">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-chart-line"></i> Freight Margin & Operational Analytics</div>
+        <div style="display:flex;gap:10px">
+          <select class="search-box" id="reportIntervalSelect" onchange="renderBusinessReports()">
+            <option value="all">Lifetime History</option>
+            <option value="month">This Month</option>
+            <option value="today">Today</option>
+            <option value="year">Current Financial Year</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" onclick="exportCSV()"><i class="fa-solid fa-file-excel"></i> Export Ledger</button>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-label">Trips Dispatched</div>
+          <div class="metric-value" id="repTripVolume">0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Consignor Freight</div>
+          <div class="metric-value" id="repFreightTotal">₹0</div>
+        </div>
+        <div class="metric-card alert">
+          <div class="metric-label">Total Outflow & Fuel</div>
+          <div class="metric-value" id="repTotalExpenses">₹0</div>
+        </div>
+        <div class="metric-card profit">
+          <div class="metric-label">Net Operating Yield</div>
+          <div class="metric-value" id="repNetSurplus">₹0</div>
+        </div>
+      </div>
+
+      <div id="reportAnalyticalSummary"></div>
+    </div>
+  </section>
 </main>
 
-<div id="printArea" class="hidden"></div>
-<footer class="no-print">SK Logistics · Transport Management System</footer>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<!-- PRINT STATION: Consignment Note (3 Copies) & Thermal Slip -->
+<div id="printStation" class="hidden"></div>
+
+<!-- DIRECT LEDGER QUICK ENTRY MODAL -->
+<div class="modal-overlay" id="quickPayModal">
+  <div class="modal-card">
+    <div class="panel-header">
+      <div class="panel-title" id="quickPayTitle">Post Financial Transaction</div>
+      <button class="btn btn-secondary btn-sm" onclick="closeQuickPayModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <input type="hidden" id="quickPayBookingId">
+    <input type="hidden" id="quickPayType">
+    <div class="field-group" style="margin-bottom:12px">
+      <label id="quickPayLabel">Amount (₹)</label>
+      <input type="number" id="quickPayInput" step="0.01" min="0" placeholder="0.00">
+    </div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px" id="quickPayMeta"></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px">
+      <button class="btn btn-secondary" onclick="closeQuickPayModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitQuickPay()"><i class="fa-solid fa-check"></i> Commit Payment</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-box" id="liveToast" role="alert">
+  <i class="fa-solid fa-circle-check"></i>
+  <span id="liveToastMsg">Action completed successfully</span>
+</div>
 
 <script>
 "use strict";
 
-const STORAGE_KEY = "sklogistics_bookings_v1";
-let bookings = [];
-let toastTimer;
+const DB_KEY = "sklogistics_enterprise_v2";
+let fleetData = [];
+let toastDismissTimer;
 
-function today() {
+// Date utilities
+function getTodayDate() {
   const d = new Date();
   return d.getFullYear() + "-" +
-    String(d.getMonth()+1).padStart(2,"0") + "-" +
-    String(d.getDate()).padStart(2,"0");
+    String(d.getMonth() + 1).padStart(2, "0") + "-" +
+    String(d.getDate()).padStart(2, "0");
 }
 
-function loadBookings() {
+function updateLiveClock() {
+  const d = new Date();
+  const el = document.getElementById("liveTimestamp");
+  if(el) el.textContent = d.toLocaleTimeString('en-IN', {hour12:true});
+}
+setInterval(updateLiveClock, 1000);
+updateLiveClock();
+
+// Numeric Formatting
+function formatINR(val) {
+  const num = Number(val) || 0;
+  return "₹" + num.toLocaleString("en-IN", {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 0
+  });
+}
+
+function parseValidNum(val) {
+  const n = parseFloat(val);
+  return (Number.isFinite(n) && n >= 0) ? n : 0;
+}
+
+function cleanStr(s) {
+  return String(s ?? "").trim();
+}
+
+function escapeHtml(str) {
+  return String(str ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+// Storage Operations
+function loadPersistence() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    bookings = Array.isArray(parsed) ? parsed : [];
-  } catch (e) {
-    bookings = [];
-    console.error("Booking data load error:", e);
-    alert("Browser se purana data read nahi ho paaya. Site ko Safari mein kholkar dobara try karo.");
+    const raw = localStorage.getItem(DB_KEY);
+    if (!raw) {
+      // Check legacy migration
+      const legacy = localStorage.getItem("sklogistics_bookings_v1");
+      fleetData = legacy ? JSON.parse(legacy) : [];
+      return;
+    }
+    fleetData = JSON.parse(raw);
+    if (!Array.isArray(fleetData)) fleetData = [];
+  } catch (err) {
+    console.error("Critical storage read exception:", err);
+    fleetData = [];
   }
 }
 
-function saveBookings() {
+function savePersistence() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
+    localStorage.setItem(DB_KEY, JSON.stringify(fleetData));
     return true;
-  } catch (e) {
-    console.error("Booking save error:", e);
-    alert("Booking save nahi hui. Browser storage available nahi hai. Site ko Safari mein kholkar dobara try karo.");
+  } catch (err) {
+    console.error("Local storage allocation error:", err);
+    triggerAlert("LocalStorage quota exceeded or unavailable. Please backup your data.");
     return false;
   }
 }
 
-function money(value) {
-  return "₹" + (Number(value) || 0).toLocaleString("en-IN", {maximumFractionDigits:2});
+// Financial Computations
+function calcProfit(entry) {
+  return parseValidNum(entry.freight) - parseValidNum(entry.ownerFreight) - parseValidNum(entry.expenses);
 }
 
-function number(value) {
-  const n = Number(value);
-  return Number.isFinite(n) ? Math.max(0,n) : 0;
+function calcCustomerDue(entry) {
+  return Math.max(0, parseValidNum(entry.freight) - parseValidNum(entry.received));
 }
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+function calcOwnerDue(entry) {
+  return Math.max(0, parseValidNum(entry.ownerFreight) - parseValidNum(entry.paid));
 }
 
-function profit(b) { return number(b.freight)-number(b.ownerFreight)-number(b.expenses); }
-function customerDue(b) { return Math.max(0,number(b.freight)-number(b.received)); }
-function ownerDue(b) { return Math.max(0,number(b.ownerFreight)-number(b.paid)); }
-
-function notify(message) {
-  const el = document.getElementById("toast");
-  el.textContent = message;
-  el.style.display = "block";
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.style.display = "none", 3000);
-}
-
-/* FIX: LR generation no longer depends on a separate localStorage counter. */
-function generateLR() {
-  const datePart = today().replace(/-/g,"");
-  const prefix = "SKL-" + datePart + "-";
-  let maxNumber = 0;
-
-  bookings.forEach(b => {
+function generateLRSeries() {
+  const prefix = "SKL-" + getTodayDate().replace(/-/g, "") + "-";
+  let maxSeq = 0;
+  fleetData.forEach(b => {
     const lr = String(b.lr || "");
     if (lr.startsWith(prefix)) {
-      const suffix = Number(lr.slice(prefix.length));
-      if (Number.isInteger(suffix) && suffix > maxNumber) maxNumber = suffix;
+      const seq = parseInt(lr.slice(prefix.length), 10);
+      if (!isNaN(seq) && seq > maxSeq) maxSeq = seq;
     }
   });
-
-  return prefix + String(maxNumber + 1).padStart(4,"0");
+  return prefix + String(maxSeq + 1).padStart(4, "0");
 }
 
-function makeId() {
-  try {
-    if (window.crypto && typeof window.crypto.randomUUID === "function") {
-      return window.crypto.randomUUID();
-    }
-  } catch (e) {
-    console.warn("UUID unavailable; using fallback ID.");
-  }
-  return "SK-" + Date.now() + "-" + Math.random().toString(36).slice(2,10);
+function triggerToast(msg) {
+  const toast = document.getElementById("liveToast");
+  const toastMsg = document.getElementById("liveToastMsg");
+  toastMsg.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(toastDismissTimer);
+  toastDismissTimer = setTimeout(() => toast.classList.remove("show"), 3200);
 }
 
-function openPage(id) {
+function triggerAlert(msg) {
+  alert(msg);
+}
+
+// Page Navigation
+function openPage(pageKey) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".nav-pill").forEach(pill => pill.classList.remove("active"));
 
-  const page = document.getElementById(id);
-  if (!page) return;
+  const targetPage = document.getElementById(pageKey);
+  const targetPill = document.querySelector(`.nav-pill[data-page="${pageKey}"]`);
 
-  page.classList.add("active");
-  const tab = document.querySelector('[data-page="' + id + '"]');
-  if (tab) tab.classList.add("active");
+  if (targetPage) targetPage.classList.add("active");
+  if (targetPill) targetPill.classList.add("active");
 
-  if (id === "newBooking" && !document.getElementById("editId").value &&
-      !document.getElementById("bookingDate").value) {
-    document.getElementById("bookingDate").value = today();
+  if (pageKey === "newBooking" && !document.getElementById("entry_recordId").value) {
+    document.getElementById("entry_bookingDate").value = getTodayDate();
   }
 
-  refreshAll();
-  window.scrollTo({top:0,behavior:"auto"});
+  renderAllViews();
+  window.scrollTo({top: 0, behavior: "smooth"});
 }
 
-const fields = [
-  "bookingDate","customer","customerMobile","pickup","destination",
-  "goods","weight","vehicleType","vehicleNo","driver","driverMobile",
-  "owner","ownerMobile","status","deliveryDate","freight","ownerFreight",
-  "expenses","received","paid","notes"
+// Registry Form Handling
+const entryFieldKeys = [
+  "bookingDate", "customer", "customerMobile", "pickup", "destination",
+  "goods", "weight", "vehicleType", "vehicleNo", "driver", "driverMobile",
+  "owner", "ownerMobile", "status", "deliveryDate", "freight", "ownerFreight",
+  "expenses", "received", "paid", "notes"
 ];
 
-function readForm() {
-  const b = {};
-  fields.forEach(id => {
-    const el = document.getElementById(id);
-    b[id] = el ? el.value.trim() : "";
+function extractFormDataset() {
+  const payload = {};
+  entryFieldKeys.forEach(k => {
+    const el = document.getElementById("entry_" + k);
+    payload[k] = el ? cleanStr(el.value) : "";
   });
-  ["freight","ownerFreight","expenses","received","paid"].forEach(id => {
-    b[id] = number(b[id]);
+  // numeric sanitization
+  ["freight", "ownerFreight", "expenses", "received", "paid"].forEach(k => {
+    payload[k] = parseValidNum(payload[k]);
   });
-  return b;
+  return payload;
 }
 
-function setForm(b) {
-  fields.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = b[id] ?? "";
+function populateEntryForm(b) {
+  entryFieldKeys.forEach(k => {
+    const el = document.getElementById("entry_" + k);
+    if (el) el.value = b[k] ?? "";
   });
-  updatePreview();
+  recalculateFormMargins();
 }
 
-function resetForm() {
-  document.getElementById("bookingForm").reset();
-  document.getElementById("editId").value = "";
-  document.getElementById("bookingDate").value = today();
-  document.getElementById("formHeading").textContent = "Create New Booking";
-  document.getElementById("saveButton").textContent = "Save Booking";
-  ["freight","ownerFreight","expenses","received","paid"].forEach(id => {
-    document.getElementById(id).value = "0";
+function resetEntryForm() {
+  document.getElementById("consignmentForm").reset();
+  document.getElementById("entry_recordId").value = "";
+  document.getElementById("entry_bookingDate").value = getTodayDate();
+  document.getElementById("bookingFormModeText").textContent = "Generate Consignment Note";
+  document.getElementById("bookingEditBadge").style.display = "none";
+  document.getElementById("saveBookingSubmitBtn").innerHTML = '<i class="fa-solid fa-check"></i> Finalize & Post Consignment';
+  ["freight", "ownerFreight", "expenses", "received", "paid"].forEach(k => {
+    const el = document.getElementById("entry_" + k);
+    if (el) el.value = "0";
   });
-  updatePreview();
+  recalculateFormMargins();
 }
 
-/* FIX: whole submit process is protected; unexpected errors now show an alert. */
-document.getElementById("bookingForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+function recalculateFormMargins() {
+  const freight = parseValidNum(document.getElementById("entry_freight")?.value);
+  const ownerFreight = parseValidNum(document.getElementById("entry_ownerFreight")?.value);
+  const expenses = parseValidNum(document.getElementById("entry_expenses")?.value);
+  const received = parseValidNum(document.getElementById("entry_received")?.value);
+  const paid = parseValidNum(document.getElementById("entry_paid")?.value);
 
+  const margin = freight - ownerFreight - expenses;
+  const clientDue = Math.max(0, freight - received);
+  const ownerDue = Math.max(0, ownerFreight - paid);
+
+  const previewMargin = document.getElementById("previewMargin");
+  const previewClientBalance = document.getElementById("previewClientBalance");
+  const previewOwnerBalance = document.getElementById("previewOwnerBalance");
+
+  if (previewMargin) {
+    previewMargin.textContent = `Operating Margin: ${formatINR(margin)}`;
+    previewMargin.style.color = margin >= 0 ? "var(--success)" : "var(--danger)";
+  }
+  if (previewClientBalance) previewClientBalance.textContent = `Client Outstanding: ${formatINR(clientDue)}`;
+  if (previewOwnerBalance) previewOwnerBalance.textContent = `Fleet Balance: ${formatINR(ownerDue)}`;
+}
+
+["entry_freight", "entry_ownerFreight", "entry_expenses", "entry_received", "entry_paid"].forEach(id => {
+  document.getElementById(id)?.addEventListener("input", recalculateFormMargins);
+});
+
+// Consignment Submission
+document.getElementById("consignmentForm").addEventListener("submit", function(evt) {
+  evt.preventDefault();
   try {
-    const b = readForm();
-    const editId = document.getElementById("editId").value;
+    const payload = extractFormDataset();
+    const editRecId = document.getElementById("entry_recordId").value;
 
-    if (!b.customer || !b.pickup || !b.destination || !b.goods) {
-      alert("Customer, pickup, destination aur goods ki details bharo.");
+    if (!payload.customer || !payload.pickup || !payload.destination || !payload.goods) {
+      triggerAlert("Please complete required logistics fields (Customer, Origin, Destination, Commodity).");
       return;
     }
 
-    if (b.received > b.freight &&
-        !confirm("Received amount customer freight se zyada hai. Kya save karna hai?")) return;
+    if (payload.received > payload.freight) {
+      if (!confirm("Received amount exceeds total billed freight. Accept surplus advance?")) return;
+    }
 
-    if (b.paid > b.ownerFreight &&
-        !confirm("Paid amount owner freight se zyada hai. Kya save karna hai?")) return;
+    if (payload.paid > payload.ownerFreight) {
+      if (!confirm("Amount paid to carrier exceeds total hiring freight. Continue?")) return;
+    }
 
-    const oldBookings = bookings.map(x => ({...x}));
-    const timestamp = new Date().toISOString();
+    const stamp = new Date().toISOString();
 
-    if (editId) {
-      const index = bookings.findIndex(x => String(x.id) === String(editId));
-      if (index < 0) {
-        alert("Booking nahi mili. Bookings page kholkar dobara try karo.");
+    if (editRecId) {
+      const idx = fleetData.findIndex(x => String(x.id) === String(editRecId));
+      if (idx === -1) {
+        triggerAlert("Target record expired or missing.");
         return;
       }
-
-      b.id = editId;
-      b.lr = bookings[index].lr || generateLR();
-      b.createdAt = bookings[index].createdAt || timestamp;
-      b.updatedAt = timestamp;
-      bookings[index] = b;
+      payload.id = editRecId;
+      payload.lr = fleetData[idx].lr || generateLRSeries();
+      payload.createdAt = fleetData[idx].createdAt || stamp;
+      payload.updatedAt = stamp;
+      fleetData[idx] = payload;
     } else {
-      b.id = makeId();
-      b.lr = generateLR();
-      b.createdAt = timestamp;
-      b.updatedAt = timestamp;
-      bookings.push(b);
+      payload.id = "TRIP-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7);
+      payload.lr = generateLRSeries();
+      payload.createdAt = stamp;
+      payload.updatedAt = stamp;
+      fleetData.unshift(payload);
     }
 
-    if (!saveBookings()) {
-      bookings = oldBookings;
-      return;
-    }
+    if (!savePersistence()) return;
 
-    resetForm();
-    refreshAll();
+    resetEntryForm();
+    renderAllViews();
     openPage("bookings");
-    notify(editId ? "Booking update ho gayi." : "Booking save ho gayi: " + b.lr);
-  } catch (error) {
-    console.error("Unexpected booking form error:", error);
-    alert("Booking process mein error aaya: " + (error && error.message ? error.message : String(error)));
+    triggerToast(editRecId ? "Consignment record revised." : `Registered: ${payload.lr}`);
+  } catch (err) {
+    console.error("Submission exception:", err);
+    triggerAlert("Form submission failed: " + err.message);
   }
 });
 
-function editBooking(id) {
-  const b = bookings.find(x => String(x.id) === String(id));
-  if (!b) { alert("Booking nahi mili."); return; }
+function editConsignment(id) {
+  const item = fleetData.find(x => String(x.id) === String(id));
+  if (!item) return;
 
-  document.getElementById("editId").value = b.id;
-  setForm(b);
-  document.getElementById("formHeading").textContent = "Edit Booking: " + b.lr;
-  document.getElementById("saveButton").textContent = "Update Booking";
+  document.getElementById("entry_recordId").value = item.id;
+  populateEntryForm(item);
+  document.getElementById("bookingFormModeText").textContent = "Revising Consignment: " + item.lr;
+  document.getElementById("bookingEditBadge").style.display = "inline-flex";
+  document.getElementById("saveBookingSubmitBtn").innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Update Consignment';
   openPage("newBooking");
 }
 
-function changeStatus(id,status) {
-  const index = bookings.findIndex(x => String(x.id) === String(id));
-  if (index < 0) return;
+function removeConsignment(id) {
+  const item = fleetData.find(x => String(x.id) === String(id));
+  if (!item) return;
+  if (!confirm(`Are you certain you wish to purge Consignment ${item.lr}?`)) return;
 
-  const old = {...bookings[index]};
-  bookings[index].status = status;
-  bookings[index].updatedAt = new Date().toISOString();
-
-  if (!saveBookings()) {
-    bookings[index] = old;
-    return;
-  }
-
-  refreshAll();
-  notify("Booking status update ho gaya.");
+  fleetData = fleetData.filter(x => String(x.id) !== String(id));
+  savePersistence();
+  renderAllViews();
+  triggerToast("Consignment purged successfully.");
 }
 
-function deleteBooking(id) {
-  const b = bookings.find(x => String(x.id) === String(id));
+function updateDirectStatus(id, newStatus) {
+  const idx = fleetData.findIndex(x => String(x.id) === String(id));
+  if (idx === -1) return;
+  fleetData[idx].status = newStatus;
+  fleetData[idx].updatedAt = new Date().toISOString();
+  savePersistence();
+  renderAllViews();
+  triggerToast(`Status changed to ${newStatus}`);
+}
+
+// WhatsApp Dispatch & Billing Notification
+function sendWhatsAppBilti(id) {
+  const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
-  if (!confirm("Kya booking " + b.lr + " delete karni hai?")) return;
 
-  const oldBookings = bookings;
-  bookings = bookings.filter(x => String(x.id) !== String(id));
+  const phone = (b.customerMobile || "").replace(/\D/g, "");
+  const msg = 
+`*SK LOGISTICS - CONSIGNMENT UPDATE*
+*LR Number:* ${b.lr}
+*Status:* ${b.status}
+*Route:* ${b.pickup} ➔ ${b.destination}
+*Vehicle No:* ${b.vehicleNo || 'Allocating'}
+*Material:* ${b.goods} (${b.weight || 'Std Load'})
+-------------------------------
+*Billed Freight:* ₹${Number(b.freight).toLocaleString('en-IN')}
+*Balance Pending:* ₹${calcCustomerDue(b).toLocaleString('en-IN')}
+-------------------------------
+Track & Queries: Call our desk for support.`;
 
-  if (!saveBookings()) {
-    bookings = oldBookings;
-    return;
+  const url = `https://wa.me/${phone ? (phone.length === 10 ? '91' + phone : phone) : ''}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+// Quick Payment Posting Modal
+function showQuickPay(id, type) {
+  const item = fleetData.find(x => String(x.id) === String(id));
+  if (!item) return;
+
+  document.getElementById("quickPayBookingId").value = id;
+  document.getElementById("quickPayType").value = type;
+
+  const titleEl = document.getElementById("quickPayTitle");
+  const labelEl = document.getElementById("quickPayLabel");
+  const inputEl = document.getElementById("quickPayInput");
+  const metaEl = document.getElementById("quickPayMeta");
+
+  if (type === "customer") {
+    titleEl.textContent = `Receive Customer Payment (${item.customer})`;
+    labelEl.textContent = "New Collected Amount (₹)";
+    inputEl.value = item.received;
+    metaEl.textContent = `Total Billed: ${formatINR(item.freight)} | Currently Balance: ${formatINR(calcCustomerDue(item))}`;
+  } else {
+    titleEl.textContent = `Disburse Fleet Owner Payment (${item.owner || 'Fleet Carrier'})`;
+    labelEl.textContent = "New Paid Amount (₹)";
+    inputEl.value = item.paid;
+    metaEl.textContent = `Owner Freight: ${formatINR(item.ownerFreight)} | Currently Due: ${formatINR(calcOwnerDue(item))}`;
   }
 
-  refreshAll();
-  notify("Booking delete ho gayi.");
+  document.getElementById("quickPayModal").classList.add("active");
+  inputEl.focus();
 }
 
-function statusBadge(status) {
-  const cls = status === "In Transit" ? "InTransit" : status;
-  return '<span class="badge ' + escapeHTML(cls) + '">' +
-    escapeHTML(status || "Booked") + '</span>';
+function closeQuickPayModal() {
+  document.getElementById("quickPayModal").classList.remove("active");
 }
 
-function bookingRows(list) {
-  if (!list.length) return '<div class="empty">Abhi koi booking nahi hai.</div>';
+function submitQuickPay() {
+  const id = document.getElementById("quickPayBookingId").value;
+  const type = document.getElementById("quickPayType").value;
+  const val = parseValidNum(document.getElementById("quickPayInput").value);
 
-  return '<div class="table-wrap"><table><thead><tr>' +
-    '<th>LR No.</th><th>Date</th><th>Customer</th><th>Route</th>' +
-    '<th>Vehicle</th><th>Freight</th><th>Customer Due</th>' +
-    '<th>Profit</th><th>Status</th><th>Actions</th>' +
-    '</tr></thead><tbody>' +
-    list.map(b => '<tr>' +
-      '<td><strong>' + escapeHTML(b.lr) + '</strong></td>' +
-      '<td>' + escapeHTML(b.bookingDate) + '</td>' +
-      '<td>' + escapeHTML(b.customer) + '</td>' +
-      '<td>' + escapeHTML(b.pickup) + ' → ' + escapeHTML(b.destination) + '</td>' +
-      '<td>' + escapeHTML(b.vehicleNo || b.vehicleType || "-") + '</td>' +
-      '<td>' + money(b.freight) + '</td>' +
-      '<td class="' + (customerDue(b)>0 ? "red" : "green") + '">' + money(customerDue(b)) + '</td>' +
-      '<td class="' + (profit(b)<0 ? "red" : "green") + '">' + money(profit(b)) + '</td>' +
-      '<td><select aria-label="Change booking status" onchange="changeStatus(' +
-        JSON.stringify(String(b.id)) + ',this.value)">' +
-        ["Booked","In Transit","Delivered","Cancelled"].map(s =>
-          '<option value="' + s + '" ' + (b.status===s ? "selected" : "") + '>' + s + '</option>'
-        ).join("") +
-      '</select></td>' +
-      '<td><div style="display:flex;gap:5px">' +
-        '<button class="btn small secondary" onclick="printLR(' + JSON.stringify(String(b.id)) + ')">Bilti</button>' +
-        '<button class="btn small" onclick="editBooking(' + JSON.stringify(String(b.id)) + ')">Edit</button>' +
-        '<button class="btn small danger" onclick="deleteBooking(' + JSON.stringify(String(b.id)) + ')">Delete</button>' +
-      '</div></td>' +
-    '</tr>').join("") +
-    '</tbody></table></div>';
+  const idx = fleetData.findIndex(x => String(x.id) === String(id));
+  if (idx === -1) return;
+
+  if (type === "customer") {
+    fleetData[idx].received = val;
+  } else {
+    fleetData[idx].paid = val;
+  }
+  fleetData[idx].updatedAt = new Date().toISOString();
+
+  savePersistence();
+  closeQuickPayModal();
+  renderAllViews();
+  triggerToast("Financial register updated.");
 }
 
-function renderBookings() {
-  const q = (document.getElementById("bookingSearch")?.value || "").toLowerCase();
-  const status = document.getElementById("statusFilter")?.value || "";
-
-  const list = [...bookings]
-    .filter(b => !status || b.status === status)
-    .filter(b => [b.lr,b.customer,b.pickup,b.destination,b.vehicleNo,b.goods]
-      .some(v => String(v || "").toLowerCase().includes(q)))
-    .sort((a,b) => String(b.bookingDate).localeCompare(String(a.bookingDate)));
-
-  document.getElementById("bookingTable").innerHTML = bookingRows(list);
+// Dynamic Renderers
+function getStatusTag(st) {
+  const map = {
+    "Booked": "badge-booked",
+    "In Transit": "badge-transit",
+    "Delivered": "badge-delivered",
+    "Cancelled": "badge-cancelled"
+  };
+  return `<span class="badge ${map[st] || 'badge-booked'}"><i class="fa-solid fa-circle" style="font-size:6px"></i> ${escapeHtml(st || 'Booked')}</span>`;
 }
 
-function sum(list,key) {
-  return list.reduce((total,b) => total + number(b[key]),0);
+function generateDynamicTable(records) {
+  if (!records.length) {
+    return `<div style="text-align:center;padding:40px;color:var(--text-muted)">
+      <i class="fa-solid fa-truck-ramp-box" style="font-size:38px;opacity:0.3;margin-bottom:10px"></i>
+      <p>No freight assignments located.</p>
+    </div>`;
+  }
+
+  return `
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>LR Number</th>
+            <th>Date</th>
+            <th>Consignor</th>
+            <th>Route Details</th>
+            <th>Vehicle / Rig</th>
+            <th>Billed Freight</th>
+            <th>Party Due</th>
+            <th>Yield Margin</th>
+            <th>Shipment Status</th>
+            <th style="text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${records.map(b => {
+            const due = calcCustomerDue(b);
+            const prof = calcProfit(b);
+            return `
+              <tr>
+                <td><strong style="font-family:var(--font-mono);color:var(--accent)">${escapeHtml(b.lr)}</strong></td>
+                <td>${escapeHtml(b.bookingDate)}</td>
+                <td>
+                  <strong>${escapeHtml(b.customer)}</strong>${b.customerMobile ? `<br><small style="color:var(--text-muted)">${escapeHtml(b.customerMobile)}</small>` : ''}
+                </td>
+                <td>
+                  <span>${escapeHtml(b.pickup)}</span>
+                  <i class="fa-solid fa-arrow-right" style="font-size:10px;margin:0 4px;color:var(--text-muted)"></i>
+                  <span>${escapeHtml(b.destination)}</span>
+                  <br><small style="color:var(--text-muted)">${escapeHtml(b.goods)}</small>
+                </td>
+                <td>
+                  <strong style="font-family:var(--font-mono)">${escapeHtml(b.vehicleNo || 'ALLOCATING')}</strong>
+                  <br><small style="color:var(--text-muted)">${escapeHtml(b.vehicleType)}</small>
+                </td>
+                <td><strong>${formatINR(b.freight)}</strong></td>
+                <td style="font-weight:700;color:${due > 0 ? 'var(--danger)' : 'var(--success)'}">${formatINR(due)}</td>
+                <td style="font-weight:700;color:${prof >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatINR(prof)}</td>
+                <td>
+                  <select onchange="updateDirectStatus('${b.id}', this.value)" style="padding:4px 8px;border-radius:6px;font-size:12px;font-weight:600">
+                    ${["Booked", "In Transit", "Delivered", "Cancelled"].map(s => 
+                      `<option value="${s}" ${b.status === s ? 'selected' : ''}>${s}</option>`
+                    ).join("")}
+                  </select>
+                </td>
+                <td style="text-align:right">
+                  <div style="display:inline-flex;gap:4px">
+                    <button class="btn btn-secondary btn-sm" onclick="printStandardBilti('${b.id}')" title="Print 3-Copy Consignment Note"><i class="fa-solid fa-print"></i> Bilti</button>
+                    <button class="btn btn-secondary btn-sm" onclick="printThermalSlip('${b.id}')" title="Thermal Print Slip"><i class="fa-solid fa-receipt"></i></button>
+                    <button class="btn btn-secondary btn-sm" onclick="sendWhatsAppBilti('${b.id}')" title="WhatsApp Summary"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
+                    <button class="btn btn-secondary btn-sm" onclick="editConsignment('${b.id}')" title="Modify Record"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="removeConsignment('${b.id}')" title="Purge Record"><i class="fa-solid fa-trash-can"></i></button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
-function renderDashboard() {
-  const active = bookings.filter(b => ["Booked","In Transit"].includes(b.status));
-  const delivered = bookings.filter(b => b.status === "Delivered");
+function renderBookingsTable() {
+  const query = (document.getElementById("globalTripSearch")?.value || "").toLowerCase();
+  const filterStatus = document.getElementById("statusFilterSelector")?.value || "";
 
-  document.getElementById("dBookings").textContent = bookings.length;
-  document.getElementById("dActive").textContent = active.length;
-  document.getElementById("dDelivered").textContent = delivered.length;
-  document.getElementById("dProfit").textContent = money(bookings.reduce((s,b)=>s+profit(b),0));
-  document.getElementById("dDue").textContent = money(bookings.reduce((s,b)=>s+customerDue(b),0));
-  document.getElementById("dOwnerDue").textContent = money(bookings.reduce((s,b)=>s+ownerDue(b),0));
-  document.getElementById("dFreight").textContent = money(sum(bookings,"freight"));
-  document.getElementById("dExpenses").textContent = money(sum(bookings,"expenses"));
+  const list = [...fleetData]
+    .filter(b => !filterStatus || b.status === filterStatus)
+    .filter(b => [b.lr, b.customer, b.pickup, b.destination, b.vehicleNo, b.goods, b.driver, b.owner]
+      .some(k => String(k || "").toLowerCase().includes(query)))
+    .sort((a, b) => String(b.bookingDate).localeCompare(String(a.bookingDate)));
 
-  const recent = [...bookings].sort((a,b) =>
-    String(b.createdAt || "").localeCompare(String(a.createdAt || ""))
-  ).slice(0,5);
-
-  document.getElementById("recentBookings").innerHTML = bookingRows(recent);
+  document.getElementById("masterBookingsTable").innerHTML = generateDynamicTable(list);
 }
 
-function renderCustomers() {
-  const query = (document.getElementById("customerSearch")?.value || "").toLowerCase();
-  const groups = {};
+function renderDashboardView() {
+  const activeTrips = fleetData.filter(b => ["Booked", "In Transit"].includes(b.status));
+  const deliveredTrips = fleetData.filter(b => b.status === "Delivered");
 
-  bookings.forEach(b => {
-    const name = b.customer || "Unknown";
-    const key = name.trim().toLowerCase();
+  const totalFreight = fleetData.reduce((acc, b) => acc + parseValidNum(b.freight), 0);
+  const netProfit = fleetData.reduce((acc, b) => acc + calcProfit(b), 0);
+  const customerDues = fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0);
+  const ownerDues = fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0);
 
-    if (!groups[key]) groups[key] = {name,mobile:b.customerMobile || "",count:0,freight:0,received:0,due:0};
+  document.getElementById("kpiBookings").textContent = fleetData.length;
+  document.getElementById("kpiActive").textContent = activeTrips.length;
+  document.getElementById("kpiDelivered").textContent = deliveredTrips.length;
+  document.getElementById("kpiNetProfit").textContent = formatINR(netProfit);
+  document.getElementById("kpiCustomerDue").textContent = formatINR(customerDues);
+  document.getElementById("kpiOwnerDue").textContent = formatINR(ownerDues);
 
-    const g = groups[key];
-    g.count++;
-    g.freight += number(b.freight);
-    g.received += number(b.received);
-    g.due += customerDue(b);
-    if (!g.mobile && b.customerMobile) g.mobile = b.customerMobile;
+  const recent = [...fleetData].sort((a,b) => String(b.createdAt || "").localeCompare(String(a.createdAt || ""))).slice(0, 5);
+  document.getElementById("recentBookingsContainer").innerHTML = generateDynamicTable(recent);
+}
+
+function renderCustomerMaster() {
+  const q = (document.getElementById("customerSearchInput")?.value || "").toLowerCase();
+  const group = {};
+
+  fleetData.forEach(b => {
+    const rawName = b.customer || "General Walk-In";
+    const key = rawName.trim().toLowerCase();
+    if (!group[key]) {
+      group[key] = {
+        name: rawName,
+        mobile: b.customerMobile || "",
+        trips: 0,
+        freight: 0,
+        received: 0,
+        balance: 0
+      };
+    }
+    const c = group[key];
+    c.trips += 1;
+    c.freight += parseValidNum(b.freight);
+    c.received += parseValidNum(b.received);
+    c.balance += calcCustomerDue(b);
+    if (!c.mobile && b.customerMobile) c.mobile = b.customerMobile;
   });
 
-  const list = Object.values(groups)
-    .filter(c => (c.name + " " + c.mobile).toLowerCase().includes(query))
-    .sort((a,b) => a.name.localeCompare(b.name));
+  const dataset = Object.values(group)
+    .filter(c => (c.name + " " + c.mobile).toLowerCase().includes(q))
+    .sort((a, b) => b.balance - a.balance);
 
-  document.getElementById("customerTable").innerHTML = list.length
-    ? '<div class="table-wrap"><table><thead><tr><th>Customer</th><th>Mobile</th><th>Bookings</th><th>Total Freight</th><th>Received</th><th>Pending</th><th>Action</th></tr></thead><tbody>' +
-      list.map(c => '<tr><td><strong>' + escapeHTML(c.name) + '</strong></td>' +
-        '<td>' + escapeHTML(c.mobile || "-") + '</td><td>' + c.count + '</td>' +
-        '<td>' + money(c.freight) + '</td><td class="green">' + money(c.received) + '</td>' +
-        '<td class="' + (c.due>0 ? "red" : "green") + '">' + money(c.due) + '</td>' +
-        '<td><button class="btn small secondary" onclick="findCustomer(' + JSON.stringify(c.name) + ')">View Bookings</button></td></tr>'
-      ).join("") + '</tbody></table></div>'
-    : '<div class="empty">Abhi koi customer record nahi hai. Booking banane par customer yahan dikhega.</div>';
+  document.getElementById("customerMasterTable").innerHTML = dataset.length ? `
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Client Name</th>
+            <th>Phone / Mobile</th>
+            <th>Total Shipments</th>
+            <th>Billed Aggregate</th>
+            <th>Amount Collected</th>
+            <th>Outstanding Dues</th>
+            <th>Filter Direct</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${dataset.map(c => `
+            <tr>
+              <td><strong>${escapeHtml(c.name)}</strong></td>
+              <td>${escapeHtml(c.mobile || '-')}</td>
+              <td>${c.trips} Trips</td>
+              <td>${formatINR(c.freight)}</td>
+              <td style="color:var(--success);font-weight:700">${formatINR(c.received)}</td>
+              <td style="color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">${formatINR(c.balance)}</td>
+              <td>
+                <button class="btn btn-secondary btn-sm" onclick="filterByParty('${escapeHtml(c.name)}')">View Consignments</button>
+              </td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  ` : `<div style="text-align:center;padding:30px;color:var(--text-muted)">No registered client directories found.</div>`;
 
-  const datalist = document.getElementById("customerSuggestions");
-  if (datalist) datalist.innerHTML = list.map(c => '<option value="' + escapeHTML(c.name) + '"></option>').join("");
+  // Autocomplete Datalist Update
+  const dl = document.getElementById("customerDirectoryList");
+  if (dl) {
+    dl.innerHTML = dataset.map(c => `<option value="${escapeHtml(c.name)}"></option>`).join("");
+  }
 }
 
-function findCustomer(name) {
+function filterByParty(name) {
   openPage("bookings");
-  document.getElementById("bookingSearch").value = name;
-  renderBookings();
+  const el = document.getElementById("globalTripSearch");
+  if (el) el.value = name;
+  renderBookingsTable();
 }
 
-function renderAccounts() {
-  document.getElementById("aFreight").textContent = money(sum(bookings,"freight"));
-  document.getElementById("aReceived").textContent = money(sum(bookings,"received"));
-  document.getElementById("aDue").textContent = money(bookings.reduce((s,b)=>s+customerDue(b),0));
-  document.getElementById("aOwnerDue").textContent = money(bookings.reduce((s,b)=>s+ownerDue(b),0));
+function renderLedgerOverview() {
+  const grossFreight = fleetData.reduce((acc, b) => acc + parseValidNum(b.freight), 0);
+  const received = fleetData.reduce((acc, b) => acc + parseValidNum(b.received), 0);
+  const clientDue = fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0);
+  const ownerDue = fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0);
 
-  const customerList = bookings.filter(b => customerDue(b)>0).sort((a,b)=>customerDue(b)-customerDue(a));
-  const ownerList = bookings.filter(b => ownerDue(b)>0).sort((a,b)=>ownerDue(b)-ownerDue(a));
+  document.getElementById("accGrossFreight").textContent = formatINR(grossFreight);
+  document.getElementById("accRealizedCollection").textContent = formatINR(received);
+  document.getElementById("accOutstandingReceivables").textContent = formatINR(clientDue);
+  document.getElementById("accTruckOwnerPayables").textContent = formatINR(ownerDue);
 
-  function dueTable(list,type) {
-    if (!list.length) return '<div class="empty">Koi pending payment nahi hai.</div>';
+  const clientDueList = fleetData.filter(b => calcCustomerDue(b) > 0).sort((a,b) => calcCustomerDue(b) - calcCustomerDue(a));
+  const ownerDueList = fleetData.filter(b => calcOwnerDue(b) > 0).sort((a,b) => calcOwnerDue(b) - calcOwnerDue(a));
 
-    return list.map(b => '<div class="money-line">' +
-      '<div><strong>' + escapeHTML(b.customer) + '</strong><br><span class="subtitle">' +
-      escapeHTML(b.lr) + ' · ' + escapeHTML(b.pickup) + ' → ' + escapeHTML(b.destination) + '</span></div>' +
-      '<div style="text-align:right"><strong class="red">' +
-      money(type==="customer" ? customerDue(b) : ownerDue(b)) +
-      '</strong><br><button class="btn small secondary" onclick="editBooking(' +
-      JSON.stringify(String(b.id)) + ')">Update Payment</button></div></div>'
-    ).join("");
+  function buildLedgerCards(list, type) {
+    if (!list.length) return `<p style="padding:15px;color:var(--text-muted);font-size:13px">All accounts fully cleared.</p>`;
+    return list.map(b => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--border-light)">
+        <div>
+          <strong>${escapeHtml(type === 'customer' ? b.customer : (b.owner || 'Fleet Carrier'))}</strong>
+          <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">
+            ${escapeHtml(b.lr)} · ${escapeHtml(b.pickup)} ➔ ${escapeHtml(b.destination)}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-weight:800;color:${type === 'customer' ? 'var(--danger)' : 'var(--warning)'}">
+            ${formatINR(type === 'customer' ? calcCustomerDue(b) : calcOwnerDue(b))}
+          </div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:4px" onclick="showQuickPay('${b.id}', '${type}')">Record Payment</button>
+        </div>
+      </div>
+    `).join("");
   }
 
-  document.getElementById("customerDues").innerHTML = dueTable(customerList,"customer");
-  document.getElementById("ownerDues").innerHTML = dueTable(ownerList,"owner");
+  document.getElementById("receivableDuesList").innerHTML = buildLedgerCards(clientDueList, 'customer');
+  document.getElementById("payableDuesList").innerHTML = buildLedgerCards(ownerDueList, 'owner');
 }
 
-function renderReports() {
-  const period = document.getElementById("reportPeriod").value;
+function renderBusinessReports() {
+  const period = document.getElementById("reportIntervalSelect")?.value || "all";
   const now = new Date();
 
-  const list = bookings.filter(b => {
+  const filtered = fleetData.filter(b => {
     if (period === "all") return true;
     if (!b.bookingDate) return false;
     const d = new Date(b.bookingDate + "T12:00:00");
-    if (period === "today") return b.bookingDate === today();
-    if (period === "month") return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
-    if (period === "year") return d.getFullYear()===now.getFullYear();
+    if (period === "today") return b.bookingDate === getTodayDate();
+    if (period === "month") return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    if (period === "year") return d.getFullYear() === now.getFullYear();
     return true;
   });
 
-  const freight = sum(list,"freight");
-  const costs = sum(list,"ownerFreight") + sum(list,"expenses");
+  const freightSum = filtered.reduce((s, b) => s + parseValidNum(b.freight), 0);
+  const outflowSum = filtered.reduce((s, b) => s + parseValidNum(b.ownerFreight) + parseValidNum(b.expenses), 0);
+  const netSurplus = freightSum - outflowSum;
 
-  document.getElementById("rCount").textContent = list.length;
-  document.getElementById("rFreight").textContent = money(freight);
-  document.getElementById("rCosts").textContent = money(costs);
-  document.getElementById("rProfit").textContent = money(freight-costs);
+  document.getElementById("repTripVolume").textContent = filtered.length;
+  document.getElementById("repFreightTotal").textContent = formatINR(freightSum);
+  document.getElementById("repTotalExpenses").textContent = formatINR(outflowSum);
+  document.getElementById("repNetSurplus").textContent = formatINR(netSurplus);
 
-  const delivered = list.filter(b=>b.status==="Delivered").length;
-  const transit = list.filter(b=>b.status==="In Transit").length;
-  const booked = list.filter(b=>b.status==="Booked").length;
-  const cancelled = list.filter(b=>b.status==="Cancelled").length;
+  const statuses = {Booked: 0, "In Transit": 0, Delivered: 0, Cancelled: 0};
+  filtered.forEach(b => { if (statuses[b.status] !== undefined) statuses[b.status]++; });
 
-  document.getElementById("reportSummary").innerHTML =
-    '<div class="money-line"><span>Booked</span><strong>' + booked + '</strong></div>' +
-    '<div class="money-line"><span>In Transit</span><strong>' + transit + '</strong></div>' +
-    '<div class="money-line"><span>Delivered</span><strong>' + delivered + '</strong></div>' +
-    '<div class="money-line"><span>Cancelled</span><strong>' + cancelled + '</strong></div>' +
-    '<div class="money-line"><span>Customer Received</span><strong class="green">' + money(sum(list,"received")) + '</strong></div>' +
-    '<div class="money-line"><span>Customer Pending</span><strong class="red">' + money(list.reduce((s,b)=>s+customerDue(b),0)) + '</strong></div>' +
-    '<div class="money-line"><span>Owner Payments Made</span><strong>' + money(sum(list,"paid")) + '</strong></div>' +
-    '<div class="money-line"><span>Owner Payments Pending</span><strong class="orange">' + money(list.reduce((s,b)=>s+ownerDue(b),0)) + '</strong></div>';
+  document.getElementById("reportAnalyticalSummary").innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:16px">
+      <div style="padding:14px;border:1px solid var(--border-light);border-radius:var(--radius-md)">
+        <span style="font-size:12px;color:var(--text-muted)">Shipment Pipeline</span>
+        <div style="margin-top:6px;font-size:13px;line-height:1.8">
+          Booked: <strong>${statuses.Booked}</strong><br>
+          En-Route: <strong>${statuses['In Transit']}</strong><br>
+          Delivered: <strong>${statuses.Delivered}</strong><br>
+          Void/Cancelled: <strong>${statuses.Cancelled}</strong>
+        </div>
+      </div>
+      <div style="padding:14px;border:1px solid var(--border-light);border-radius:var(--radius-md)">
+        <span style="font-size:12px;color:var(--text-muted)">Cash Flow Realization</span>
+        <div style="margin-top:6px;font-size:13px;line-height:1.8">
+          Realized Collections: <strong style="color:var(--success)">${formatINR(filtered.reduce((s,b)=>s+parseValidNum(b.received),0))}</strong><br>
+          Market Outstandings: <strong style="color:var(--danger)">${formatINR(filtered.reduce((s,b)=>s+calcCustomerDue(b),0))}</strong><br>
+          Fleet Owner Outstandings: <strong style="color:var(--warning)">${formatINR(filtered.reduce((s,b)=>s+calcOwnerDue(b),0))}</strong>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
-function updatePreview() {
-  const freight = number(document.getElementById("freight").value);
-  const ownerFreight = number(document.getElementById("ownerFreight").value);
-  const expenses = number(document.getElementById("expenses").value);
-  const received = number(document.getElementById("received").value);
-  const paid = number(document.getElementById("paid").value);
-
-  document.getElementById("profitPreview").textContent =
-    "Estimated profit: " + money(freight-ownerFreight-expenses) +
-    " | Customer due: " + money(Math.max(0,freight-received)) +
-    " | Owner due: " + money(Math.max(0,ownerFreight-paid));
+function renderAllViews() {
+  renderDashboardView();
+  renderBookingsTable();
+  renderCustomerMaster();
+  renderLedgerOverview();
+  renderBusinessReports();
 }
 
-["freight","ownerFreight","expenses","received","paid"].forEach(id => {
-  document.getElementById(id).addEventListener("input",updatePreview);
-});
-
-function printLR(id) {
-  const b = bookings.find(x => String(x.id) === String(id));
+// PRINT 1: Authentic 3-Copy Transport Consignment Note (Bilti)
+function printStandardBilti(id) {
+  const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
 
-  const area = document.getElementById("printArea");
-  area.innerHTML = `
-    <div style="font-family:Arial,sans-serif;color:#111">
-      <h1>SK LOGISTICS</h1>
-      <p style="text-align:center">TRANSPORT CONSIGNMENT NOTE / BILTI</p><hr>
-      <div style="display:flex;justify-content:space-between;gap:20px">
-        <div><strong>LR Number:</strong> ${escapeHTML(b.lr)}</div>
-        <div><strong>Booking Date:</strong> ${escapeHTML(b.bookingDate)}</div>
-      </div><br>
-      <table style="width:100%;border-collapse:collapse" border="1" cellpadding="9">
-        <tr><th>Customer</th><td>${escapeHTML(b.customer)}</td></tr>
-        <tr><th>Customer Mobile</th><td>${escapeHTML(b.customerMobile || "-")}</td></tr>
-        <tr><th>Pickup From</th><td>${escapeHTML(b.pickup)}</td></tr>
-        <tr><th>Delivery To</th><td>${escapeHTML(b.destination)}</td></tr>
-        <tr><th>Goods / Material</th><td>${escapeHTML(b.goods)}</td></tr>
-        <tr><th>Weight</th><td>${escapeHTML(b.weight || "-")}</td></tr>
-        <tr><th>Vehicle Type</th><td>${escapeHTML(b.vehicleType || "-")}</td></tr>
-        <tr><th>Vehicle Number</th><td>${escapeHTML(b.vehicleNo || "-")}</td></tr>
-        <tr><th>Driver Name</th><td>${escapeHTML(b.driver || "-")}</td></tr>
-        <tr><th>Driver Mobile</th><td>${escapeHTML(b.driverMobile || "-")}</td></tr>
-        <tr><th>Truck Owner</th><td>${escapeHTML(b.owner || "-")}</td></tr>
-        <tr><th>Expected Delivery</th><td>${escapeHTML(b.deliveryDate || "-")}</td></tr>
-        <tr><th>Freight (₹)</th><td>${money(b.freight)}</td></tr>
-        <tr><th>Booking Status</th><td>${escapeHTML(b.status)}</td></tr>
-        <tr><th>Notes</th><td>${escapeHTML(b.notes || "-")}</td></tr>
-      </table><br>
-      <p>I acknowledge receipt of the goods described above for transportation.</p><br><br>
-      <div style="display:flex;justify-content:space-between;gap:20px">
-        <div>Sender's Signature: __________________</div>
-        <div>Authorized Signature: __________________</div>
+  const copies = ["Consignor Copy (Original)", "Driver / Transit Copy", "Consignee / File Copy"];
+  const station = document.getElementById("printStation");
+  
+  station.innerHTML = copies.map(copyName => `
+    <div class="bilti-container">
+      <div class="bilti-header">
+        <div>
+          <div style="font-weight:bold;font-size:14px">SK LOGISTICS FLEET</div>
+          <div style="font-size:10px">Head Office: Transport Hub, New Delhi - 110001</div>
+          <div style="font-size:10px">Phone: +91 98765 43210 | GSTIN: 07AAAAA0000A1Z5</div>
+        </div>
+        <div class="bilti-title">
+          <h2>GOODS CONSIGNMENT NOTE</h2>
+          <p style="font-weight:bold;letter-spacing:1px">(CONSIGNMENT NOTE / BILTI)</p>
+        </div>
+        <div style="text-align:right">
+          <div class="bilti-copy-label">${copyName}</div>
+          <div style="margin-top:6px;font-weight:bold">LR: ${escapeHtml(b.lr)}</div>
+          <div style="font-size:11px">Date: ${escapeHtml(b.bookingDate)}</div>
+        </div>
       </div>
-      <p style="margin-top:35px;font-size:11px">Computer-generated document. Please verify details before use.</p>
-    </div>`;
-  area.classList.remove("hidden");
+
+      <table class="grid-table">
+        <tr>
+          <td style="width:50%"><strong>Consignor (Sender):</strong><br>${escapeHtml(b.customer)}<br>Contact: ${escapeHtml(b.customerMobile || '-')}</td>
+          <td style="width:50%"><strong>Consignee (Delivery At):</strong><br>To Order / As per Invoice instructions<br>Destination: ${escapeHtml(b.destination)}</td>
+        </tr>
+        <tr>
+          <td><strong>Loading Station (From):</strong> ${escapeHtml(b.pickup)}</td>
+          <td><strong>Unloading Station (To):</strong> ${escapeHtml(b.destination)}</td>
+        </tr>
+        <tr>
+          <td><strong>Vehicle Number:</strong> ${escapeHtml(b.vehicleNo || 'ALLOCATING')} (${escapeHtml(b.vehicleType)})</td>
+          <td><strong>Driver Name / Cell:</strong> ${escapeHtml(b.driver || '-')} / ${escapeHtml(b.driverMobile || '-')}</td>
+        </tr>
+      </table>
+
+      <table class="grid-table" style="margin-top:10px">
+        <thead>
+          <tr>
+            <th>Packages / Articles</th>
+            <th>Description of Goods (Said to Contain)</th>
+            <th>Charged Weight</th>
+            <th>Total Freight Charges</th>
+            <th>Payment Basis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Standard Load</td>
+            <td><strong>${escapeHtml(b.goods)}</strong></td>
+            <td>${escapeHtml(b.weight || 'As per Scale')}</td>
+            <td><strong>${formatINR(b.freight)}</strong></td>
+            <td>${calcCustomerDue(b) === 0 ? 'PAID IN FULL' : (b.received > 0 ? 'PARTIAL ADVANCE' : 'TO-PAY / DUE')}</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="text-align:right"><strong>Total Advance Paid:</strong></td>
+            <td colspan="2">${formatINR(b.received)}</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="text-align:right"><strong>Net Balance Recoverable:</strong></td>
+            <td colspan="2"><strong style="font-size:13px">${formatINR(calcCustomerDue(b))}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="font-size:9.5px;color:#333;margin-top:8px;line-height:1.4">
+        <strong>Terms & Conditions:</strong>
+        The goods are transported under owners risk unless insured. The company is not liable for leakage, breakage, or road hazards. Consignment subject to Delhi Jurisdiction.
+      </div>
+
+      <div class="bilti-signatures">
+        <div class="signature-line">Consignor Signature</div>
+        <div class="signature-line">Driver's Handover Mark</div>
+        <div class="signature-line">For SK LOGISTICS (Authorised)</div>
+      </div>
+    </div>
+  `).join("");
+
+  station.classList.remove("hidden");
   window.print();
-  setTimeout(() => area.classList.add("hidden"),1000);
+  setTimeout(() => station.classList.add("hidden"), 1000);
 }
 
-function csvCell(value) {
-  let s = String(value ?? "");
-  if (/^[=+\-@]/.test(s)) s = "'" + s;
-  return '"' + s.replace(/"/g,'""') + '"';
+// PRINT 2: 80mm Thermal Receipt Slip
+function printThermalSlip(id) {
+  const b = fleetData.find(x => String(x.id) === String(id));
+  if (!b) return;
+
+  const station = document.getElementById("printStation");
+  station.innerHTML = `
+    <div class="thermal-receipt">
+      <h3>SK LOGISTICS</h3>
+      <p style="text-align:center;font-size:10px">FLEET DISPATCH RECEIPT</p>
+      <div class="divider"></div>
+      <div>LR NO: ${escapeHtml(b.lr)}</div>
+      <div>DATE : ${escapeHtml(b.bookingDate)}</div>
+      <div>PARTY: ${escapeHtml(b.customer)}</div>
+      <div>FROM : ${escapeHtml(b.pickup)}</div>
+      <div>TO   : ${escapeHtml(b.destination)}</div>
+      <div>TRUCK: ${escapeHtml(b.vehicleNo || 'ALLOCATING')}</div>
+      <div>GOODS: ${escapeHtml(b.goods)} (${escapeHtml(b.weight || 'Std')})</div>
+      <div class="divider"></div>
+      <div>FREIGHT BILLED : ${formatINR(b.freight)}</div>
+      <div>ADV. RECEIVED  : ${formatINR(b.received)}</div>
+      <div style="font-weight:bold">BALANCE DUE     : ${formatINR(calcCustomerDue(b))}</div>
+      <div class="divider"></div>
+      <p style="text-align:center;font-size:10px;margin-top:15px">Thank you for shipping with SK Logistics.</p>
+    </div>
+  `;
+
+  station.classList.remove("hidden");
+  window.print();
+  setTimeout(() => station.classList.add("hidden"), 1000);
 }
 
+// Export / Import JSON & CSV
 function exportCSV() {
-  if (!bookings.length) {
-    alert("Export karne ke liye pehle booking banao.");
+  if (!fleetData.length) {
+    triggerAlert("No consignment entries available for export.");
     return;
   }
 
   const headers = [
-    "LR Number","Booking Date","Customer","Customer Mobile","Pickup","Destination",
-    "Goods","Weight","Vehicle Type","Vehicle Number","Driver","Driver Mobile",
-    "Truck Owner","Owner Mobile","Status","Delivery Date","Customer Freight",
-    "Owner Freight","Expenses","Customer Received","Customer Due","Owner Paid",
-    "Owner Due","Estimated Profit","Notes"
+    "LR Number", "Date", "Customer Name", "Customer Phone", "Loading Point",
+    "Delivery Point", "Goods Nature", "Weight", "Vehicle Type", "Vehicle Number",
+    "Driver Name", "Driver Phone", "Fleet Owner", "Owner Phone", "Trip Status",
+    "Delivery Date", "Customer Freight", "Truck Hire Freight", "Expenses",
+    "Received Advance", "Customer Due", "Paid To Fleet", "Owner Due", "Yield Margin", "Remarks"
   ];
 
-  const rows = bookings.map(b => [
-    b.lr,b.bookingDate,b.customer,b.customerMobile,b.pickup,b.destination,b.goods,
-    b.weight,b.vehicleType,b.vehicleNo,b.driver,b.driverMobile,b.owner,b.ownerMobile,
-    b.status,b.deliveryDate,b.freight,b.ownerFreight,b.expenses,b.received,
-    customerDue(b),b.paid,ownerDue(b),profit(b),b.notes
+  const sanitizeCSV = str => {
+    let s = String(str ?? "");
+    if (/^[=+\-@]/.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  };
+
+  const rows = fleetData.map(b => [
+    b.lr, b.bookingDate, b.customer, b.customerMobile, b.pickup,
+    b.destination, b.goods, b.weight, b.vehicleType, b.vehicleNo,
+    b.driver, b.driverMobile, b.owner, b.ownerMobile, b.status,
+    b.deliveryDate, b.freight, b.ownerFreight, b.expenses,
+    b.received, calcCustomerDue(b), b.paid, calcOwnerDue(b), calcProfit(b), b.notes
   ]);
 
-  const csv = "\uFEFF" + [headers,...rows].map(row=>row.map(csvCell).join(",")).join("\r\n");
-  const blob = new Blob([csv],{type:"text/csv;charset=utf-8;"});
+  const csvContent = "\uFEFF" + [headers, ...rows].map(r => r.map(sanitizeCSV).join(",")).join("\r\n");
+  const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "SK-Logistics-Report-" + today() + ".csv";
+  a.download = `SK-Logistics-Ledger-${getTodayDate()}.csv`;
   document.body.appendChild(a);
   a.click();
   a.remove();
-  setTimeout(() => URL.revokeObjectURL(url),1000);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function refreshAll() {
-  renderDashboard();
-  renderBookings();
-  renderCustomers();
-  renderAccounts();
-  renderReports();
+function exportDataBackup() {
+  const blob = new Blob([JSON.stringify(fleetData, null, 2)], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `SK-Logistics-Backup-${getTodayDate()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-/* Startup */
-loadBookings();
-resetForm();
-refreshAll();
+function importDataBackup(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    try {
+      const data = JSON.parse(event.target.result);
+      if (Array.isArray(data)) {
+        if (confirm(`Import ${data.length} records? This will merge with existing ledger.`)) {
+          const map = new Map();
+          fleetData.forEach(item => map.set(item.id, item));
+          data.forEach(item => { if(item.id) map.set(item.id, item); });
+          fleetData = Array.from(map.values());
+          savePersistence();
+          renderAllViews();
+          triggerToast("Records merged successfully.");
+        }
+      } else {
+        triggerAlert("Invalid format. Please supply a valid JSON array.");
+      }
+    } catch (err) {
+      triggerAlert("JSON parsing failure: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// Quick Keyboard Shortcuts
+window.addEventListener("keydown", function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+    e.preventDefault();
+    openPage('newBooking');
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    openPage('bookings');
+    document.getElementById("globalTripSearch")?.focus();
+  }
+});
+
+// Startup Execution
+loadPersistence();
+resetEntryForm();
+renderAllViews();
 </script>
 </body>
 </html>
