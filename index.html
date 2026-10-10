@@ -1,17 +1,15 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <meta name="theme-color" content="#090e17">
-<title>SK LOGISTICS | Enterprise Fleet & E-Way Ledger</title>
+<title>SK LOGISTICS | Transport Management</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<!-- QR Code Engine -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 :root {
@@ -20,7 +18,7 @@
   --navy-border: #1e293b;
   --accent: #2563eb;
   --accent-light: #3b82f6;
-  --accent-glow: rgba(37, 99, 235, 0.2);
+  --accent-glow: rgba(37, 99, 235, 0.15);
   --success: #059669;
   --success-bg: #ecfdf5;
   --danger: #dc2626;
@@ -120,8 +118,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
 .badge-transit{background:var(--warning-bg);color:var(--warning)}
 .badge-delivered{background:var(--success-bg);color:var(--success)}
 .badge-cancelled{background:var(--danger-bg);color:var(--danger)}
-.badge-eway-alert{background:#fef2f2;color:#b91c1c;border:1px solid #f87171;animation:pulseRed 1.8s infinite}
-@keyframes pulseRed{0%,100%{opacity:1}50%{opacity:0.6}}
+.badge-eway-alert{background:#fef2f2;color:#b91c1c;border:1px solid #f87171}
 
 /* Mobile Trip Card */
 .mobile-card-list{display:none;flex-direction:column;gap:12px}
@@ -148,7 +145,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
 .pod-preview-wrapper{width:100%;height:180px;border:2px dashed var(--border-light);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa;position:relative}
 .pod-preview-img{width:100%;height:100%;object-fit:cover}
 
-/* QR Center Box */
+/* QR Container */
 .qr-container{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;background:#fff;border-radius:var(--radius-md);border:1px solid var(--border-light)}
 
 /* Responsive Queries */
@@ -572,7 +569,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
 <!-- PRINT STATION -->
 <div id="printStation" class="hidden"></div>
 
-<!-- DYNAMIC UPI QR MODAL -->
+<!-- DYNAMIC UPI QR MODAL (No external dependencies) -->
 <div class="modal-overlay" id="upiModal">
   <div class="modal-card">
     <div class="panel-header">
@@ -580,7 +577,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
       <button class="btn btn-secondary btn-sm" onclick="closeUpiModal()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="qr-container">
-      <div id="upiQrcodeTarget" style="margin-bottom:12px"></div>
+      <div id="upiQrcodeTarget" style="margin-bottom:12px;min-height:160px;display:flex;align-items:center;justify-content:center"></div>
       <strong id="upiAmountLabel" style="font-size:18px;font-family:var(--font-mono)">₹0</strong>
       <span id="upiPartyLabel" style="font-size:12px;color:var(--text-muted)"></span>
     </div>
@@ -637,8 +634,7 @@ const DB_KEY = "sklogistics_enterprise_v3";
 let fleetData = [];
 let toastDismissTimer;
 
-// Defaults
-const LOGISTICS_VPA = "sklogistics@upi"; // Configure your UPI ID
+const LOGISTICS_VPA = "sklogistics@upi";
 const LOGISTICS_NAME = "SK Logistics";
 
 function getTodayDate() {
@@ -668,7 +664,6 @@ function escapeHtml(str) {
   }[c]));
 }
 
-// Storage Management
 function loadPersistence() {
   try {
     const raw = localStorage.getItem(DB_KEY);
@@ -689,12 +684,11 @@ function savePersistence() {
     localStorage.setItem(DB_KEY, JSON.stringify(fleetData));
     return true;
   } catch (err) {
-    alert("Storage limit reached! Please export backup or purge older PODs.");
+    alert("Storage limit reached! Please export backup or delete old items.");
     return false;
   }
 }
 
-// Multi-stage Financials
 function totalCustomerReceived(b) {
   return parseValidNum(b.loadingAdvance) + parseValidNum(b.unloadingAdvance);
 }
@@ -727,6 +721,7 @@ function generateLRSeries() {
 function triggerToast(msg) {
   const toast = document.getElementById("liveToast");
   const toastMsg = document.getElementById("liveToastMsg");
+  if (!toast || !toastMsg) return;
   toastMsg.textContent = msg;
   toast.classList.add("show");
   clearTimeout(toastDismissTimer);
@@ -746,15 +741,16 @@ function openPage(pageKey) {
   if (targetPill) targetPill.classList.add("active");
   if (targetBnav) targetBnav.classList.add("active");
 
-  if (pageKey === "newBooking" && !document.getElementById("entry_recordId").value) {
-    document.getElementById("entry_bookingDate").value = getTodayDate();
+  const editIdEl = document.getElementById("entry_recordId");
+  const dateEl = document.getElementById("entry_bookingDate");
+  if (pageKey === "newBooking" && editIdEl && !editIdEl.value && dateEl) {
+    dateEl.value = getTodayDate();
   }
 
   renderAllViews();
   window.scrollTo({top: 0, behavior: "smooth"});
 }
 
-// Form Population & Image Compression
 const entryFieldKeys = [
   "bookingDate", "customer", "customerMobile", "ewayBill", "ewayExpiry", "gstin",
   "pickup", "destination", "goods", "weight", "vehicleType", "vehicleNo",
@@ -771,7 +767,8 @@ function extractFormDataset() {
   ["freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses"].forEach(k => {
     payload[k] = parseValidNum(payload[k]);
   });
-  payload.podImage = document.getElementById("entry_podImage").value;
+  const podEl = document.getElementById("entry_podImage");
+  payload.podImage = podEl ? podEl.value : "";
   return payload;
 }
 
@@ -780,27 +777,44 @@ function populateEntryForm(b) {
     const el = document.getElementById("entry_" + k);
     if (el) el.value = b[k] ?? "";
   });
-  document.getElementById("entry_podImage").value = b.podImage || "";
-  if (b.podImage) {
-    document.getElementById("podPreviewImage").src = b.podImage;
-    document.getElementById("podPreviewImage").style.display = "block";
-    document.getElementById("podEmptyText").style.display = "none";
-  } else {
-    document.getElementById("podPreviewImage").style.display = "none";
-    document.getElementById("podEmptyText").style.display = "inline";
+  const podEl = document.getElementById("entry_podImage");
+  if (podEl) podEl.value = b.podImage || "";
+  
+  const previewImg = document.getElementById("podPreviewImage");
+  const emptyTxt = document.getElementById("podEmptyText");
+  if (previewImg && emptyTxt) {
+    if (b.podImage) {
+      previewImg.src = b.podImage;
+      previewImg.style.display = "block";
+      emptyTxt.style.display = "none";
+    } else {
+      previewImg.style.display = "none";
+      emptyTxt.style.display = "inline";
+    }
   }
   recalculateFormMargins();
 }
 
 function resetEntryForm() {
-  document.getElementById("consignmentForm").reset();
-  document.getElementById("entry_recordId").value = "";
-  document.getElementById("entry_podImage").value = "";
-  document.getElementById("entry_bookingDate").value = getTodayDate();
-  document.getElementById("podPreviewImage").style.display = "none";
-  document.getElementById("podEmptyText").style.display = "inline";
-  document.getElementById("bookingFormModeText").textContent = "Consignment Dispatch Form";
-  document.getElementById("saveBookingSubmitBtn").innerHTML = '<i class="fa-solid fa-check"></i> Commit Consignment';
+  const form = document.getElementById("consignmentForm");
+  if (form) form.reset();
+  
+  const recEl = document.getElementById("entry_recordId");
+  const podEl = document.getElementById("entry_podImage");
+  const dateEl = document.getElementById("entry_bookingDate");
+  const prevImg = document.getElementById("podPreviewImage");
+  const empTxt = document.getElementById("podEmptyText");
+  const modeTxt = document.getElementById("bookingFormModeText");
+  const btn = document.getElementById("saveBookingSubmitBtn");
+
+  if (recEl) recEl.value = "";
+  if (podEl) podEl.value = "";
+  if (dateEl) dateEl.value = getTodayDate();
+  if (prevImg) prevImg.style.display = "none";
+  if (empTxt) empTxt.style.display = "inline";
+  if (modeTxt) modeTxt.textContent = "Consignment Dispatch Form";
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-check"></i> Commit Consignment';
+
   ["freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses"].forEach(k => {
     const el = document.getElementById("entry_" + k);
     if (el) el.value = "0";
@@ -816,7 +830,6 @@ function processPodUpload(event) {
   reader.onload = function(e) {
     const img = new Image();
     img.onload = function() {
-      // Compress with 800px max dimension
       const canvas = document.createElement("canvas");
       let width = img.width;
       let height = img.height;
@@ -834,11 +847,17 @@ function processPodUpload(event) {
       ctx.drawImage(img, 0, 0, width, height);
       const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.65);
 
-      document.getElementById("entry_podImage").value = compressedDataUrl;
-      document.getElementById("podPreviewImage").src = compressedDataUrl;
-      document.getElementById("podPreviewImage").style.display = "block";
-      document.getElementById("podEmptyText").style.display = "none";
-      triggerToast("Signed POD compressed & attached");
+      const podField = document.getElementById("entry_podImage");
+      const previewImg = document.getElementById("podPreviewImage");
+      const emptyTxt = document.getElementById("podEmptyText");
+
+      if (podField) podField.value = compressedDataUrl;
+      if (previewImg) {
+        previewImg.src = compressedDataUrl;
+        previewImg.style.display = "block";
+      }
+      if (emptyTxt) emptyTxt.style.display = "none";
+      triggerToast("Signed POD attached");
     };
     img.src = e.target.result;
   };
@@ -873,54 +892,61 @@ function recalculateFormMargins() {
   document.getElementById(id)?.addEventListener("input", recalculateFormMargins);
 });
 
-document.getElementById("consignmentForm").addEventListener("submit", function(evt) {
-  evt.preventDefault();
-  try {
-    const payload = extractFormDataset();
-    const editRecId = document.getElementById("entry_recordId").value;
+const cForm = document.getElementById("consignmentForm");
+if (cForm) {
+  cForm.addEventListener("submit", function(evt) {
+    evt.preventDefault();
+    try {
+      const payload = extractFormDataset();
+      const editRecId = document.getElementById("entry_recordId")?.value;
 
-    if (!payload.customer || !payload.pickup || !payload.destination || !payload.goods) {
-      alert("Party, Pickup, Destination and Goods details are required.");
-      return;
+      if (!payload.customer || !payload.pickup || !payload.destination || !payload.goods) {
+        alert("Party, Pickup, Destination and Goods details are required.");
+        return;
+      }
+
+      const stamp = new Date().toISOString();
+
+      if (editRecId) {
+        const idx = fleetData.findIndex(x => String(x.id) === String(editRecId));
+        if (idx === -1) return;
+        payload.id = editRecId;
+        payload.lr = fleetData[idx].lr || generateLRSeries();
+        payload.createdAt = fleetData[idx].createdAt || stamp;
+        payload.updatedAt = stamp;
+        fleetData[idx] = payload;
+      } else {
+        payload.id = "TRIP-" + Date.now();
+        payload.lr = generateLRSeries();
+        payload.createdAt = stamp;
+        payload.updatedAt = stamp;
+        fleetData.unshift(payload);
+      }
+
+      if (!savePersistence()) return;
+
+      resetEntryForm();
+      renderAllViews();
+      openPage("bookings");
+      triggerToast(editRecId ? "Booking updated" : `Created: ${payload.lr}`);
+    } catch (err) {
+      alert("Error: " + err.message);
     }
-
-    const stamp = new Date().toISOString();
-
-    if (editRecId) {
-      const idx = fleetData.findIndex(x => String(x.id) === String(editRecId));
-      if (idx === -1) return;
-      payload.id = editRecId;
-      payload.lr = fleetData[idx].lr || generateLRSeries();
-      payload.createdAt = fleetData[idx].createdAt || stamp;
-      payload.updatedAt = stamp;
-      fleetData[idx] = payload;
-    } else {
-      payload.id = "TRIP-" + Date.now();
-      payload.lr = generateLRSeries();
-      payload.createdAt = stamp;
-      payload.updatedAt = stamp;
-      fleetData.unshift(payload);
-    }
-
-    if (!savePersistence()) return;
-
-    resetEntryForm();
-    renderAllViews();
-    openPage("bookings");
-    triggerToast(editRecId ? "Booking updated" : `Created: ${payload.lr}`);
-  } catch (err) {
-    alert("Error: " + err.message);
-  }
-});
+  });
+}
 
 function editConsignment(id) {
   const item = fleetData.find(x => String(x.id) === String(id));
   if (!item) return;
 
-  document.getElementById("entry_recordId").value = item.id;
+  const recId = document.getElementById("entry_recordId");
+  const modeTxt = document.getElementById("bookingFormModeText");
+  const btn = document.getElementById("saveBookingSubmitBtn");
+
+  if (recId) recId.value = item.id;
   populateEntryForm(item);
-  document.getElementById("bookingFormModeText").textContent = "Edit LR: " + item.lr;
-  document.getElementById("saveBookingSubmitBtn").innerHTML = '<i class="fa-solid fa-check"></i> Update Record';
+  if (modeTxt) modeTxt.textContent = "Edit LR: " + item.lr;
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-check"></i> Update Record';
   openPage("newBooking");
 }
 
@@ -945,7 +971,7 @@ function updateDirectStatus(id, newStatus) {
   triggerToast(`Status: ${newStatus}`);
 }
 
-// UPI QR Generator
+// Standalone safe QR generator using QR Server API with instant fallback
 function showUpiQr(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
@@ -957,44 +983,51 @@ function showUpiQr(id) {
   }
 
   const container = document.getElementById("upiQrcodeTarget");
+  if (!container) return;
   container.innerHTML = "";
 
   const upiUrl = `upi://pay?pa=${encodeURIComponent(LOGISTICS_VPA)}&pn=${encodeURIComponent(LOGISTICS_NAME)}&am=${due.toFixed(2)}&cu=INR&tn=${encodeURIComponent('LR_' + b.lr)}`;
+  const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(upiUrl)}`;
 
-  new QRCode(container, {
-    text: upiUrl,
-    width: 180,
-    height: 180,
-    colorDark: "#090e17",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.M
-  });
+  const img = document.createElement("img");
+  img.src = qrApiUrl;
+  img.alt = "UPI QR Code";
+  img.style.width = "160px";
+  img.style.height = "160px";
+  img.onerror = function() {
+    container.innerHTML = `<div style="padding:10px;font-size:12px;color:var(--text-muted);text-align:center">UPI: <strong>${LOGISTICS_VPA}</strong><br>Amount: <strong>${formatINR(due)}</strong></div>`;
+  };
+  container.appendChild(img);
 
-  document.getElementById("upiAmountLabel").textContent = formatINR(due);
-  document.getElementById("upiPartyLabel").textContent = `${b.customer} (${b.lr})`;
-  document.getElementById("upiModal").classList.add("active");
+  const amtLabel = document.getElementById("upiAmountLabel");
+  const partyLabel = document.getElementById("upiPartyLabel");
+  const modal = document.getElementById("upiModal");
+
+  if (amtLabel) amtLabel.textContent = formatINR(due);
+  if (partyLabel) partyLabel.textContent = `${b.customer} (${b.lr})`;
+  if (modal) modal.classList.add("active");
 }
 
 function closeUpiModal() {
-  document.getElementById("upiModal").classList.remove("active");
+  document.getElementById("upiModal")?.classList.remove("active");
 }
 
-// POD Viewer
 function viewPodImage(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b || !b.podImage) {
     alert("No signed POD uploaded yet.");
     return;
   }
-  document.getElementById("podModalImg").src = b.podImage;
-  document.getElementById("podModal").classList.add("active");
+  const img = document.getElementById("podModalImg");
+  const modal = document.getElementById("podModal");
+  if (img) img.src = b.podImage;
+  if (modal) modal.classList.add("active");
 }
 
 function closePodModal() {
-  document.getElementById("podModal").classList.remove("active");
+  document.getElementById("podModal")?.classList.remove("active");
 }
 
-// Pre-filled WhatsApp Share
 function sendWhatsAppBilti(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
@@ -1012,49 +1045,51 @@ function sendWhatsAppBilti(id) {
 *Total Freight:* ${formatINR(b.freight)}
 *Pending Balance:* ${formatINR(calcCustomerDue(b))}
 -------------------------------
-For delivery coordinates or inquiries, reply back to this desk.`;
+For inquiries or coordinates, contact our dispatch desk.`;
 
   const url = `https://wa.me/${phone ? (phone.length === 10 ? '91' + phone : phone) : ''}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
 
-// Quick Payment Posting
 function showQuickPay(id, type) {
   const item = fleetData.find(x => String(x.id) === String(id));
   if (!item) return;
 
-  document.getElementById("quickPayBookingId").value = id;
-  document.getElementById("quickPayType").value = type;
-
+  const bId = document.getElementById("quickPayBookingId");
+  const qType = document.getElementById("quickPayType");
   const titleEl = document.getElementById("quickPayTitle");
   const labelEl = document.getElementById("quickPayLabel");
   const inputEl = document.getElementById("quickPayInput");
   const metaEl = document.getElementById("quickPayMeta");
+  const modal = document.getElementById("quickPayModal");
+
+  if (bId) bId.value = id;
+  if (qType) qType.value = type;
 
   if (type === "customer") {
-    titleEl.textContent = `Collect: ${item.customer}`;
-    labelEl.textContent = "Unloading / Balance Advance Received (₹)";
-    inputEl.value = item.unloadingAdvance || 0;
-    metaEl.textContent = `Billed: ${formatINR(item.freight)} | Current Due: ${formatINR(calcCustomerDue(item))}`;
+    if (titleEl) titleEl.textContent = `Collect: ${item.customer}`;
+    if (labelEl) labelEl.textContent = "Unloading / Balance Advance Received (₹)";
+    if (inputEl) inputEl.value = item.unloadingAdvance || 0;
+    if (metaEl) metaEl.textContent = `Billed: ${formatINR(item.freight)} | Current Due: ${formatINR(calcCustomerDue(item))}`;
   } else {
-    titleEl.textContent = `Paid to Truck: ${item.owner || 'Carrier'}`;
-    labelEl.textContent = "Total Amount Paid to Truck (₹)";
-    inputEl.value = item.paid;
-    metaEl.textContent = `Truck Hire: ${formatINR(item.ownerFreight)} | Current Due: ${formatINR(calcOwnerDue(item))}`;
+    if (titleEl) titleEl.textContent = `Paid to Truck: ${item.owner || 'Carrier'}`;
+    if (labelEl) labelEl.textContent = "Total Amount Paid to Truck (₹)";
+    if (inputEl) inputEl.value = item.paid;
+    if (metaEl) metaEl.textContent = `Truck Hire: ${formatINR(item.ownerFreight)} | Current Due: ${formatINR(calcOwnerDue(item))}`;
   }
 
-  document.getElementById("quickPayModal").classList.add("active");
-  inputEl.focus();
+  if (modal) modal.classList.add("active");
+  if (inputEl) inputEl.focus();
 }
 
 function closeQuickPayModal() {
-  document.getElementById("quickPayModal").classList.remove("active");
+  document.getElementById("quickPayModal")?.classList.remove("active");
 }
 
 function submitQuickPay() {
-  const id = document.getElementById("quickPayBookingId").value;
-  const type = document.getElementById("quickPayType").value;
-  const val = parseValidNum(document.getElementById("quickPayInput").value);
+  const id = document.getElementById("quickPayBookingId")?.value;
+  const type = document.getElementById("quickPayType")?.value;
+  const val = parseValidNum(document.getElementById("quickPayInput")?.value);
 
   const idx = fleetData.findIndex(x => String(x.id) === String(id));
   if (idx === -1) return;
@@ -1086,7 +1121,6 @@ function getEwayStatusTag(b) {
   return `<span class="badge" style="background:#f1f5f9;color:#475569"><i class="fa-solid fa-receipt"></i> E-Way Active</span>`;
 }
 
-// Table / Card Renderers
 function buildDesktopTable(records) {
   if (!records.length) return `<div style="text-align:center;padding:30px;color:var(--text-muted)">No bookings located.</div>`;
   return `
@@ -1230,24 +1264,35 @@ function renderBookingsTable() {
       .some(k => String(k || "").toLowerCase().includes(query)))
     .sort((a, b) => String(b.bookingDate).localeCompare(String(a.bookingDate)));
 
-  document.getElementById("masterBookingsDesktopTable").innerHTML = buildDesktopTable(list);
-  document.getElementById("masterBookingsMobileList").innerHTML = buildMobileCards(list);
+  const dTable = document.getElementById("masterBookingsDesktopTable");
+  const mList = document.getElementById("masterBookingsMobileList");
+  if (dTable) dTable.innerHTML = buildDesktopTable(list);
+  if (mList) mList.innerHTML = buildMobileCards(list);
 }
 
 function renderDashboardView() {
   const activeTrips = fleetData.filter(b => ["Booked", "In Transit"].includes(b.status));
   const deliveredTrips = fleetData.filter(b => b.status === "Delivered");
 
-  document.getElementById("kpiBookings").textContent = fleetData.length;
-  document.getElementById("kpiActive").textContent = activeTrips.length;
-  document.getElementById("kpiDelivered").textContent = deliveredTrips.length;
-  document.getElementById("kpiNetProfit").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcProfit(b), 0));
-  document.getElementById("kpiCustomerDue").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
-  document.getElementById("kpiOwnerDue").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
+  const kpiB = document.getElementById("kpiBookings");
+  const kpiA = document.getElementById("kpiActive");
+  const kpiD = document.getElementById("kpiDelivered");
+  const kpiP = document.getElementById("kpiNetProfit");
+  const kpiCD = document.getElementById("kpiCustomerDue");
+  const kpiOD = document.getElementById("kpiOwnerDue");
+
+  if (kpiB) kpiB.textContent = fleetData.length;
+  if (kpiA) kpiA.textContent = activeTrips.length;
+  if (kpiD) kpiD.textContent = deliveredTrips.length;
+  if (kpiP) kpiP.textContent = formatINR(fleetData.reduce((acc, b) => acc + calcProfit(b), 0));
+  if (kpiCD) kpiCD.textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
+  if (kpiOD) kpiOD.textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
 
   const recent = [...fleetData].sort((a,b) => String(b.createdAt || "").localeCompare(String(a.createdAt || ""))).slice(0, 5);
-  document.getElementById("recentDesktopTable").innerHTML = buildDesktopTable(recent);
-  document.getElementById("recentMobileList").innerHTML = buildMobileCards(recent);
+  const rTable = document.getElementById("recentDesktopTable");
+  const rList = document.getElementById("recentMobileList");
+  if (rTable) rTable.innerHTML = buildDesktopTable(recent);
+  if (rList) rList.innerHTML = buildMobileCards(recent);
 }
 
 function renderCustomerMaster() {
@@ -1272,59 +1317,70 @@ function renderCustomerMaster() {
     .filter(c => (c.name + " " + c.mobile).toLowerCase().includes(q))
     .sort((a, b) => b.balance - a.balance);
 
-  document.getElementById("customerMasterDesktopTable").innerHTML = dataset.length ? `
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr>
-            <th>Client Name</th>
-            <th>Mobile</th>
-            <th>Trips</th>
-            <th>Billed</th>
-            <th>Received</th>
-            <th>Balance Due</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${dataset.map(c => `
+  const dTable = document.getElementById("customerMasterDesktopTable");
+  if (dTable) {
+    dTable.innerHTML = dataset.length ? `
+      <div class="table-responsive">
+        <table>
+          <thead>
             <tr>
-              <td><strong>${escapeHtml(c.name)}</strong></td>
-              <td>${escapeHtml(c.mobile || '-')}</td>
-              <td>${c.trips}</td>
-              <td>${formatINR(c.freight)}</td>
-              <td style="color:var(--success)">${formatINR(c.received)}</td>
-              <td style="color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">${formatINR(c.balance)}</td>
+              <th>Client Name</th>
+              <th>Mobile</th>
+              <th>Trips</th>
+              <th>Billed</th>
+              <th>Received</th>
+              <th>Balance Due</th>
             </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </div>
-  ` : `<div style="text-align:center;padding:24px;color:var(--text-muted)">No clients located.</div>`;
+          </thead>
+          <tbody>
+            ${dataset.map(c => `
+              <tr>
+                <td><strong>${escapeHtml(c.name)}</strong></td>
+                <td>${escapeHtml(c.mobile || '-')}</td>
+                <td>${c.trips}</td>
+                <td>${formatINR(c.freight)}</td>
+                <td style="color:var(--success)">${formatINR(c.received)}</td>
+                <td style="color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">${formatINR(c.balance)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    ` : `<div style="text-align:center;padding:24px;color:var(--text-muted)">No clients located.</div>`;
+  }
 
-  document.getElementById("customerMasterMobileList").innerHTML = dataset.map(c => `
-    <div class="trip-card-mobile">
-      <div style="display:flex;justify-content:space-between">
-        <strong>${escapeHtml(c.name)}</strong>
-        <span style="font-size:12px;color:var(--text-muted)">${c.trips} Loads</span>
+  const mList = document.getElementById("customerMasterMobileList");
+  if (mList) {
+    mList.innerHTML = dataset.map(c => `
+      <div class="trip-card-mobile">
+        <div style="display:flex;justify-content:space-between">
+          <strong>${escapeHtml(c.name)}</strong>
+          <span style="font-size:12px;color:var(--text-muted)">${c.trips} Loads</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted)">${escapeHtml(c.mobile || 'No Contact')}</div>
+        <div class="tcm-financials">
+          <div class="tcm-fin-col"><span>Billed</span><strong>${formatINR(c.freight)}</strong></div>
+          <div class="tcm-fin-col"><span>Received</span><strong style="color:var(--success)">${formatINR(c.received)}</strong></div>
+          <div class="tcm-fin-col"><span>Balance</span><strong style="color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'}">${formatINR(c.balance)}</strong></div>
+        </div>
       </div>
-      <div style="font-size:12px;color:var(--text-muted)">${escapeHtml(c.mobile || 'No Contact')}</div>
-      <div class="tcm-financials">
-        <div class="tcm-fin-col"><span>Billed</span><strong>${formatINR(c.freight)}</strong></div>
-        <div class="tcm-fin-col"><span>Received</span><strong style="color:var(--success)">${formatINR(c.received)}</strong></div>
-        <div class="tcm-fin-col"><span>Balance</span><strong style="color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'}">${formatINR(c.balance)}</strong></div>
-      </div>
-    </div>
-  `).join("");
+    `).join("");
+  }
 
   const dl = document.getElementById("customerDirectoryList");
   if (dl) dl.innerHTML = dataset.map(c => `<option value="${escapeHtml(c.name)}"></option>`).join("");
 }
 
 function renderLedgerOverview() {
-  document.getElementById("accGrossFreight").textContent = formatINR(fleetData.reduce((acc, b) => acc + parseValidNum(b.freight), 0));
-  document.getElementById("accRealizedCollection").textContent = formatINR(fleetData.reduce((acc, b) => acc + totalCustomerReceived(b), 0));
-  document.getElementById("accOutstandingReceivables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
-  document.getElementById("accTruckOwnerPayables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
+  const gF = document.getElementById("accGrossFreight");
+  const rC = document.getElementById("accRealizedCollection");
+  const oR = document.getElementById("accOutstandingReceivables");
+  const tO = document.getElementById("accTruckOwnerPayables");
+
+  if (gF) gF.textContent = formatINR(fleetData.reduce((acc, b) => acc + parseValidNum(b.freight), 0));
+  if (rC) rC.textContent = formatINR(fleetData.reduce((acc, b) => acc + totalCustomerReceived(b), 0));
+  if (oR) oR.textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
+  if (tO) tO.textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
 
   const clientDueList = fleetData.filter(b => calcCustomerDue(b) > 0);
   const ownerDueList = fleetData.filter(b => calcOwnerDue(b) > 0);
@@ -1350,8 +1406,10 @@ function renderLedgerOverview() {
     `).join("");
   }
 
-  document.getElementById("receivableDuesList").innerHTML = buildDues(clientDueList, 'customer');
-  document.getElementById("payableDuesList").innerHTML = buildDues(ownerDueList, 'owner');
+  const rList = document.getElementById("receivableDuesList");
+  const pList = document.getElementById("payableDuesList");
+  if (rList) rList.innerHTML = buildDues(clientDueList, 'customer');
+  if (pList) pList.innerHTML = buildDues(ownerDueList, 'owner');
 }
 
 function renderBusinessReports() {
@@ -1371,22 +1429,30 @@ function renderBusinessReports() {
   const freightSum = filtered.reduce((s, b) => s + parseValidNum(b.freight), 0);
   const outflowSum = filtered.reduce((s, b) => s + parseValidNum(b.ownerFreight) + parseValidNum(b.expenses), 0);
 
-  document.getElementById("repTripVolume").textContent = filtered.length;
-  document.getElementById("repFreightTotal").textContent = formatINR(freightSum);
-  document.getElementById("repTotalExpenses").textContent = formatINR(outflowSum);
-  document.getElementById("repNetSurplus").textContent = formatINR(freightSum - outflowSum);
+  const rV = document.getElementById("repTripVolume");
+  const rF = document.getElementById("repFreightTotal");
+  const rE = document.getElementById("repTotalExpenses");
+  const rS = document.getElementById("repNetSurplus");
+
+  if (rV) rV.textContent = filtered.length;
+  if (rF) rF.textContent = formatINR(freightSum);
+  if (rE) rE.textContent = formatINR(outflowSum);
+  if (rS) rS.textContent = formatINR(freightSum - outflowSum);
 
   const statuses = {Booked: 0, "In Transit": 0, Delivered: 0, Cancelled: 0};
   filtered.forEach(b => { if (statuses[b.status] !== undefined) statuses[b.status]++; });
 
-  document.getElementById("reportAnalyticalSummary").innerHTML = `
-    <div style="padding:12px;border:1px solid var(--border-light);border-radius:var(--radius-md);margin-top:12px;font-size:13px;line-height:1.8">
-      <div>Booked Trips: <strong>${statuses.Booked}</strong></div>
-      <div>In Transit: <strong>${statuses['In Transit']}</strong></div>
-      <div>Delivered (POD): <strong>${statuses.Delivered}</strong></div>
-      <div>Void / Cancelled: <strong>${statuses.Cancelled}</strong></div>
-    </div>
-  `;
+  const rSum = document.getElementById("reportAnalyticalSummary");
+  if (rSum) {
+    rSum.innerHTML = `
+      <div style="padding:12px;border:1px solid var(--border-light);border-radius:var(--radius-md);margin-top:12px;font-size:13px;line-height:1.8">
+        <div>Booked Trips: <strong>${statuses.Booked}</strong></div>
+        <div>In Transit: <strong>${statuses['In Transit']}</strong></div>
+        <div>Delivered (POD): <strong>${statuses.Delivered}</strong></div>
+        <div>Void / Cancelled: <strong>${statuses.Cancelled}</strong></div>
+      </div>
+    `;
+  }
 }
 
 function renderAllViews() {
@@ -1397,13 +1463,13 @@ function renderAllViews() {
   renderBusinessReports();
 }
 
-// Bilti Consignment Print
 function printStandardBilti(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
 
   const copies = ["Consignor Copy", "Driver / Transit Copy", "Consignee Copy"];
   const station = document.getElementById("printStation");
+  if (!station) return;
   
   station.innerHTML = copies.map(copyName => `
     <div class="bilti-container">
@@ -1464,9 +1530,8 @@ function exportCSV() {
 
 function exportDataBackup() {
   const blob = new Blob([JSON.stringify(fleetData, null, 2)], {type: "application/json"});
-  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
+  a.href = URL.createObjectURL(blob);
   a.download = `SK-Logistics-FullDB-${getTodayDate()}.json`;
   document.body.appendChild(a);
   a.click();
@@ -1492,10 +1557,18 @@ function importDataBackup(e) {
   reader.readAsText(file);
 }
 
-// Initial Boot
-loadPersistence();
-resetEntryForm();
-renderAllViews();
+// Global Safe Initialization
+document.addEventListener("DOMContentLoaded", function() {
+  loadPersistence();
+  resetEntryForm();
+  renderAllViews();
+});
+// Fallback if already loaded
+if (document.readyState === "complete" || document.readyState === "interactive") {
+  loadPersistence();
+  resetEntryForm();
+  renderAllViews();
+}
 </script>
 </body>
 </html>
