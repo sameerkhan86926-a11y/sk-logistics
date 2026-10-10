@@ -272,7 +272,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
         <input type="hidden" id="entry_podImage">
         
         <div class="form-grid">
-          <!-- 1. Metadata & Compliance -->
           <div class="form-title"><i class="fa-solid fa-shield-halved"></i> 1. Compliance & Consignor Info</div>
           <div class="field">
             <label>Consignment Date *</label>
@@ -299,7 +298,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="text" id="entry_gstin" placeholder="07AAAAA0000A1Z5" style="text-transform:uppercase">
           </div>
 
-          <!-- 2. Route & Cargo -->
           <div class="form-title"><i class="fa-solid fa-route"></i> 2. Origin, Route & Cargo</div>
           <div class="field">
             <label>Origin Hub (From) *</label>
@@ -334,7 +332,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="text" id="entry_vehicleNo" placeholder="HR55AB1234" style="text-transform:uppercase">
           </div>
 
-          <!-- 3. Driver & Fleet Carrier -->
           <div class="form-title"><i class="fa-solid fa-user-gear"></i> 3. Fleet Carrier & Driver</div>
           <div class="field">
             <label>Driver In-Charge</label>
@@ -366,7 +363,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="date" id="entry_deliveryDate">
           </div>
 
-          <!-- 4. Freight Ledger & Breakout -->
           <div class="form-title"><i class="fa-solid fa-indian-rupee-sign"></i> 4. Freight Commercials & Advance Breakout</div>
           <div class="field">
             <label>Total Customer Freight (₹) *</label>
@@ -397,7 +393,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="text" id="entry_notes" placeholder="Remarks, loading conditions, or payment agreements">
           </div>
 
-          <!-- POD File Upload -->
           <div class="form-title"><i class="fa-solid fa-file-arrow-up"></i> 5. Proof of Delivery (POD) Slip</div>
           <div class="field full">
             <input type="file" id="podFileInput" accept="image/*">
@@ -512,23 +507,23 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 <!-- Bottom Nav -->
 <nav class="bottom-nav no-print">
   <div class="bottom-nav-inner">
-    <button class="bnav-item active" data-action="goto" data-target="dashboard">
+    <button type="button" class="bnav-item active" data-action="goto" data-target="dashboard">
       <i class="fa-solid fa-chart-pie"></i>
       <span>Control</span>
     </button>
-    <button class="bnav-item" data-action="goto" data-target="bookings">
+    <button type="button" class="bnav-item" data-action="goto" data-target="bookings">
       <i class="fa-solid fa-list-check"></i>
       <span>Trips</span>
     </button>
-    <button class="bnav-item" data-action="goto" data-target="newBooking">
+    <button type="button" class="bnav-item" data-action="goto" data-target="newBooking">
       <i class="fa-solid fa-circle-plus" style="font-size:24px;color:var(--accent)"></i>
       <span>Add LR</span>
     </button>
-    <button class="bnav-item" data-action="goto" data-target="accounts">
+    <button type="button" class="bnav-item" data-action="goto" data-target="accounts">
       <i class="fa-solid fa-scale-balanced"></i>
       <span>Ledger</span>
     </button>
-    <button class="bnav-item" data-action="goto" data-target="reports">
+    <button type="button" class="bnav-item" data-action="goto" data-target="reports">
       <i class="fa-solid fa-chart-line"></i>
       <span>Reports</span>
     </button>
@@ -594,8 +589,8 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 <div class="toast" id="liveToast">Action completed</div>
 
 <script>
-// CENTRAL GUARANTEED ENGINE
-const STORAGE_KEY = "sklogistics_clean_v5";
+// CENTRAL APPLICATION ENGINE
+const STORAGE_KEY = "sklogistics_clean_v6";
 let fleetData = [];
 
 const LOGISTICS_VPA = "sklogistics@upi";
@@ -628,14 +623,22 @@ function escapeHtml(str) {
   }[c]));
 }
 
-// STORAGE ENGINE (Crash Proof)
 function loadPersistence() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      const legacy = localStorage.getItem("sklogistics_clean_v4") || localStorage.getItem("sklogistics_enterprise_v3") || localStorage.getItem("sklogistics_enterprise_v2") || localStorage.getItem("sklogistics_bookings_v1");
-      fleetData = legacy ? JSON.parse(legacy) : [];
-      if (!Array.isArray(fleetData)) fleetData = [];
+      const legacyKeys = ["sklogistics_clean_v5", "sklogistics_clean_v4", "sklogistics_enterprise_v3", "sklogistics_bookings_v1"];
+      for (const k of legacyKeys) {
+        const val = localStorage.getItem(k);
+        if (val) {
+          const parsed = JSON.parse(val);
+          if (Array.isArray(parsed)) {
+            fleetData = parsed;
+            return;
+          }
+        }
+      }
+      fleetData = [];
       return;
     }
     const parsed = JSON.parse(raw);
@@ -650,7 +653,7 @@ function savePersistence() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(fleetData));
     return true;
   } catch (err) {
-    alert("Phone storage full. Please export backup.");
+    alert("Storage limit exceeded. Export a backup to clear space.");
     return false;
   }
 }
@@ -692,8 +695,8 @@ function triggerToast(msg) {
   setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
-// NAVIGATION
 function navigateTo(pageKey) {
+  if (!pageKey) return;
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".nav-pill").forEach(pill => pill.classList.remove("active"));
   document.querySelectorAll(".bnav-item").forEach(b => b.classList.remove("active"));
@@ -786,49 +789,6 @@ function resetEntryForm() {
   recalculateFormMargins();
 }
 
-// POD Image Processing
-document.getElementById("podFileInput")?.addEventListener("change", function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement("canvas");
-      let width = img.width;
-      let height = img.height;
-      const maxDim = 800;
-      if (width > height && width > maxDim) {
-        height = Math.round((height * maxDim) / width);
-        width = maxDim;
-      } else if (height > maxDim) {
-        width = Math.round((width * maxDim) / height);
-        height = maxDim;
-      }
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
-      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.65);
-
-      const podField = document.getElementById("entry_podImage");
-      const previewImg = document.getElementById("podPreviewImage");
-      const emptyTxt = document.getElementById("podEmptyText");
-
-      if (podField) podField.value = compressedDataUrl;
-      if (previewImg) {
-        previewImg.src = compressedDataUrl;
-        previewImg.style.display = "block";
-      }
-      if (emptyTxt) emptyTxt.style.display = "none";
-      triggerToast("Signed POD attached");
-    };
-    img.src = evt.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
 function recalculateFormMargins() {
   const freight = parseValidNum(document.getElementById("entry_freight")?.value);
   const loadingAdv = parseValidNum(document.getElementById("entry_loadingAdvance")?.value);
@@ -852,50 +812,6 @@ function recalculateFormMargins() {
     previewBalances.textContent = `Customer Due: ${formatINR(clientDue)} | Carrier Due: ${formatINR(ownerDue)}`;
   }
 }
-
-["entry_freight", "entry_loadingAdvance", "entry_unloadingAdvance", "entry_ownerFreight", "entry_paid", "entry_expenses"].forEach(id => {
-  document.getElementById(id)?.addEventListener("input", recalculateFormMargins);
-});
-
-document.getElementById("consignmentForm")?.addEventListener("submit", function(evt) {
-  evt.preventDefault();
-  try {
-    const payload = extractFormDataset();
-    const editRecId = document.getElementById("entry_recordId")?.value;
-
-    if (!payload.customer || !payload.pickup || !payload.destination || !payload.goods) {
-      alert("Party, Pickup, Destination and Goods details are required.");
-      return;
-    }
-
-    const stamp = new Date().toISOString();
-
-    if (editRecId) {
-      const idx = fleetData.findIndex(x => String(x.id) === String(editRecId));
-      if (idx === -1) return;
-      payload.id = editRecId;
-      payload.lr = fleetData[idx].lr || generateLRSeries();
-      payload.createdAt = fleetData[idx].createdAt || stamp;
-      payload.updatedAt = stamp;
-      fleetData[idx] = payload;
-    } else {
-      payload.id = "TRIP-" + Date.now();
-      payload.lr = generateLRSeries();
-      payload.createdAt = stamp;
-      payload.updatedAt = stamp;
-      fleetData.unshift(payload);
-    }
-
-    if (!savePersistence()) return;
-
-    resetEntryForm();
-    renderAllViews();
-    navigateTo("bookings");
-    triggerToast(editRecId ? "Booking updated" : `Created: ${payload.lr}`);
-  } catch (err) {
-    alert("Error: " + err.message);
-  }
-});
 
 function editConsignment(id) {
   const item = fleetData.find(x => String(x.id) === String(id));
@@ -1448,82 +1364,172 @@ function exportDataBackup() {
   a.click();
 }
 
-document.getElementById("importInput")?.addEventListener("change", function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(evt) {
+// SAFE INITIALIZATION & BINDINGS ON DOM READY
+document.addEventListener("DOMContentLoaded", function() {
+  loadPersistence();
+  resetEntryForm();
+  renderAllViews();
+
+  // Inputs & Filters
+  document.getElementById("globalTripSearch")?.addEventListener("input", renderBookingsTable);
+  document.getElementById("statusFilterSelector")?.addEventListener("change", renderBookingsTable);
+  document.getElementById("customerSearchInput")?.addEventListener("input", renderCustomerMaster);
+  document.getElementById("reportIntervalSelect")?.addEventListener("change", renderBusinessReports);
+
+  ["entry_freight", "entry_loadingAdvance", "entry_unloadingAdvance", "entry_ownerFreight", "entry_paid", "entry_expenses"].forEach(id => {
+    document.getElementById(id)?.addEventListener("input", recalculateFormMargins);
+  });
+
+  // POD Upload Handler
+  document.getElementById("podFileInput")?.addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+        const maxDim = 800;
+        if (width > height && width > maxDim) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else if (height > maxDim) {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.65);
+
+        const podField = document.getElementById("entry_podImage");
+        const previewImg = document.getElementById("podPreviewImage");
+        const emptyTxt = document.getElementById("podEmptyText");
+
+        if (podField) podField.value = compressedDataUrl;
+        if (previewImg) {
+          previewImg.src = compressedDataUrl;
+          previewImg.style.display = "block";
+        }
+        if (emptyTxt) emptyTxt.style.display = "none";
+        triggerToast("Signed POD attached");
+      };
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Form Submit Handler
+  document.getElementById("consignmentForm")?.addEventListener("submit", function(evt) {
+    evt.preventDefault();
     try {
-      const data = JSON.parse(evt.target.result);
-      if (Array.isArray(data)) {
-        fleetData = data;
-        savePersistence();
-        renderAllViews();
-        triggerToast("Ledger restored");
+      const payload = extractFormDataset();
+      const editRecId = document.getElementById("entry_recordId")?.value;
+
+      if (!payload.customer || !payload.pickup || !payload.destination || !payload.goods) {
+        alert("Party, Pickup, Destination and Goods details are required.");
+        return;
       }
+
+      const stamp = new Date().toISOString();
+
+      if (editRecId) {
+        const idx = fleetData.findIndex(x => String(x.id) === String(editRecId));
+        if (idx === -1) return;
+        payload.id = editRecId;
+        payload.lr = fleetData[idx].lr || generateLRSeries();
+        payload.createdAt = fleetData[idx].createdAt || stamp;
+        payload.updatedAt = stamp;
+        fleetData[idx] = payload;
+      } else {
+        payload.id = "TRIP-" + Date.now();
+        payload.lr = generateLRSeries();
+        payload.createdAt = stamp;
+        payload.updatedAt = stamp;
+        fleetData.unshift(payload);
+      }
+
+      if (!savePersistence()) return;
+
+      resetEntryForm();
+      renderAllViews();
+      navigateTo("bookings");
+      triggerToast(editRecId ? "Booking updated" : `Created: ${payload.lr}`);
     } catch (err) {
-      alert("Invalid backup file: " + err.message);
+      alert("Error: " + err.message);
     }
-  };
-  reader.readAsText(file);
+  });
+
+  // Restore Database Handler
+  document.getElementById("importInput")?.addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      try {
+        const data = JSON.parse(evt.target.result);
+        if (Array.isArray(data)) {
+          fleetData = data;
+          savePersistence();
+          renderAllViews();
+          triggerToast("Ledger restored");
+        }
+      } catch (err) {
+        alert("Invalid backup file: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  // Universal Click Delegation
+  document.addEventListener("click", function(e) {
+    const target = e.target.closest("[data-action]");
+    if (!target) return;
+
+    const action = target.getAttribute("data-action");
+    const id = target.getAttribute("data-id");
+
+    if (action === "goto") {
+      navigateTo(target.getAttribute("data-target"));
+    } else if (action === "resetForm") {
+      resetEntryForm();
+    } else if (action === "editConsignment") {
+      editConsignment(id);
+    } else if (action === "removeConsignment") {
+      removeConsignment(id);
+    } else if (action === "printStandardBilti") {
+      printStandardBilti(id);
+    } else if (action === "sendWhatsAppBilti") {
+      sendWhatsAppBilti(id);
+    } else if (action === "showUpiQr") {
+      showUpiQr(id);
+    } else if (action === "viewPodImage") {
+      viewPodImage(id);
+    } else if (action === "showQuickPay") {
+      showQuickPay(id, target.getAttribute("data-type"));
+    } else if (action === "closeModal") {
+      const modalId = target.getAttribute("data-modal");
+      document.getElementById(modalId)?.classList.remove("active");
+    } else if (action === "submitQuickPay") {
+      submitQuickPay();
+    } else if (action === "exportCSV") {
+      exportCSV();
+    } else if (action === "backup") {
+      exportDataBackup();
+    }
+  });
+
+  document.addEventListener("change", function(e) {
+    if (e.target.classList.contains("status-selector")) {
+      const id = e.target.getAttribute("data-id");
+      updateDirectStatus(id, e.target.value);
+    }
+  });
 });
-
-// Realtime listeners
-document.getElementById("globalTripSearch")?.addEventListener("input", renderBookingsTable);
-document.getElementById("statusFilterSelector")?.addEventListener("change", renderBookingsTable);
-document.getElementById("customerSearchInput")?.addEventListener("input", renderCustomerMaster);
-document.getElementById("reportIntervalSelect")?.addEventListener("change", renderBusinessReports);
-
-// CENTRAL EVENT DELEGATION
-document.addEventListener("click", function(e) {
-  const target = e.target.closest("[data-action]");
-  if (!target) return;
-
-  const action = target.getAttribute("data-action");
-  const id = target.getAttribute("data-id");
-
-  if (action === "goto") {
-    navigateTo(target.getAttribute("data-target"));
-  } else if (action === "resetForm") {
-    resetEntryForm();
-  } else if (action === "editConsignment") {
-    editConsignment(id);
-  } else if (action === "removeConsignment") {
-    removeConsignment(id);
-  } else if (action === "printStandardBilti") {
-    printStandardBilti(id);
-  } else if (action === "sendWhatsAppBilti") {
-    sendWhatsAppBilti(id);
-  } else if (action === "showUpiQr") {
-    showUpiQr(id);
-  } else if (action === "viewPodImage") {
-    viewPodImage(id);
-  } else if (action === "showQuickPay") {
-    showQuickPay(id, target.getAttribute("data-type"));
-  } else if (action === "closeModal") {
-    const modalId = target.getAttribute("data-modal");
-    document.getElementById(modalId)?.classList.remove("active");
-  } else if (action === "submitQuickPay") {
-    submitQuickPay();
-  } else if (action === "exportCSV") {
-    exportCSV();
-  } else if (action === "backup") {
-    exportDataBackup();
-  }
-});
-
-// Handle Select Elements in dynamic tables
-document.addEventListener("change", function(e) {
-  if (e.target.classList.contains("status-selector")) {
-    const id = e.target.getAttribute("data-id");
-    updateDirectStatus(id, e.target.value);
-  }
-});
-
-// SAFE APP INITIALIZATION
-loadPersistence();
-resetEntryForm();
-renderAllViews();
 </script>
 </body>
 </html>
