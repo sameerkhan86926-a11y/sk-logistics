@@ -8,244 +8,93 @@
 
 <style>
 :root {
-  --navy:#10213a;
-  --blue:#2459d3;
-  --bg:#f3f6fb;
-  --white:#fff;
-  --text:#182235;
-  --muted:#6c778b;
-  --green:#13865b;
-  --red:#d94343;
-  --orange:#dc8a16;
-  --border:#e2e8f0;
+  --navy:#10213a;--blue:#2459d3;--bg:#f3f6fb;--white:#fff;
+  --text:#182235;--muted:#6c778b;--green:#13865b;--red:#d94343;
+  --orange:#dc8a16;--border:#e2e8f0;
 }
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:var(--bg);
-  color:var(--text);
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.topbar{background:var(--navy);color:white;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-size:23px;font-weight:800}
+.brand small{display:block;font-size:11px;font-weight:400;letter-spacing:2px;margin-top:5px;color:#b8c8e5}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.container{max-width:1400px;margin:auto;padding:22px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:0 0 16px}
+.tab{border:1px solid var(--border);background:white;color:var(--text);border-radius:9px;padding:11px 15px;white-space:nowrap;font-weight:700}
+.tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+.page{display:none}
+.page.active{display:block}
+.heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+h1{font-size:25px;margin:0 0 6px}
+h2{font-size:19px;margin:0 0 16px}
+.subtitle{color:var(--muted);font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:22px}
+.card,.panel{background:white;border:1px solid var(--border);border-radius:13px;padding:19px;min-width:0}
+.card-label{color:var(--muted);font-size:13px}
+.card-value{font-size:25px;font-weight:800;margin:12px 0 5px;overflow-wrap:anywhere}
+.card-note{font-size:12px;color:var(--muted)}
+.green{color:var(--green)}.red{color:var(--red)}.orange{color:var(--orange)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.btn{border:0;border-radius:8px;padding:11px 15px;background:var(--blue);color:white;font-weight:700}
+.btn.secondary{background:#eaf0ff;color:#214ab2}
+.btn.dark{background:var(--navy);color:white}
+.btn.success{background:var(--green)}
+.btn.danger{background:#fff0f0;color:var(--red)}
+.btn.small{padding:7px 10px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-size:13px;font-weight:700}
+.field input,.field select,.field textarea,.search-input{width:100%;padding:12px;border:1px solid #d7dfeb;border-radius:8px;background:white;color:var(--text);min-width:0}
+.field textarea{min-height:85px;resize:vertical}
+.field.full{grid-column:1/-1}
+.section-title{grid-column:1/-1;border-bottom:1px solid var(--border);padding-bottom:9px;font-size:15px;font-weight:800;margin-top:8px}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.toolbar input{flex:1;min-width:160px}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px}
+table{width:100%;border-collapse:collapse;background:white;font-size:13px}
+th,td{padding:12px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+th{background:#f7f9fc;color:#526079;font-size:12px}
+tr:last-child td{border-bottom:0}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:800}
+.badge.Booked{background:#e8efff;color:#2459d3}
+.badge.InTransit{background:#fff0d8;color:#9b5a00}
+.badge.Delivered{background:#dcf7e9;color:#08794c}
+.badge.Cancelled{background:#ffe5e5;color:#b42323}
+.empty{padding:25px;text-align:center;color:var(--muted)}
+.quick-buttons{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.notice{background:#fff8e8;border:1px solid #f4dfac;padding:12px;border-radius:9px;color:#80530b;font-size:13px;line-height:1.5;margin-bottom:17px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+.hidden{display:none!important}
+.money-line{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
+.money-line:last-child{border:0}
+.total-line{font-weight:800;font-size:17px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#10213a;color:white;padding:13px 18px;border-radius:10px;z-index:1000;display:none;max-width:90%;text-align:center}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){
+.container{padding:13px}.topbar{padding:16px}.brand{font-size:21px}
+.cards{gap:9px}.card{padding:13px}.card-value{font-size:20px}
+.grid2{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}
+.field.full,.section-title{grid-column:1}h1{font-size:22px}.btn{padding:10px 12px}
 }
-button,input,select,textarea { font:inherit; }
-button { cursor:pointer; }
-.topbar {
-  background:var(--navy);
-  color:white;
-  padding:18px 22px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.brand { font-size:23px;font-weight:800; }
-.brand small {
-  display:block;
-  font-size:11px;
-  font-weight:400;
-  letter-spacing:2px;
-  margin-top:5px;
-  color:#b8c8e5;
-}
-.top-actions { display:flex;gap:8px;flex-wrap:wrap; }
-.container { max-width:1400px;margin:auto;padding:22px; }
-.tabs {
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:0 0 16px;
-}
-.tab {
-  border:1px solid var(--border);
-  background:white;
-  color:var(--text);
-  border-radius:9px;
-  padding:11px 15px;
-  white-space:nowrap;
-  font-weight:700;
-}
-.tab.active { background:var(--blue);color:white;border-color:var(--blue); }
-.page { display:none; }
-.page.active { display:block; }
-.heading {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-bottom:18px;
-}
-h1 { font-size:25px;margin:0 0 6px; }
-h2 { font-size:19px;margin:0 0 16px; }
-.subtitle { color:var(--muted);font-size:13px; }
-.cards {
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:15px;
-  margin-bottom:22px;
-}
-.card,.panel {
-  background:white;
-  border:1px solid var(--border);
-  border-radius:13px;
-  padding:19px;
-  min-width:0;
-}
-.card-label { color:var(--muted);font-size:13px; }
-.card-value { font-size:25px;font-weight:800;margin:12px 0 5px;overflow-wrap:anywhere; }
-.card-note { font-size:12px;color:var(--muted); }
-.green { color:var(--green); }
-.red { color:var(--red); }
-.orange { color:var(--orange); }
-.grid2 { display:grid;grid-template-columns:1fr 1fr;gap:18px; }
-.btn {
-  border:0;
-  border-radius:8px;
-  padding:11px 15px;
-  background:var(--blue);
-  color:white;
-  font-weight:700;
-}
-.btn.secondary { background:#eaf0ff;color:#214ab2; }
-.btn.dark { background:var(--navy);color:white; }
-.btn.success { background:var(--green); }
-.btn.danger { background:#fff0f0;color:var(--red); }
-.btn.small { padding:7px 10px;font-size:12px; }
-.btn:disabled { opacity:.5;cursor:not-allowed; }
-.form-grid {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:15px;
-}
-.field { display:flex;flex-direction:column;gap:7px; }
-.field label { font-size:13px;font-weight:700; }
-.field input,.field select,.field textarea,
-.search-input {
-  width:100%;
-  padding:12px;
-  border:1px solid #d7dfeb;
-  border-radius:8px;
-  background:white;
-  color:var(--text);
-  min-width:0;
-}
-.field textarea { min-height:85px;resize:vertical; }
-.field.full { grid-column:1/-1; }
-.section-title {
-  grid-column:1/-1;
-  border-bottom:1px solid var(--border);
-  padding-bottom:9px;
-  font-size:15px;
-  font-weight:800;
-  margin-top:8px;
-}
-.form-actions {
-  display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;
-}
-.toolbar {
-  display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;
-}
-.toolbar input { flex:1;min-width:160px; }
-.table-wrap {
-  overflow-x:auto;
-  border:1px solid var(--border);
-  border-radius:10px;
-}
-table {
-  width:100%;
-  border-collapse:collapse;
-  background:white;
-  font-size:13px;
-}
-th,td {
-  padding:12px;
-  border-bottom:1px solid var(--border);
-  text-align:left;
-  white-space:nowrap;
-}
-th { background:#f7f9fc;color:#526079;font-size:12px; }
-tr:last-child td { border-bottom:0; }
-.badge {
-  display:inline-block;
-  padding:5px 8px;
-  border-radius:20px;
-  font-size:11px;
-  font-weight:800;
-}
-.badge.Booked { background:#e8efff;color:#2459d3; }
-.badge.InTransit { background:#fff0d8;color:#9b5a00; }
-.badge.Delivered { background:#dcf7e9;color:#08794c; }
-.badge.Cancelled { background:#ffe5e5;color:#b42323; }
-.empty { padding:25px;text-align:center;color:var(--muted); }
-.quick-buttons { display:flex;gap:10px;flex-wrap:wrap;margin:18px 0; }
-.notice {
-  background:#fff8e8;
-  border:1px solid #f4dfac;
-  padding:12px;
-  border-radius:9px;
-  color:#80530b;
-  font-size:13px;
-  line-height:1.5;
-  margin-bottom:17px;
-}
-footer { text-align:center;color:var(--muted);font-size:12px;padding:25px; }
-.hidden { display:none !important; }
-.money-line {
-  display:flex;justify-content:space-between;gap:10px;
-  padding:12px 0;border-bottom:1px solid var(--border);
-}
-.money-line:last-child { border:0; }
-.total-line { font-weight:800;font-size:17px; }
-.toast {
-  position:fixed;bottom:20px;left:50%;
-  transform:translateX(-50%);
-  background:#10213a;color:white;
-  padding:13px 18px;border-radius:10px;
-  z-index:1000;display:none;
-  max-width:90%;text-align:center;
-}
-@media(max-width:900px) {
-  .cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .form-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-}
-@media(max-width:600px) {
-  .container { padding:13px; }
-  .topbar { padding:16px; }
-  .brand { font-size:21px; }
-  .cards { gap:9px; }
-  .card { padding:13px; }
-  .card-value { font-size:20px; }
-  .grid2 { grid-template-columns:1fr; }
-  .form-grid { grid-template-columns:1fr; }
-  .field.full,.section-title { grid-column:1; }
-  h1 { font-size:22px; }
-  .btn { padding:10px 12px; }
-}
-@media print {
-  body * { visibility:hidden !important; }
-  #printArea,#printArea * { visibility:visible !important; }
-  #printArea {
-    display:block !important;
-    position:absolute;left:0;top:0;width:100%;
-    padding:20px;background:white;color:black;
-  }
-  #printArea h1 { text-align:center; }
-  #printArea table { font-size:12px; }
-  #printArea th,#printArea td {
-    border:1px solid #888;white-space:normal;
-  }
-  .no-print { display:none !important; }
+@media print{
+body *{visibility:hidden!important}
+#printArea,#printArea *{visibility:visible!important}
+#printArea{display:block!important;position:absolute;left:0;top:0;width:100%;padding:20px;background:white;color:black}
+#printArea h1{text-align:center}
+#printArea table{font-size:12px}
+#printArea th,#printArea td{border:1px solid #888;white-space:normal}
+.no-print{display:none!important}
 }
 </style>
 </head>
-
 <body>
 
 <header class="topbar no-print">
-  <div class="brand">
-    SK LOGISTICS
-    <small>TRANSPORT MANAGEMENT SYSTEM</small>
-  </div>
+  <div class="brand">SK LOGISTICS<small>TRANSPORT MANAGEMENT SYSTEM</small></div>
   <div class="top-actions">
     <button class="btn secondary" onclick="exportCSV()">Export CSV</button>
     <button class="btn" onclick="openPage('newBooking')">+ New Booking</button>
@@ -253,375 +102,130 @@ footer { text-align:center;color:var(--muted);font-size:12px;padding:25px; }
 </header>
 
 <main class="container no-print">
+<nav class="tabs">
+  <button class="tab active" data-page="dashboard" onclick="openPage('dashboard')">Dashboard</button>
+  <button class="tab" data-page="bookings" onclick="openPage('bookings')">Bookings</button>
+  <button class="tab" data-page="newBooking" onclick="openPage('newBooking')">New Booking</button>
+  <button class="tab" data-page="customers" onclick="openPage('customers')">Customers</button>
+  <button class="tab" data-page="accounts" onclick="openPage('accounts')">Hisab-Kitab</button>
+  <button class="tab" data-page="reports" onclick="openPage('reports')">Reports</button>
+</nav>
 
-  <nav class="tabs">
-    <button class="tab active" data-page="dashboard" onclick="openPage('dashboard')">Dashboard</button>
-    <button class="tab" data-page="bookings" onclick="openPage('bookings')">Bookings</button>
-    <button class="tab" data-page="newBooking" onclick="openPage('newBooking')">New Booking</button>
-    <button class="tab" data-page="customers" onclick="openPage('customers')">Customers</button>
-    <button class="tab" data-page="accounts" onclick="openPage('accounts')">Hisab-Kitab</button>
-    <button class="tab" data-page="reports" onclick="openPage('reports')">Reports</button>
-  </nav>
+<section id="dashboard" class="page active">
+  <div class="heading">
+    <div><h1>Business Dashboard</h1><div class="subtitle">SK Logistics ka transport aur payment overview</div></div>
+    <button class="btn" onclick="openPage('newBooking')">+ Add Booking</button>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="card-label">Total Bookings</div><div class="card-value" id="dBookings">0</div><div class="card-note">All transport bookings</div></div>
+    <div class="card"><div class="card-label">Active Trips</div><div class="card-value orange" id="dActive">0</div><div class="card-note">Booked or in transit</div></div>
+    <div class="card"><div class="card-label">Delivered Trips</div><div class="card-value green" id="dDelivered">0</div><div class="card-note">Successfully delivered</div></div>
+    <div class="card"><div class="card-label">Estimated Profit</div><div class="card-value green" id="dProfit">₹0</div><div class="card-note">Freight minus costs</div></div>
+    <div class="card"><div class="card-label">Customer Collection Due</div><div class="card-value red" id="dDue">₹0</div><div class="card-note">Customer freight outstanding</div></div>
+    <div class="card"><div class="card-label">Truck Owner Payment Due</div><div class="card-value orange" id="dOwnerDue">₹0</div><div class="card-note">Owner freight outstanding</div></div>
+    <div class="card"><div class="card-label">Total Customer Freight</div><div class="card-value" id="dFreight">₹0</div><div class="card-note">Booking freight value</div></div>
+    <div class="card"><div class="card-label">Total Trip Expenses</div><div class="card-value" id="dExpenses">₹0</div><div class="card-note">Recorded trip expenses</div></div>
+  </div>
+  <div class="quick-buttons">
+    <button class="btn" onclick="openPage('newBooking')">Create Booking</button>
+    <button class="btn secondary" onclick="openPage('accounts')">Check Payments</button>
+    <button class="btn secondary" onclick="openPage('reports')">View Reports</button>
+  </div>
+  <div class="panel"><h2>Recent Bookings</h2><div id="recentBookings"></div></div>
+</section>
 
-  <!-- DASHBOARD -->
-  <section id="dashboard" class="page active">
-    <div class="heading">
-      <div>
-        <h1>Business Dashboard</h1>
-        <div class="subtitle">SK Logistics ka transport aur payment overview</div>
-      </div>
-      <button class="btn" onclick="openPage('newBooking')">+ Add Booking</button>
+<section id="bookings" class="page">
+  <div class="heading">
+    <div><h1>Transport Bookings</h1><div class="subtitle">Bookings search karo, status badlo aur bilti print karo.</div></div>
+    <button class="btn" onclick="openPage('newBooking')">+ New Booking</button>
+  </div>
+  <div class="toolbar">
+    <input class="search-input" id="bookingSearch" placeholder="LR number, customer, route ya vehicle search..." oninput="renderBookings()">
+    <select class="search-input" id="statusFilter" onchange="renderBookings()" style="max-width:190px">
+      <option value="">All Statuses</option><option value="Booked">Booked</option><option value="In Transit">In Transit</option><option value="Delivered">Delivered</option><option value="Cancelled">Cancelled</option>
+    </select>
+  </div>
+  <div class="panel"><div id="bookingTable"></div></div>
+</section>
+
+<section id="newBooking" class="page">
+  <div class="heading"><div><h1 id="formHeading">Create New Booking</h1><div class="subtitle">Transport details aur freight information bharo.</div></div></div>
+  <form id="bookingForm" class="panel">
+    <input type="hidden" id="editId">
+    <div class="form-grid">
+      <div class="section-title">1. Booking Information</div>
+      <div class="field"><label>Booking Date *</label><input id="bookingDate" type="date" required></div>
+      <div class="field"><label>Customer Name *</label><input id="customer" list="customerSuggestions" required placeholder="Customer ka naam"><datalist id="customerSuggestions"></datalist></div>
+      <div class="field"><label>Customer Mobile</label><input id="customerMobile" type="tel" maxlength="15" placeholder="Mobile number"></div>
+      <div class="field"><label>Pickup Location *</label><input id="pickup" required placeholder="Loading city"></div>
+      <div class="field"><label>Delivery Location *</label><input id="destination" required placeholder="Unloading city"></div>
+      <div class="field"><label>Goods / Material *</label><input id="goods" required placeholder="Goods ka naam"></div>
+      <div class="field"><label>Weight</label><input id="weight" placeholder="e.g. 5 Ton"></div>
+      <div class="field"><label>Vehicle Type</label><select id="vehicleType"><option value="Truck">Truck</option><option value="Container">Container</option><option value="Trailer">Trailer</option><option value="Pickup">Pickup</option><option value="Tata Ace">Tata Ace</option><option value="Other">Other</option></select></div>
+      <div class="field"><label>Vehicle Number</label><input id="vehicleNo" placeholder="e.g. HR55AB1234"></div>
+      <div class="section-title">2. Driver & Truck Owner</div>
+      <div class="field"><label>Driver Name</label><input id="driver" placeholder="Driver name"></div>
+      <div class="field"><label>Driver Mobile</label><input id="driverMobile" type="tel" maxlength="15"></div>
+      <div class="field"><label>Truck Owner Name</label><input id="owner" placeholder="Truck owner"></div>
+      <div class="field"><label>Truck Owner Mobile</label><input id="ownerMobile" type="tel" maxlength="15"></div>
+      <div class="field"><label>Trip Status</label><select id="status"><option>Booked</option><option>In Transit</option><option>Delivered</option><option>Cancelled</option></select></div>
+      <div class="field"><label>Expected Delivery Date</label><input id="deliveryDate" type="date"></div>
+      <div class="section-title">3. Freight & Payment</div>
+      <div class="field"><label>Customer Freight (₹) *</label><input id="freight" type="number" min="0" step="0.01" required value="0"></div>
+      <div class="field"><label>Truck Owner Freight (₹)</label><input id="ownerFreight" type="number" min="0" step="0.01" value="0"></div>
+      <div class="field"><label>Trip Expenses (₹)</label><input id="expenses" type="number" min="0" step="0.01" value="0"></div>
+      <div class="field"><label>Customer Amount Received (₹)</label><input id="received" type="number" min="0" step="0.01" value="0"></div>
+      <div class="field"><label>Owner Amount Paid (₹)</label><input id="paid" type="number" min="0" step="0.01" value="0"></div>
+      <div class="field"><label>Other Notes</label><input id="notes" placeholder="Optional details"></div>
+      <div class="field full"><div class="notice" id="profitPreview">Estimated profit: ₹0 | Customer due: ₹0 | Owner due: ₹0</div></div>
     </div>
+    <div class="form-actions">
+      <button type="submit" class="btn" id="saveButton">Save Booking</button>
+      <button type="button" class="btn secondary" onclick="resetForm()">Clear Form</button>
+      <button type="button" class="btn dark" onclick="openPage('bookings')">Back to Bookings</button>
+    </div>
+  </form>
+</section>
 
+<section id="customers" class="page">
+  <div class="heading"><div><h1>Customer Management</h1><div class="subtitle">Customer list aur unka payment balance.</div></div></div>
+  <div class="toolbar"><input id="customerSearch" class="search-input" placeholder="Customer name ya mobile search..." oninput="renderCustomers()"></div>
+  <div class="panel"><div id="customerTable"></div></div>
+</section>
+
+<section id="accounts" class="page">
+  <div class="heading"><div><h1>Hisab-Kitab</h1><div class="subtitle">Customer collection aur truck owner payments.</div></div></div>
+  <div class="cards">
+    <div class="card"><div class="card-label">Customer Freight</div><div class="card-value" id="aFreight">₹0</div></div>
+    <div class="card"><div class="card-label">Customer Received</div><div class="card-value green" id="aReceived">₹0</div></div>
+    <div class="card"><div class="card-label">Customer Due</div><div class="card-value red" id="aDue">₹0</div></div>
+    <div class="card"><div class="card-label">Owner Payment Due</div><div class="card-value orange" id="aOwnerDue">₹0</div></div>
+  </div>
+  <div class="grid2">
+    <div class="panel"><h2>Customer Collection Pending</h2><div id="customerDues"></div></div>
+    <div class="panel"><h2>Truck Owner Payment Pending</h2><div id="ownerDues"></div></div>
+  </div>
+  <div class="notice" style="margin-top:18px">Payment update karne ke liye booking edit karo aur received ya paid amount update karke save karo.</div>
+</section>
+
+<section id="reports" class="page">
+  <div class="heading"><div><h1>Business Reports</h1><div class="subtitle">Freight, expenses aur estimated profit ka overview.</div></div><button class="btn" onclick="exportCSV()">Export CSV</button></div>
+  <div class="panel">
+    <div class="field" style="max-width:280px;margin-bottom:18px"><label>Report Period</label><select id="reportPeriod" onchange="renderReports()"><option value="all">All Bookings</option><option value="month">This Month</option><option value="today">Today</option><option value="year">This Year</option></select></div>
     <div class="cards">
-      <div class="card">
-        <div class="card-label">Total Bookings</div>
-        <div class="card-value" id="dBookings">0</div>
-        <div class="card-note">All transport bookings</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Active Trips</div>
-        <div class="card-value orange" id="dActive">0</div>
-        <div class="card-note">Booked or in transit</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Delivered Trips</div>
-        <div class="card-value green" id="dDelivered">0</div>
-        <div class="card-note">Successfully delivered</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Estimated Profit</div>
-        <div class="card-value green" id="dProfit">₹0</div>
-        <div class="card-note">Freight minus costs</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Customer Collection Due</div>
-        <div class="card-value red" id="dDue">₹0</div>
-        <div class="card-note">Customer freight outstanding</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Truck Owner Payment Due</div>
-        <div class="card-value orange" id="dOwnerDue">₹0</div>
-        <div class="card-note">Owner freight outstanding</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Total Customer Freight</div>
-        <div class="card-value" id="dFreight">₹0</div>
-        <div class="card-note">Booking freight value</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Total Trip Expenses</div>
-        <div class="card-value" id="dExpenses">₹0</div>
-        <div class="card-note">Recorded trip expenses</div>
-      </div>
+      <div class="card"><div class="card-label">Bookings</div><div class="card-value" id="rCount">0</div></div>
+      <div class="card"><div class="card-label">Total Freight</div><div class="card-value" id="rFreight">₹0</div></div>
+      <div class="card"><div class="card-label">Total Costs</div><div class="card-value" id="rCosts">₹0</div></div>
+      <div class="card"><div class="card-label">Estimated Profit</div><div class="card-value green" id="rProfit">₹0</div></div>
     </div>
-
-    <div class="quick-buttons">
-      <button class="btn" onclick="openPage('newBooking')">Create Booking</button>
-      <button class="btn secondary" onclick="openPage('accounts')">Check Payments</button>
-      <button class="btn secondary" onclick="openPage('reports')">View Reports</button>
-    </div>
-
-    <div class="panel">
-      <h2>Recent Bookings</h2>
-      <div id="recentBookings"></div>
-    </div>
-  </section>
-
-  <!-- ALL BOOKINGS -->
-  <section id="bookings" class="page">
-    <div class="heading">
-      <div>
-        <h1>Transport Bookings</h1>
-        <div class="subtitle">Bookings search karo, status badlo aur bilti print karo.</div>
-      </div>
-      <button class="btn" onclick="openPage('newBooking')">+ New Booking</button>
-    </div>
-
-    <div class="toolbar">
-      <input class="search-input" id="bookingSearch" placeholder="LR number, customer, route ya vehicle search..." oninput="renderBookings()">
-      <select class="search-input" id="statusFilter" onchange="renderBookings()" style="max-width:190px">
-        <option value="">All Statuses</option>
-        <option value="Booked">Booked</option>
-        <option value="In Transit">In Transit</option>
-        <option value="Delivered">Delivered</option>
-        <option value="Cancelled">Cancelled</option>
-      </select>
-    </div>
-
-    <div class="panel">
-      <div id="bookingTable"></div>
-    </div>
-  </section>
-
-  <!-- NEW BOOKING -->
-  <section id="newBooking" class="page">
-    <div class="heading">
-      <div>
-        <h1 id="formHeading">Create New Booking</h1>
-        <div class="subtitle">Transport details aur freight information bharo.</div>
-      </div>
-    </div>
-
-    <form id="bookingForm" class="panel">
-      <input type="hidden" id="editId">
-
-      <div class="form-grid">
-        <div class="section-title">1. Booking Information</div>
-
-        <div class="field">
-          <label>Booking Date *</label>
-          <input id="bookingDate" type="date" required>
-        </div>
-
-        <div class="field">
-          <label>Customer Name *</label>
-          <input id="customer" list="customerSuggestions" required placeholder="Customer ka naam">
-          <datalist id="customerSuggestions"></datalist>
-        </div>
-
-        <div class="field">
-          <label>Customer Mobile</label>
-          <input id="customerMobile" type="tel" maxlength="15" placeholder="Mobile number">
-        </div>
-
-        <div class="field">
-          <label>Pickup Location *</label>
-          <input id="pickup" required placeholder="Loading city">
-        </div>
-
-        <div class="field">
-          <label>Delivery Location *</label>
-          <input id="destination" required placeholder="Unloading city">
-        </div>
-
-        <div class="field">
-          <label>Goods / Material *</label>
-          <input id="goods" required placeholder="Goods ka naam">
-        </div>
-
-        <div class="field">
-          <label>Weight</label>
-          <input id="weight" placeholder="e.g. 5 Ton">
-        </div>
-
-        <div class="field">
-          <label>Vehicle Type</label>
-          <select id="vehicleType">
-            <option value="Truck">Truck</option>
-            <option value="Container">Container</option>
-            <option value="Trailer">Trailer</option>
-            <option value="Pickup">Pickup</option>
-            <option value="Tata Ace">Tata Ace</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Vehicle Number</label>
-          <input id="vehicleNo" placeholder="e.g. HR55AB1234">
-        </div>
-
-        <div class="section-title">2. Driver & Truck Owner</div>
-
-        <div class="field">
-          <label>Driver Name</label>
-          <input id="driver" placeholder="Driver name">
-        </div>
-
-        <div class="field">
-          <label>Driver Mobile</label>
-          <input id="driverMobile" type="tel" maxlength="15">
-        </div>
-
-        <div class="field">
-          <label>Truck Owner Name</label>
-          <input id="owner" placeholder="Truck owner">
-        </div>
-
-        <div class="field">
-          <label>Truck Owner Mobile</label>
-          <input id="ownerMobile" type="tel" maxlength="15">
-        </div>
-
-        <div class="field">
-          <label>Trip Status</label>
-          <select id="status">
-            <option>Booked</option>
-            <option>In Transit</option>
-            <option>Delivered</option>
-            <option>Cancelled</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Expected Delivery Date</label>
-          <input id="deliveryDate" type="date">
-        </div>
-
-        <div class="section-title">3. Freight & Payment</div>
-
-        <div class="field">
-          <label>Customer Freight (₹) *</label>
-          <input id="freight" type="number" min="0" step="0.01" required value="0">
-        </div>
-
-        <div class="field">
-          <label>Truck Owner Freight (₹)</label>
-          <input id="ownerFreight" type="number" min="0" step="0.01" value="0">
-        </div>
-
-        <div class="field">
-          <label>Trip Expenses (₹)</label>
-          <input id="expenses" type="number" min="0" step="0.01" value="0">
-        </div>
-
-        <div class="field">
-          <label>Customer Amount Received (₹)</label>
-          <input id="received" type="number" min="0" step="0.01" value="0">
-        </div>
-
-        <div class="field">
-          <label>Owner Amount Paid (₹)</label>
-          <input id="paid" type="number" min="0" step="0.01" value="0">
-        </div>
-
-        <div class="field">
-          <label>Other Notes</label>
-          <input id="notes" placeholder="Optional details">
-        </div>
-
-        <div class="field full">
-          <div class="notice" id="profitPreview">
-            Estimated profit: ₹0 | Customer due: ₹0 | Owner due: ₹0
-          </div>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button type="submit" class="btn" id="saveButton">Save Booking</button>
-        <button type="button" class="btn secondary" onclick="resetForm()">Clear Form</button>
-        <button type="button" class="btn dark" onclick="openPage('bookings')">Back to Bookings</button>
-      </div>
-    </form>
-  </section>
-
-  <!-- CUSTOMERS -->
-  <section id="customers" class="page">
-    <div class="heading">
-      <div>
-        <h1>Customer Management</h1>
-        <div class="subtitle">Customer list aur unka payment balance.</div>
-      </div>
-    </div>
-
-    <div class="toolbar">
-      <input id="customerSearch" class="search-input" placeholder="Customer name ya mobile search..." oninput="renderCustomers()">
-    </div>
-
-    <div class="panel">
-      <div id="customerTable"></div>
-    </div>
-  </section>
-
-  <!-- ACCOUNTS -->
-  <section id="accounts" class="page">
-    <div class="heading">
-      <div>
-        <h1>Hisab-Kitab</h1>
-        <div class="subtitle">Customer collection aur truck owner payments.</div>
-      </div>
-    </div>
-
-    <div class="cards">
-      <div class="card">
-        <div class="card-label">Customer Freight</div>
-        <div class="card-value" id="aFreight">₹0</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Customer Received</div>
-        <div class="card-value green" id="aReceived">₹0</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Customer Due</div>
-        <div class="card-value red" id="aDue">₹0</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Owner Payment Due</div>
-        <div class="card-value orange" id="aOwnerDue">₹0</div>
-      </div>
-    </div>
-
-    <div class="grid2">
-      <div class="panel">
-        <h2>Customer Collection Pending</h2>
-        <div id="customerDues"></div>
-      </div>
-      <div class="panel">
-        <h2>Truck Owner Payment Pending</h2>
-        <div id="ownerDues"></div>
-      </div>
-    </div>
-
-    <div class="notice" style="margin-top:18px">
-      Payment update karne ke liye booking edit karo aur received ya paid amount update karke save karo.
-    </div>
-  </section>
-
-  <!-- REPORTS -->
-  <section id="reports" class="page">
-    <div class="heading">
-      <div>
-        <h1>Business Reports</h1>
-        <div class="subtitle">Freight, expenses aur estimated profit ka overview.</div>
-      </div>
-      <button class="btn" onclick="exportCSV()">Export CSV</button>
-    </div>
-
-    <div class="panel">
-      <div class="field" style="max-width:280px;margin-bottom:18px">
-        <label>Report Period</label>
-        <select id="reportPeriod" onchange="renderReports()">
-          <option value="all">All Bookings</option>
-          <option value="month">This Month</option>
-          <option value="today">Today</option>
-          <option value="year">This Year</option>
-        </select>
-      </div>
-
-      <div class="cards">
-        <div class="card">
-          <div class="card-label">Bookings</div>
-          <div class="card-value" id="rCount">0</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Total Freight</div>
-          <div class="card-value" id="rFreight">₹0</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Total Costs</div>
-          <div class="card-value" id="rCosts">₹0</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Estimated Profit</div>
-          <div class="card-value green" id="rProfit">₹0</div>
-        </div>
-      </div>
-
-      <div id="reportSummary"></div>
-    </div>
-  </section>
-
+    <div id="reportSummary"></div>
+  </div>
+</section>
 </main>
 
-<!-- Printable LR / Bilti -->
 <div id="printArea" class="hidden"></div>
-
-<footer class="no-print">
-  SK Logistics · Transport Management System
-</footer>
-
-<div class="toast" id="toast"></div>
+<footer class="no-print">SK Logistics · Transport Management System</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 "use strict";
@@ -639,10 +243,13 @@ function today() {
 
 function loadBookings() {
   try {
-    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    bookings = Array.isArray(raw) ? raw : [];
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    bookings = Array.isArray(parsed) ? parsed : [];
   } catch (e) {
     bookings = [];
+    console.error("Booking data load error:", e);
+    alert("Browser se purana data read nahi ho paaya. Site ko Safari mein kholkar dobara try karo.");
   }
 }
 
@@ -651,49 +258,65 @@ function saveBookings() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
     return true;
   } catch (e) {
-    alert("Data save nahi ho paya. Browser storage check karo.");
+    console.error("Booking save error:", e);
+    alert("Booking save nahi hui. Browser storage available nahi hai. Site ko Safari mein kholkar dobara try karo.");
     return false;
   }
 }
 
 function money(value) {
-  return "₹" + (Number(value) || 0).toLocaleString("en-IN", {
-    maximumFractionDigits:2
-  });
+  return "₹" + (Number(value) || 0).toLocaleString("en-IN", {maximumFractionDigits:2});
 }
 
 function number(value) {
-  return Math.max(0, Number(value) || 0);
+  const n = Number(value);
+  return Number.isFinite(n) ? Math.max(0,n) : 0;
 }
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[c]));
 }
 
-function profit(b) {
-  return number(b.freight) - number(b.ownerFreight) - number(b.expenses);
-}
-
-function customerDue(b) {
-  return Math.max(0, number(b.freight) - number(b.received));
-}
-
-function ownerDue(b) {
-  return Math.max(0, number(b.ownerFreight) - number(b.paid));
-}
+function profit(b) { return number(b.freight)-number(b.ownerFreight)-number(b.expenses); }
+function customerDue(b) { return Math.max(0,number(b.freight)-number(b.received)); }
+function ownerDue(b) { return Math.max(0,number(b.ownerFreight)-number(b.paid)); }
 
 function notify(message) {
   const el = document.getElementById("toast");
   el.textContent = message;
   el.style.display = "block";
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.style.display = "none", 2600);
+  toastTimer = setTimeout(() => el.style.display = "none", 3000);
+}
+
+/* FIX: LR generation no longer depends on a separate localStorage counter. */
+function generateLR() {
+  const datePart = today().replace(/-/g,"");
+  const prefix = "SKL-" + datePart + "-";
+  let maxNumber = 0;
+
+  bookings.forEach(b => {
+    const lr = String(b.lr || "");
+    if (lr.startsWith(prefix)) {
+      const suffix = Number(lr.slice(prefix.length));
+      if (Number.isInteger(suffix) && suffix > maxNumber) maxNumber = suffix;
+    }
+  });
+
+  return prefix + String(maxNumber + 1).padStart(4,"0");
+}
+
+function makeId() {
+  try {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+      return window.crypto.randomUUID();
+    }
+  } catch (e) {
+    console.warn("UUID unavailable; using fallback ID.");
+  }
+  return "SK-" + Date.now() + "-" + Math.random().toString(36).slice(2,10);
 }
 
 function openPage(id) {
@@ -704,32 +327,16 @@ function openPage(id) {
   if (!page) return;
 
   page.classList.add("active");
-
   const tab = document.querySelector('[data-page="' + id + '"]');
   if (tab) tab.classList.add("active");
 
-  if (id === "newBooking" && !document.getElementById("editId").value) {
-    if (!document.getElementById("bookingDate").value) {
-      document.getElementById("bookingDate").value = today();
-    }
+  if (id === "newBooking" && !document.getElementById("editId").value &&
+      !document.getElementById("bookingDate").value) {
+    document.getElementById("bookingDate").value = today();
   }
 
   refreshAll();
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function generateLR() {
-  const key = "sklogistics_lr_counter_v1";
-  let count = Number(localStorage.getItem(key) || "0") + 1;
-
-  while (bookings.some(b => b.lr === "SKL-" + today().replaceAll("-","") + "-" + String(count).padStart(4,"0"))) {
-    count++;
-  }
-
-  localStorage.setItem(key, String(count));
-
-  return "SKL-" + today().replaceAll("-","") + "-" +
-    String(count).padStart(4,"0");
+  window.scrollTo({top:0,behavior:"auto"});
 }
 
 const fields = [
@@ -745,11 +352,9 @@ function readForm() {
     const el = document.getElementById(id);
     b[id] = el ? el.value.trim() : "";
   });
-
   ["freight","ownerFreight","expenses","received","paid"].forEach(id => {
     b[id] = number(b[id]);
   });
-
   return b;
 }
 
@@ -767,93 +372,109 @@ function resetForm() {
   document.getElementById("bookingDate").value = today();
   document.getElementById("formHeading").textContent = "Create New Booking";
   document.getElementById("saveButton").textContent = "Save Booking";
-  document.getElementById("freight").value = "0";
-  document.getElementById("ownerFreight").value = "0";
-  document.getElementById("expenses").value = "0";
-  document.getElementById("received").value = "0";
-  document.getElementById("paid").value = "0";
+  ["freight","ownerFreight","expenses","received","paid"].forEach(id => {
+    document.getElementById(id).value = "0";
+  });
   updatePreview();
 }
 
+/* FIX: whole submit process is protected; unexpected errors now show an alert. */
 document.getElementById("bookingForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
-  const b = readForm();
-  const editId = document.getElementById("editId").value;
+  try {
+    const b = readForm();
+    const editId = document.getElementById("editId").value;
 
-  if (!b.customer || !b.pickup || !b.destination || !b.goods) {
-    alert("Customer, pickup, destination aur goods ki details bharo.");
-    return;
-  }
-
-  if (b.received > b.freight) {
-    if (!confirm("Received amount customer freight se zyada hai. Kya save karna hai?")) return;
-  }
-
-  if (b.paid > b.ownerFreight) {
-    if (!confirm("Paid amount owner freight se zyada hai. Kya save karna hai?")) return;
-  }
-
-  if (editId) {
-    const index = bookings.findIndex(x => x.id === editId);
-    if (index < 0) {
-      alert("Booking nahi mili.");
+    if (!b.customer || !b.pickup || !b.destination || !b.goods) {
+      alert("Customer, pickup, destination aur goods ki details bharo.");
       return;
     }
 
-    b.id = editId;
-    b.lr = bookings[index].lr;
-    b.createdAt = bookings[index].createdAt;
-    b.updatedAt = new Date().toISOString();
-    bookings[index] = b;
-  } else {
-    b.id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()));
-    b.lr = generateLR();
-    b.createdAt = new Date().toISOString();
-    b.updatedAt = b.createdAt;
+    if (b.received > b.freight &&
+        !confirm("Received amount customer freight se zyada hai. Kya save karna hai?")) return;
+
+    if (b.paid > b.ownerFreight &&
+        !confirm("Paid amount owner freight se zyada hai. Kya save karna hai?")) return;
+
+    const oldBookings = bookings.map(x => ({...x}));
+    const timestamp = new Date().toISOString();
+
+    if (editId) {
+      const index = bookings.findIndex(x => String(x.id) === String(editId));
+      if (index < 0) {
+        alert("Booking nahi mili. Bookings page kholkar dobara try karo.");
+        return;
+      }
+
+      b.id = editId;
+      b.lr = bookings[index].lr || generateLR();
+      b.createdAt = bookings[index].createdAt || timestamp;
+      b.updatedAt = timestamp;
+      bookings[index] = b;
+    } else {
+      b.id = makeId();
+      b.lr = generateLR();
+      b.createdAt = timestamp;
+      b.updatedAt = timestamp;
+      bookings.push(b);
+    }
+
+    if (!saveBookings()) {
+      bookings = oldBookings;
+      return;
+    }
+
+    resetForm();
+    refreshAll();
+    openPage("bookings");
+    notify(editId ? "Booking update ho gayi." : "Booking save ho gayi: " + b.lr);
+  } catch (error) {
+    console.error("Unexpected booking form error:", error);
+    alert("Booking process mein error aaya: " + (error && error.message ? error.message : String(error)));
   }
-
-  if (!saveBookings()) return;
-
-  resetForm();
-  renderCustomers();
-  refreshAll();
-  openPage("bookings");
-  notify(editId ? "Booking update ho gayi." : "Booking save ho gayi: " + b.lr);
 });
 
 function editBooking(id) {
-  const b = bookings.find(x => x.id === id);
-  if (!b) return;
+  const b = bookings.find(x => String(x.id) === String(id));
+  if (!b) { alert("Booking nahi mili."); return; }
 
-  document.getElementById("editId").value = id;
+  document.getElementById("editId").value = b.id;
   setForm(b);
   document.getElementById("formHeading").textContent = "Edit Booking: " + b.lr;
   document.getElementById("saveButton").textContent = "Update Booking";
   openPage("newBooking");
 }
 
-function changeStatus(id, status) {
-  const b = bookings.find(x => x.id === id);
-  if (!b) return;
+function changeStatus(id,status) {
+  const index = bookings.findIndex(x => String(x.id) === String(id));
+  if (index < 0) return;
 
-  b.status = status;
-  b.updatedAt = new Date().toISOString();
+  const old = {...bookings[index]};
+  bookings[index].status = status;
+  bookings[index].updatedAt = new Date().toISOString();
 
-  if (!saveBookings()) return;
+  if (!saveBookings()) {
+    bookings[index] = old;
+    return;
+  }
 
   refreshAll();
   notify("Booking status update ho gaya.");
 }
 
 function deleteBooking(id) {
-  const b = bookings.find(x => x.id === id);
+  const b = bookings.find(x => String(x.id) === String(id));
   if (!b) return;
-
   if (!confirm("Kya booking " + b.lr + " delete karni hai?")) return;
 
-  bookings = bookings.filter(x => x.id !== id);
-  if (!saveBookings()) return;
+  const oldBookings = bookings;
+  bookings = bookings.filter(x => String(x.id) !== String(id));
+
+  if (!saveBookings()) {
+    bookings = oldBookings;
+    return;
+  }
 
   refreshAll();
   notify("Booking delete ho gayi.");
@@ -866,9 +487,7 @@ function statusBadge(status) {
 }
 
 function bookingRows(list) {
-  if (!list.length) {
-    return '<div class="empty">Abhi koi booking nahi hai.</div>';
-  }
+  if (!list.length) return '<div class="empty">Abhi koi booking nahi hai.</div>';
 
   return '<div class="table-wrap"><table><thead><tr>' +
     '<th>LR No.</th><th>Date</th><th>Customer</th><th>Route</th>' +
@@ -882,18 +501,18 @@ function bookingRows(list) {
       '<td>' + escapeHTML(b.pickup) + ' → ' + escapeHTML(b.destination) + '</td>' +
       '<td>' + escapeHTML(b.vehicleNo || b.vehicleType || "-") + '</td>' +
       '<td>' + money(b.freight) + '</td>' +
-      '<td class="' + (customerDue(b)>0 ? 'red' : 'green') + '">' + money(customerDue(b)) + '</td>' +
-      '<td class="' + (profit(b)<0 ? 'red' : 'green') + '">' + money(profit(b)) + '</td>' +
-      '<td><select aria-label="Change booking status" onchange="changeStatus(\'' +
-        escapeHTML(b.id) + '\',this.value)">' +
+      '<td class="' + (customerDue(b)>0 ? "red" : "green") + '">' + money(customerDue(b)) + '</td>' +
+      '<td class="' + (profit(b)<0 ? "red" : "green") + '">' + money(profit(b)) + '</td>' +
+      '<td><select aria-label="Change booking status" onchange="changeStatus(' +
+        JSON.stringify(String(b.id)) + ',this.value)">' +
         ["Booked","In Transit","Delivered","Cancelled"].map(s =>
-          '<option ' + (b.status===s?'selected':'') + '>' + s + '</option>'
+          '<option value="' + s + '" ' + (b.status===s ? "selected" : "") + '>' + s + '</option>'
         ).join("") +
       '</select></td>' +
       '<td><div style="display:flex;gap:5px">' +
-        '<button class="btn small secondary" onclick="printLR(\'' + escapeHTML(b.id) + '\')">Bilti</button>' +
-        '<button class="btn small" onclick="editBooking(\'' + escapeHTML(b.id) + '\')">Edit</button>' +
-        '<button class="btn small danger" onclick="deleteBooking(\'' + escapeHTML(b.id) + '\')">Delete</button>' +
+        '<button class="btn small secondary" onclick="printLR(' + JSON.stringify(String(b.id)) + ')">Bilti</button>' +
+        '<button class="btn small" onclick="editBooking(' + JSON.stringify(String(b.id)) + ')">Edit</button>' +
+        '<button class="btn small danger" onclick="deleteBooking(' + JSON.stringify(String(b.id)) + ')">Delete</button>' +
       '</div></td>' +
     '</tr>').join("") +
     '</tbody></table></div>';
@@ -905,15 +524,14 @@ function renderBookings() {
 
   const list = [...bookings]
     .filter(b => !status || b.status === status)
-    .filter(b => [
-      b.lr,b.customer,b.pickup,b.destination,b.vehicleNo,b.goods
-    ].some(v => String(v || "").toLowerCase().includes(q)))
+    .filter(b => [b.lr,b.customer,b.pickup,b.destination,b.vehicleNo,b.goods]
+      .some(v => String(v || "").toLowerCase().includes(q)))
     .sort((a,b) => String(b.bookingDate).localeCompare(String(a.bookingDate)));
 
   document.getElementById("bookingTable").innerHTML = bookingRows(list);
 }
 
-function sum(list, key) {
+function sum(list,key) {
   return list.reduce((total,b) => total + number(b[key]),0);
 }
 
@@ -931,7 +549,7 @@ function renderDashboard() {
   document.getElementById("dExpenses").textContent = money(sum(bookings,"expenses"));
 
   const recent = [...bookings].sort((a,b) =>
-    String(b.createdAt).localeCompare(String(a.createdAt))
+    String(b.createdAt || "").localeCompare(String(a.createdAt || ""))
   ).slice(0,5);
 
   document.getElementById("recentBookings").innerHTML = bookingRows(recent);
@@ -943,18 +561,9 @@ function renderCustomers() {
 
   bookings.forEach(b => {
     const name = b.customer || "Unknown";
-    const key = name.toLowerCase();
+    const key = name.trim().toLowerCase();
 
-    if (!groups[key]) {
-      groups[key] = {
-        name,
-        mobile:b.customerMobile || "",
-        count:0,
-        freight:0,
-        received:0,
-        due:0
-      };
-    }
+    if (!groups[key]) groups[key] = {name,mobile:b.customerMobile || "",count:0,freight:0,received:0,due:0};
 
     const g = groups[key];
     g.count++;
@@ -969,28 +578,17 @@ function renderCustomers() {
     .sort((a,b) => a.name.localeCompare(b.name));
 
   document.getElementById("customerTable").innerHTML = list.length
-    ? '<div class="table-wrap"><table><thead><tr>' +
-      '<th>Customer</th><th>Mobile</th><th>Bookings</th><th>Total Freight</th>' +
-      '<th>Received</th><th>Pending</th><th>Action</th>' +
-      '</tr></thead><tbody>' +
+    ? '<div class="table-wrap"><table><thead><tr><th>Customer</th><th>Mobile</th><th>Bookings</th><th>Total Freight</th><th>Received</th><th>Pending</th><th>Action</th></tr></thead><tbody>' +
       list.map(c => '<tr><td><strong>' + escapeHTML(c.name) + '</strong></td>' +
-        '<td>' + escapeHTML(c.mobile || "-") + '</td>' +
-        '<td>' + c.count + '</td>' +
-        '<td>' + money(c.freight) + '</td>' +
-        '<td class="green">' + money(c.received) + '</td>' +
-        '<td class="' + (c.due>0?'red':'green') + '">' + money(c.due) + '</td>' +
-        '<td><button class="btn small secondary" onclick="findCustomer(\'' +
-          escapeHTML(c.name).replace(/'/g,"\\'") + '\')">View Bookings</button></td>' +
-      '</tr>').join("") +
-      '</tbody></table></div>'
+        '<td>' + escapeHTML(c.mobile || "-") + '</td><td>' + c.count + '</td>' +
+        '<td>' + money(c.freight) + '</td><td class="green">' + money(c.received) + '</td>' +
+        '<td class="' + (c.due>0 ? "red" : "green") + '">' + money(c.due) + '</td>' +
+        '<td><button class="btn small secondary" onclick="findCustomer(' + JSON.stringify(c.name) + ')">View Bookings</button></td></tr>'
+      ).join("") + '</tbody></table></div>'
     : '<div class="empty">Abhi koi customer record nahi hai. Booking banane par customer yahan dikhega.</div>';
 
   const datalist = document.getElementById("customerSuggestions");
-  if (datalist) {
-    datalist.innerHTML = list.map(c =>
-      '<option value="' + escapeHTML(c.name) + '">'
-    ).join("");
-  }
+  if (datalist) datalist.innerHTML = list.map(c => '<option value="' + escapeHTML(c.name) + '"></option>').join("");
 }
 
 function findCustomer(name) {
@@ -1005,23 +603,19 @@ function renderAccounts() {
   document.getElementById("aDue").textContent = money(bookings.reduce((s,b)=>s+customerDue(b),0));
   document.getElementById("aOwnerDue").textContent = money(bookings.reduce((s,b)=>s+ownerDue(b),0));
 
-  const customerList = bookings.filter(b => customerDue(b)>0)
-    .sort((a,b)=>customerDue(b)-customerDue(a));
+  const customerList = bookings.filter(b => customerDue(b)>0).sort((a,b)=>customerDue(b)-customerDue(a));
+  const ownerList = bookings.filter(b => ownerDue(b)>0).sort((a,b)=>ownerDue(b)-ownerDue(a));
 
-  const ownerList = bookings.filter(b => ownerDue(b)>0)
-    .sort((a,b)=>ownerDue(b)-ownerDue(a));
-
-  function dueTable(list, type) {
+  function dueTable(list,type) {
     if (!list.length) return '<div class="empty">Koi pending payment nahi hai.</div>';
 
     return list.map(b => '<div class="money-line">' +
-      '<div><strong>' + escapeHTML(b.customer) + '</strong><br>' +
-      '<span class="subtitle">' + escapeHTML(b.lr) + ' · ' +
-      escapeHTML(b.pickup) + ' → ' + escapeHTML(b.destination) + '</span></div>' +
+      '<div><strong>' + escapeHTML(b.customer) + '</strong><br><span class="subtitle">' +
+      escapeHTML(b.lr) + ' · ' + escapeHTML(b.pickup) + ' → ' + escapeHTML(b.destination) + '</span></div>' +
       '<div style="text-align:right"><strong class="red">' +
       money(type==="customer" ? customerDue(b) : ownerDue(b)) +
-      '</strong><br><button class="btn small secondary" onclick="editBooking(\'' +
-      escapeHTML(b.id) + '\')">Update Payment</button></div></div>'
+      '</strong><br><button class="btn small secondary" onclick="editBooking(' +
+      JSON.stringify(String(b.id)) + ')">Update Payment</button></div></div>'
     ).join("");
   }
 
@@ -1036,25 +630,20 @@ function renderReports() {
   const list = bookings.filter(b => {
     if (period === "all") return true;
     if (!b.bookingDate) return false;
-
     const d = new Date(b.bookingDate + "T12:00:00");
     if (period === "today") return b.bookingDate === today();
-    if (period === "month") {
-      return d.getFullYear() === now.getFullYear() &&
-        d.getMonth() === now.getMonth();
-    }
-    if (period === "year") return d.getFullYear() === now.getFullYear();
+    if (period === "month") return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+    if (period === "year") return d.getFullYear()===now.getFullYear();
     return true;
   });
 
   const freight = sum(list,"freight");
   const costs = sum(list,"ownerFreight") + sum(list,"expenses");
-  const net = freight - costs;
 
   document.getElementById("rCount").textContent = list.length;
   document.getElementById("rFreight").textContent = money(freight);
   document.getElementById("rCosts").textContent = money(costs);
-  document.getElementById("rProfit").textContent = money(net);
+  document.getElementById("rProfit").textContent = money(freight-costs);
 
   const delivered = list.filter(b=>b.status==="Delivered").length;
   const transit = list.filter(b=>b.status==="In Transit").length;
@@ -1066,14 +655,10 @@ function renderReports() {
     '<div class="money-line"><span>In Transit</span><strong>' + transit + '</strong></div>' +
     '<div class="money-line"><span>Delivered</span><strong>' + delivered + '</strong></div>' +
     '<div class="money-line"><span>Cancelled</span><strong>' + cancelled + '</strong></div>' +
-    '<div class="money-line"><span>Customer Received</span><strong class="green">' +
-      money(sum(list,"received")) + '</strong></div>' +
-    '<div class="money-line"><span>Customer Pending</span><strong class="red">' +
-      money(list.reduce((s,b)=>s+customerDue(b),0)) + '</strong></div>' +
-    '<div class="money-line"><span>Owner Payments Made</span><strong>' +
-      money(sum(list,"paid")) + '</strong></div>' +
-    '<div class="money-line"><span>Owner Payments Pending</span><strong class="orange">' +
-      money(list.reduce((s,b)=>s+ownerDue(b),0)) + '</strong></div>';
+    '<div class="money-line"><span>Customer Received</span><strong class="green">' + money(sum(list,"received")) + '</strong></div>' +
+    '<div class="money-line"><span>Customer Pending</span><strong class="red">' + money(list.reduce((s,b)=>s+customerDue(b),0)) + '</strong></div>' +
+    '<div class="money-line"><span>Owner Payments Made</span><strong>' + money(sum(list,"paid")) + '</strong></div>' +
+    '<div class="money-line"><span>Owner Payments Pending</span><strong class="orange">' + money(list.reduce((s,b)=>s+ownerDue(b),0)) + '</strong></div>';
 }
 
 function updatePreview() {
@@ -1094,20 +679,18 @@ function updatePreview() {
 });
 
 function printLR(id) {
-  const b = bookings.find(x=>x.id===id);
+  const b = bookings.find(x => String(x.id) === String(id));
   if (!b) return;
 
   const area = document.getElementById("printArea");
   area.innerHTML = `
     <div style="font-family:Arial,sans-serif;color:#111">
       <h1>SK LOGISTICS</h1>
-      <p style="text-align:center">TRANSPORT CONSIGNMENT NOTE / BILTI</p>
-      <hr>
+      <p style="text-align:center">TRANSPORT CONSIGNMENT NOTE / BILTI</p><hr>
       <div style="display:flex;justify-content:space-between;gap:20px">
         <div><strong>LR Number:</strong> ${escapeHTML(b.lr)}</div>
         <div><strong>Booking Date:</strong> ${escapeHTML(b.bookingDate)}</div>
-      </div>
-      <br>
+      </div><br>
       <table style="width:100%;border-collapse:collapse" border="1" cellpadding="9">
         <tr><th>Customer</th><td>${escapeHTML(b.customer)}</td></tr>
         <tr><th>Customer Mobile</th><td>${escapeHTML(b.customerMobile || "-")}</td></tr>
@@ -1124,21 +707,17 @@ function printLR(id) {
         <tr><th>Freight (₹)</th><td>${money(b.freight)}</td></tr>
         <tr><th>Booking Status</th><td>${escapeHTML(b.status)}</td></tr>
         <tr><th>Notes</th><td>${escapeHTML(b.notes || "-")}</td></tr>
-      </table>
-      <br>
-      <p>I acknowledge receipt of the goods described above for transportation.</p>
-      <br><br>
+      </table><br>
+      <p>I acknowledge receipt of the goods described above for transportation.</p><br><br>
       <div style="display:flex;justify-content:space-between;gap:20px">
         <div>Sender's Signature: __________________</div>
         <div>Authorized Signature: __________________</div>
       </div>
       <p style="margin-top:35px;font-size:11px">Computer-generated document. Please verify details before use.</p>
-    </div>
-  `;
-
+    </div>`;
   area.classList.remove("hidden");
   window.print();
-  setTimeout(()=>area.classList.add("hidden"),1000);
+  setTimeout(() => area.classList.add("hidden"),1000);
 }
 
 function csvCell(value) {
@@ -1154,25 +733,21 @@ function exportCSV() {
   }
 
   const headers = [
-    "LR Number","Booking Date","Customer","Customer Mobile","Pickup",
-    "Destination","Goods","Weight","Vehicle Type","Vehicle Number",
-    "Driver","Driver Mobile","Truck Owner","Owner Mobile","Status",
-    "Delivery Date","Customer Freight","Owner Freight","Expenses",
-    "Customer Received","Customer Due","Owner Paid","Owner Due",
-    "Estimated Profit","Notes"
+    "LR Number","Booking Date","Customer","Customer Mobile","Pickup","Destination",
+    "Goods","Weight","Vehicle Type","Vehicle Number","Driver","Driver Mobile",
+    "Truck Owner","Owner Mobile","Status","Delivery Date","Customer Freight",
+    "Owner Freight","Expenses","Customer Received","Customer Due","Owner Paid",
+    "Owner Due","Estimated Profit","Notes"
   ];
 
   const rows = bookings.map(b => [
-    b.lr,b.bookingDate,b.customer,b.customerMobile,b.pickup,b.destination,
-    b.goods,b.weight,b.vehicleType,b.vehicleNo,b.driver,b.driverMobile,
-    b.owner,b.ownerMobile,b.status,b.deliveryDate,b.freight,b.ownerFreight,
-    b.expenses,b.received,customerDue(b),b.paid,ownerDue(b),profit(b),b.notes
+    b.lr,b.bookingDate,b.customer,b.customerMobile,b.pickup,b.destination,b.goods,
+    b.weight,b.vehicleType,b.vehicleNo,b.driver,b.driverMobile,b.owner,b.ownerMobile,
+    b.status,b.deliveryDate,b.freight,b.ownerFreight,b.expenses,b.received,
+    customerDue(b),b.paid,ownerDue(b),profit(b),b.notes
   ]);
 
-  const csv = "\uFEFF" + [headers,...rows]
-    .map(row=>row.map(csvCell).join(","))
-    .join("\r\n");
-
+  const csv = "\uFEFF" + [headers,...rows].map(row=>row.map(csvCell).join(",")).join("\r\n");
   const blob = new Blob([csv],{type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -1181,7 +756,7 @@ function exportCSV() {
   document.body.appendChild(a);
   a.click();
   a.remove();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url),1000);
 }
 
 function refreshAll() {
@@ -1192,8 +767,7 @@ function refreshAll() {
   renderReports();
 }
 
-document.getElementById("bookingDate").value = today();
-
+/* Startup */
 loadBookings();
 resetForm();
 refreshAll();
