@@ -1140,7 +1140,8 @@ function buildDesktopTable(records) {
               <br><small style="color:#64748b">${escapeHtml(b.goods)}</small>
             </td>
             <td>
-              <strong style="font-family:var(--font-mono)">${escapeHtml(b.vehicleNo \vert{}\vert{} 'ALLOCATING')}</strong>${b.driverMobile ? `<br><a href="tel:${escapeHtml(b.driverMobile)}" style="font-size:11px;color:#64748b;text-decoration:none"><i class="fa-solid fa-phone" style="font-size:9px"></i> ${escapeHtml(b.driver)}</a>` : ''}
+              <strong style="font-family:var(--font-mono)">${escapeHtml(b.vehicleNo || 'ALLOCATING')}</strong>
+${b.driverMobile ? `<br><a href="tel:${escapeHtml(b.driverMobile)}" style="font-size:11px;color:#64748b;text-decoration:none"><i class="fa-solid fa-phone" style="font-size:9px"></i> ${escapeHtml(b.driver)}</a>` : ''}
             </td>
             <td><strong>${formatINR(b.freight)}</strong></td>
             <td style="color:${calcCustomerDue(b) > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">
