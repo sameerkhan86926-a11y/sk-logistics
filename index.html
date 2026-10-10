@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <meta name="theme-color" content="#090e17">
-<title>SK LOGISTICS | Transport Management</title>
+<title>SK LOGISTICS | Enterprise Fleet & E-Way Ledger</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- QR Code Engine -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 :root {
@@ -18,7 +20,7 @@
   --navy-border: #1e293b;
   --accent: #2563eb;
   --accent-light: #3b82f6;
-  --accent-glow: rgba(37, 99, 235, 0.15);
+  --accent-glow: rgba(37, 99, 235, 0.2);
   --success: #059669;
   --success-bg: #ecfdf5;
   --danger: #dc2626;
@@ -40,36 +42,36 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:var(--font-sans);background:var(--bg-body);color:var(--text-main);-webkit-font-smoothing:antialiased;line-height:1.5;padding-bottom:calc(var(--bottom-nav-height) + 20px)}
+body{font-family:var(--font-sans);background:var(--bg-body);color:var(--text-main);-webkit-font-smoothing:antialiased;line-height:1.5;padding-bottom:calc(var(--bottom-nav-height) + 24px)}
 button,input,select,textarea{font-family:inherit}
 
 /* Header */
 .app-header{background:var(--navy);border-bottom:1px solid var(--navy-border);position:sticky;top:0;z-index:100}
 .header-inner{max-width:1440px;margin:auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand-group{display:flex;align-items:center;gap:10px}
-.brand-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent-light),#1d4ed8);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;box-shadow:0 0 12px var(--accent-glow);flex-shrink:0}
+.brand-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent-light),#1d4ed8);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;box-shadow:0 0 15px var(--accent-glow);flex-shrink:0}
 .brand-text h1{font-size:16px;font-weight:800;color:#fff;letter-spacing:0.5px}
 .brand-text p{font-size:9.5px;font-weight:600;color:#94a3b8;letter-spacing:1px;text-transform:uppercase}
-.header-actions{display:flex;align-items:center;gap:6px}
+.header-actions{display:flex;align-items:center;gap:8px}
 
 /* Layout */
 .layout-container{max-width:1440px;margin:auto;padding:16px}
 .nav-pills{display:flex;gap:8px;padding-bottom:16px;border-bottom:1px solid var(--border-light);margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .nav-pills::-webkit-scrollbar{display:none}
-.nav-pill{background:#fff;border:1px solid var(--border-light);color:var(--text-muted);padding:9px 15px;border-radius:var(--radius-md);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;white-space:nowrap;transition:all .15s ease}
+.nav-pill{background:#fff;border:1px solid var(--border-light);color:var(--text-muted);padding:9px 16px;border-radius:var(--radius-md);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;transition:all .15s}
 .nav-pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 
-/* Mobile Bottom Navigation Bar */
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--bottom-nav-height);background:#fff;border-top:1px solid var(--border-light);z-index:1000;box-shadow:0 -4px 12px rgba(0,0,0,0.06);padding:0 8px}
+/* Mobile Bottom Navigation */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--bottom-nav-height);background:#fff;border-top:1px solid var(--border-light);z-index:1000;box-shadow:0 -4px 15px rgba(0,0,0,0.06);padding:0 8px}
 .bottom-nav-inner{display:flex;height:100%;align-items:center;justify-content:space-around}
-.bnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-muted);text-decoration:none;font-size:10px;font-weight:600;gap:4px;flex:1;height:100%;background:transparent;border:0;cursor:pointer}
+.bnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-muted);font-size:10px;font-weight:600;gap:4px;flex:1;height:100%;background:transparent;border:0;cursor:pointer}
 .bnav-item i{font-size:18px}
 .bnav-item.active{color:var(--accent)}
 
 /* Pages */
 .page{display:none}
 .page.active{display:block;animation:fadeIn .2s ease-in-out}
-@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
 .panel{background:var(--card-bg);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
 .panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border-light);flex-wrap:wrap;gap:10px}
@@ -82,17 +84,20 @@ button,input,select,textarea{font-family:inherit}
 .metric-card.profit::after{background:var(--success)}
 .metric-card.alert::after{background:var(--danger)}
 .metric-card.warning::after{background:var(--warning)}
-.metric-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px}
-.metric-value{font-size:19px;font-weight:800;margin:6px 0 2px;font-family:var(--font-mono);letter-spacing:-0.5px;overflow-wrap:anywhere}
+.metric-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase}
+.metric-value{font-size:20px;font-weight:800;margin:6px 0 2px;font-family:var(--font-mono);overflow-wrap:anywhere}
 .metric-note{font-size:11px;color:var(--text-muted)}
 
 /* Inputs & Form */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:var(--radius-md);font-weight:600;font-size:13px;cursor:pointer;border:1px solid transparent;transition:all .15s}
 .btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#1d4ed8}
 .btn-secondary{background:#fff;border-color:var(--border-light);color:var(--text-main)}
+.btn-secondary:hover{background:#f1f5f9}
 .btn-dark{background:var(--navy);color:#fff}
 .btn-danger{background:var(--danger-bg);color:var(--danger);border-color:#fecaca}
-.btn-sm{padding:6px 10px;font-size:11.5px}
+.btn-success{background:var(--success);color:#fff}
+.btn-sm{padding:6px 10px;font-size:12px}
 
 .form-grid{display:grid;grid-template-columns:1fr;gap:14px}
 .field-group{display:flex;flex-direction:column;gap:5px}
@@ -100,11 +105,11 @@ button,input,select,textarea{font-family:inherit}
 .field-group input,.field-group select,.field-group textarea,.search-box{border:1px solid var(--border-light);border-radius:var(--radius-md);padding:10px 12px;font-size:14px;background:#fff;outline:none;width:100%}
 .field-group input:focus,.field-group select:focus,.field-group textarea:focus,.search-box:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 .field-group textarea{resize:vertical;min-height:70px}
-.form-section-title{font-size:12.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;padding:10px 0 2px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:7px}
+.form-section-title{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;padding:12px 0 4px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:8px}
 
-.action-banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius-md);padding:12px;font-size:12px;display:flex;flex-direction:column;gap:6px}
+.action-banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius-md);padding:12px;font-size:12.5px;display:flex;flex-direction:column;gap:6px}
 
-/* Tables / Mobile Card Lists */
+/* Tables & Cards */
 .table-responsive{overflow-x:auto;border:1px solid var(--border-light);border-radius:var(--radius-md);background:#fff}
 table{width:100%;border-collapse:collapse;font-size:13px;text-align:left}
 th{background:#f8fafc;padding:11px 12px;font-weight:700;color:#475569;border-bottom:1px solid var(--border-light);white-space:nowrap;font-size:11.5px;text-transform:uppercase}
@@ -115,45 +120,38 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
 .badge-transit{background:var(--warning-bg);color:var(--warning)}
 .badge-delivered{background:var(--success-bg);color:var(--success)}
 .badge-cancelled{background:var(--danger-bg);color:var(--danger)}
+.badge-eway-alert{background:#fef2f2;color:#b91c1c;border:1px solid #f87171;animation:pulseRed 1.8s infinite}
+@keyframes pulseRed{0%,100%{opacity:1}50%{opacity:0.6}}
 
 /* Mobile Trip Card */
 .mobile-card-list{display:none;flex-direction:column;gap:12px}
-.trip-card-mobile{background:#fff;border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.03)}
+.trip-card-mobile{background:#fff;border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
 .tcm-header{display:flex;justify-content:space-between;align-items:flex-start}
 .tcm-body{display:flex;flex-direction:column;gap:6px;font-size:13px}
 .tcm-route{display:flex;align-items:center;gap:6px;font-weight:700}
 .tcm-financials{display:grid;grid-template-columns:repeat(3,1fr);background:#f8fafc;padding:8px;border-radius:var(--radius-md);text-align:center;gap:4px;margin-top:4px}
 .tcm-fin-col span{display:block;font-size:10px;color:var(--text-muted);text-transform:uppercase}
-.tcm-fin-col strong{font-size:12.5px;font-family:var(--font-mono)}
+.tcm-fin-col strong{font-size:13px;font-family:var(--font-mono)}
 .tcm-actions{display:flex;gap:6px;flex-wrap:wrap;border-top:1px dashed var(--border-light);padding-top:10px}
-.tcm-actions .btn{flex:1;min-width:70px}
+.tcm-actions .btn{flex:1;min-width:65px}
 
-/* Modal */
+/* Modals */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,14,23,0.7);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:2000;opacity:0;pointer-events:none;transition:all .2s ease;padding:16px}
 .modal-overlay.active{opacity:1;pointer-events:all}
-.modal-card{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:440px;padding:20px;box-shadow:0 15px 30px rgba(0,0,0,0.2)}
+.modal-card{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:460px;padding:22px;box-shadow:0 20px 30px rgba(0,0,0,0.25)}
 
-/* Toast Notification */
+/* Toast */
 .toast-box{position:fixed;top:16px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 10px 20px rgba(0,0,0,0.2);z-index:9999;opacity:0;transition:all .25s ease;max-width:90%;white-space:nowrap}
 .toast-box.show{transform:translate(-50%,0);opacity:1}
 
-/* Print Handling */
-@media print {
-  body *{visibility:hidden!important}
-  #printStation, #printStation *{visibility:visible!important}
-  #printStation{position:absolute;left:0;top:0;width:100%;margin:0;padding:0;background:#fff;display:block!important}
-  .no-print{display:none!important}
-  .bilti-container{border:2px solid #000;padding:16px;margin-bottom:20px;page-break-after:always;font-family:Arial,sans-serif;font-size:12px}
-  .bilti-header{display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px}
-  .grid-table{width:100%;border-collapse:collapse;margin:8px 0}
-  .grid-table th, .grid-table td{border:1px solid #000;padding:6px;text-align:left}
-  .bilti-signatures{display:flex;justify-content:space-between;margin-top:35px}
-  .signature-line{border-top:1px dashed #000;width:160px;text-align:center;font-size:10px;font-weight:bold}
-  .thermal-receipt{width:80mm;margin:0 auto;font-family:'Courier New',Courier,monospace;font-size:12px;padding:5px}
-  .thermal-receipt .divider{border-bottom:1px dashed #000;margin:5px 0}
-}
+/* POD Preview Area */
+.pod-preview-wrapper{width:100%;height:180px;border:2px dashed var(--border-light);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa;position:relative}
+.pod-preview-img{width:100%;height:100%;object-fit:cover}
 
-/* Desktop Responsiveness */
+/* QR Center Box */
+.qr-container{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;background:#fff;border-radius:var(--radius-md);border:1px solid var(--border-light)}
+
+/* Responsive Queries */
 @media(min-width: 768px){
   body{padding-bottom:0}
   .bottom-nav{display:none}
@@ -170,10 +168,23 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
   .bottom-nav{display:block}
   .table-responsive{display:none}
   .mobile-card-list{display:flex}
-  .metric-value{font-size:17px}
-  .app-header .header-actions button:not(.mobile-visible){display:none}
+  .metric-value{font-size:18px}
   .panel-header > div{width:100%}
   .search-box{width:100%!important}
+}
+
+/* Print Stations */
+@media print {
+  body *{visibility:hidden!important}
+  #printStation, #printStation *{visibility:visible!important}
+  #printStation{position:absolute;left:0;top:0;width:100%;margin:0;padding:0;background:#fff;display:block!important}
+  .no-print{display:none!important}
+  .bilti-container{border:2px solid #000;padding:16px;margin-bottom:20px;page-break-after:always;font-family:Arial,sans-serif;font-size:12px}
+  .bilti-header{display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px}
+  .grid-table{width:100%;border-collapse:collapse;margin:8px 0}
+  .grid-table th, .grid-table td{border:1px solid #000;padding:6px;text-align:left}
+  .bilti-signatures{display:flex;justify-content:space-between;margin-top:35px}
+  .signature-line{border-top:1px dashed #000;width:160px;text-align:center;font-size:10px;font-weight:bold}
 }
 </style>
 </head>
@@ -185,16 +196,16 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
       <div class="brand-icon"><i class="fa-solid fa-truck-fast"></i></div>
       <div class="brand-text">
         <h1>SK LOGISTICS</h1>
-        <p>Transport Manager</p>
+        <p>Enterprise Fleet TMS</p>
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn btn-secondary btn-sm" onclick="exportDataBackup()" title="Backup"><i class="fa-solid fa-download"></i></button>
-      <label class="btn btn-secondary btn-sm" style="cursor:pointer" title="Restore">
+      <button class="btn btn-secondary btn-sm" onclick="exportDataBackup()" title="Backup Database"><i class="fa-solid fa-download"></i></button>
+      <label class="btn btn-secondary btn-sm" style="cursor:pointer" title="Restore Data">
         <i class="fa-solid fa-upload"></i>
         <input type="file" id="importInput" style="display:none" onchange="importDataBackup(event)" accept=".json">
       </label>
-      <button class="btn btn-primary btn-sm mobile-visible" onclick="openPage('newBooking')"><i class="fa-solid fa-plus"></i> New</button>
+      <button class="btn btn-primary btn-sm" onclick="openPage('newBooking')"><i class="fa-solid fa-plus"></i> New Trip</button>
     </div>
   </div>
 </header>
@@ -202,53 +213,53 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
 <main class="layout-container no-print">
   <!-- Desktop Tabs -->
   <nav class="nav-pills" role="tablist">
-    <button class="nav-pill active" data-page="dashboard" onclick="openPage('dashboard')"><i class="fa-solid fa-chart-pie"></i> Overview</button>
-    <button class="nav-pill" data-page="bookings" onclick="openPage('bookings')"><i class="fa-solid fa-list-check"></i> Bookings</button>
-    <button class="nav-pill" data-page="newBooking" onclick="openPage('newBooking')"><i class="fa-solid fa-file-circle-plus"></i> New Booking</button>
-    <button class="nav-pill" data-page="customers" onclick="openPage('customers')"><i class="fa-solid fa-users"></i> Parties</button>
-    <button class="nav-pill" data-page="accounts" onclick="openPage('accounts')"><i class="fa-solid fa-scale-balanced"></i> Hisab-Kitab</button>
-    <button class="nav-pill" data-page="reports" onclick="openPage('reports')"><i class="fa-solid fa-chart-line"></i> Reports</button>
+    <button class="nav-pill active" data-page="dashboard" onclick="openPage('dashboard')"><i class="fa-solid fa-chart-pie"></i> Control Tower</button>
+    <button class="nav-pill" data-page="bookings" onclick="openPage('bookings')"><i class="fa-solid fa-list-check"></i> Trips & Waybills</button>
+    <button class="nav-pill" data-page="newBooking" onclick="openPage('newBooking')"><i class="fa-solid fa-file-circle-plus"></i> New Consignment</button>
+    <button class="nav-pill" data-page="customers" onclick="openPage('customers')"><i class="fa-solid fa-users"></i> Party Directory</button>
+    <button class="nav-pill" data-page="accounts" onclick="openPage('accounts')"><i class="fa-solid fa-scale-balanced"></i> Freight Ledger</button>
+    <button class="nav-pill" data-page="reports" onclick="openPage('reports')"><i class="fa-solid fa-chart-line"></i> P&L Reports</button>
   </nav>
 
   <!-- DASHBOARD -->
   <section id="dashboard" class="page active">
     <div class="metric-grid">
       <div class="metric-card">
-        <div class="metric-label">Total Trips</div>
+        <div class="metric-label">Total Consignments</div>
         <div class="metric-value" id="kpiBookings">0</div>
-        <div class="metric-note">Lifetime consignments</div>
+        <div class="metric-note">Lifetime operations</div>
       </div>
       <div class="metric-card warning">
-        <div class="metric-label">Active Trips</div>
+        <div class="metric-label">Active En-Route</div>
         <div class="metric-value" id="kpiActive">0</div>
-        <div class="metric-note">Booked / In Transit</div>
+        <div class="metric-note">Transit & Booked</div>
       </div>
       <div class="metric-card profit">
-        <div class="metric-label">Delivered</div>
+        <div class="metric-label">POD Completed</div>
         <div class="metric-value" id="kpiDelivered">0</div>
-        <div class="metric-note">Completed runs</div>
+        <div class="metric-note">Delivered shipments</div>
       </div>
       <div class="metric-card profit">
-        <div class="metric-label">Est. Profit</div>
+        <div class="metric-label">Est. Net Profit</div>
         <div class="metric-value" id="kpiNetProfit">₹0</div>
-        <div class="metric-note">Freight margin</div>
+        <div class="metric-note">Revenue minus costs</div>
       </div>
       <div class="metric-card alert">
-        <div class="metric-label">Party Due</div>
+        <div class="metric-label">Customer Dues</div>
         <div class="metric-value" id="kpiCustomerDue">₹0</div>
-        <div class="metric-note">Customer pending</div>
+        <div class="metric-note">Pending collection</div>
       </div>
       <div class="metric-card warning">
-        <div class="metric-label">Truck Due</div>
+        <div class="metric-label">Carrier Payables</div>
         <div class="metric-value" id="kpiOwnerDue">₹0</div>
-        <div class="metric-note">Carrier balance</div>
+        <div class="metric-note">Owed to truck suppliers</div>
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Consignments</div>
-        <button class="btn btn-secondary btn-sm" onclick="openPage('bookings')">View All</button>
+        <div class="panel-title"><i class="fa-solid fa-bolt text-accent"></i> Active Stream & Trips</div>
+        <button class="btn btn-secondary btn-sm" onclick="openPage('bookings')">Open Master List</button>
       </div>
       <div id="recentDesktopTable"></div>
       <div class="mobile-card-list" id="recentMobileList"></div>
@@ -259,9 +270,9 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
   <section id="bookings" class="page">
     <div class="panel">
       <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-list-check"></i> All Bookings</div>
+        <div class="panel-title"><i class="fa-solid fa-list-check"></i> Freight Registry</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%">
-          <input class="search-box" id="globalTripSearch" placeholder="Search LR, Party, Route, Vehicle..." oninput="renderBookingsTable()">
+          <input class="search-box" id="globalTripSearch" placeholder="Search LR, Party, Route, Vehicle, E-Way Bill..." oninput="renderBookingsTable()">
           <div style="display:flex;gap:8px;width:100%">
             <select class="search-box" id="statusFilterSelector" onchange="renderBookingsTable()" style="flex:1">
               <option value="">All Statuses</option>
@@ -270,7 +281,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
               <option value="Delivered">Delivered</option>
               <option value="Cancelled">Cancelled</option>
             </select>
-            <button class="btn btn-secondary btn-sm" onclick="exportCSV()"><i class="fa-solid fa-file-excel"></i> CSV</button>
+            <button class="btn btn-secondary btn-sm" onclick="exportCSV()"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
           </div>
         </div>
       </div>
@@ -285,52 +296,69 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
       <div class="panel-header">
         <div class="panel-title">
           <i class="fa-solid fa-file-signature"></i>
-          <span id="bookingFormModeText">New Consignment Entry</span>
+          <span id="bookingFormModeText">Consignment Dispatch Form</span>
         </div>
       </div>
 
       <form id="consignmentForm">
         <input type="hidden" id="entry_recordId">
+        <input type="hidden" id="entry_podImage">
+        
         <div class="form-grid">
-          <div class="form-section-title"><i class="fa-solid fa-calendar-check"></i> 1. Basic Details</div>
+          <!-- 1. Metadata & Compliance -->
+          <div class="form-section-title"><i class="fa-solid fa-shield-halved"></i> 1. Compliance & Consignor Info</div>
           <div class="field-group">
-            <label>Booking Date *</label>
+            <label>Consignment Date *</label>
             <input type="date" id="entry_bookingDate" required>
           </div>
           <div class="field-group">
-            <label>Customer Name *</label>
-            <input type="text" id="entry_customer" list="customerDirectoryList" placeholder="Party Name" required>
+            <label>Party / Consignor Name *</label>
+            <input type="text" id="entry_customer" list="customerDirectoryList" placeholder="Firm or client name" required>
             <datalist id="customerDirectoryList"></datalist>
           </div>
           <div class="field-group">
-            <label>Customer Mobile</label>
-            <input type="tel" id="entry_customerMobile" placeholder="WhatsApp / Contact No.">
+            <label>Customer Mobile No.</label>
+            <input type="tel" id="entry_customerMobile" placeholder="Contact number" maxlength="15">
+          </div>
+          <div class="field-group">
+            <label>E-Way Bill Number</label>
+            <input type="text" id="entry_ewayBill" placeholder="12-digit E-Way Bill No.">
+          </div>
+          <div class="field-group">
+            <label>E-Way Bill Expiry Date</label>
+            <input type="date" id="entry_ewayExpiry">
+          </div>
+          <div class="field-group">
+            <label>Consignor GSTIN</label>
+            <input type="text" id="entry_gstin" placeholder="07AAAAA0000A1Z5" style="text-transform:uppercase">
           </div>
 
-          <div class="form-section-title"><i class="fa-solid fa-route"></i> 2. Route & Cargo</div>
+          <!-- 2. Route & Cargo -->
+          <div class="form-section-title"><i class="fa-solid fa-route"></i> 2. Origin, Route & Cargo</div>
           <div class="field-group">
-            <label>Pickup Location *</label>
-            <input type="text" id="entry_pickup" placeholder="Loading Point" required>
+            <label>Origin Hub (From) *</label>
+            <input type="text" id="entry_pickup" placeholder="Loading city / warehouse" required>
           </div>
           <div class="field-group">
-            <label>Delivery Location *</label>
-            <input type="text" id="entry_destination" placeholder="Unloading Point" required>
+            <label>Destination (To) *</label>
+            <input type="text" id="entry_destination" placeholder="Unloading city" required>
           </div>
           <div class="field-group">
-            <label>Material / Goods *</label>
-            <input type="text" id="entry_goods" placeholder="e.g. Iron Rods / Machinery" required>
+            <label>Material / Commodity *</label>
+            <input type="text" id="entry_goods" placeholder="Goods description" required>
           </div>
           <div class="field-group">
-            <label>Weight / Packages</label>
-            <input type="text" id="entry_weight" placeholder="e.g. 10 Ton / 250 Bags">
+            <label>Weight / Quantity</label>
+            <input type="text" id="entry_weight" placeholder="e.g. 18.50 MT / 450 Bags">
           </div>
           <div class="field-group">
-            <label>Vehicle Type</label>
+            <label>Vehicle Configuration</label>
             <select id="entry_vehicleType">
-              <option value="Truck">Truck</option>
-              <option value="Trailer">Trailer</option>
-              <option value="Container">Container</option>
-              <option value="Pickup">Pickup</option>
+              <option value="Multi-Axle Truck">Multi-Axle Truck</option>
+              <option value="10 Wheeler Taurus">10 Wheeler Taurus</option>
+              <option value="Container 32ft MX">Container 32ft MX</option>
+              <option value="Trailer 40ft">Trailer 40ft</option>
+              <option value="Pickup / Bolero">Pickup / Bolero</option>
               <option value="Tata Ace">Tata Ace</option>
               <option value="Other">Other</option>
             </select>
@@ -340,22 +368,23 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
             <input type="text" id="entry_vehicleNo" placeholder="HR55AB1234" style="text-transform:uppercase">
           </div>
 
-          <div class="form-section-title"><i class="fa-solid fa-truck"></i> 3. Driver & Owner</div>
+          <!-- 3. Driver & Fleet Carrier -->
+          <div class="form-section-title"><i class="fa-solid fa-user-gear"></i> 3. Fleet Carrier & Driver</div>
           <div class="field-group">
-            <label>Driver Name</label>
-            <input type="text" id="entry_driver" placeholder="Driver name">
+            <label>Driver In-Charge</label>
+            <input type="text" id="entry_driver" placeholder="Driver full name">
           </div>
           <div class="field-group">
-            <label>Driver Mobile</label>
-            <input type="tel" id="entry_driverMobile" placeholder="Driver phone">
+            <label>Driver Contact</label>
+            <input type="tel" id="entry_driverMobile" placeholder="Driver mobile" maxlength="15">
           </div>
           <div class="field-group">
-            <label>Truck Owner / Supplier</label>
-            <input type="text" id="entry_owner" placeholder="Owner name">
+            <label>Truck Owner / Broker</label>
+            <input type="text" id="entry_owner" placeholder="Owner / Supplier name">
           </div>
           <div class="field-group">
-            <label>Owner Mobile</label>
-            <input type="tel" id="entry_ownerMobile" placeholder="Owner phone">
+            <label>Owner Contact</label>
+            <input type="tel" id="entry_ownerMobile" placeholder="Owner mobile" maxlength="15">
           </div>
           <div class="field-group">
             <label>Trip Status</label>
@@ -367,58 +396,73 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
             </select>
           </div>
           <div class="field-group">
-            <label>Expected Delivery</label>
+            <label>Expected Unloading</label>
             <input type="date" id="entry_deliveryDate">
           </div>
 
-          <div class="form-section-title"><i class="fa-solid fa-indian-rupee-sign"></i> 4. Freight & Payments</div>
+          <!-- 4. Freight Ledger & Breakout -->
+          <div class="form-section-title"><i class="fa-solid fa-indian-rupee-sign"></i> 4. Freight Commercials & Advance Breakout</div>
           <div class="field-group">
-            <label>Customer Freight (₹) *</label>
+            <label>Total Customer Freight (₹) *</label>
             <input type="number" id="entry_freight" step="0.01" min="0" value="0" required>
           </div>
           <div class="field-group">
-            <label>Truck Owner Freight (₹)</label>
+            <label>Customer Loading Advance (₹)</label>
+            <input type="number" id="entry_loadingAdvance" step="0.01" min="0" value="0">
+          </div>
+          <div class="field-group">
+            <label>Customer Unloading Advance (₹)</label>
+            <input type="number" id="entry_unloadingAdvance" step="0.01" min="0" value="0">
+          </div>
+          <div class="field-group">
+            <label>Truck Owner Hire Cost (₹)</label>
             <input type="number" id="entry_ownerFreight" step="0.01" min="0" value="0">
           </div>
           <div class="field-group">
-            <label>Trip Expenses (₹)</label>
-            <input type="number" id="entry_expenses" step="0.01" min="0" value="0">
-          </div>
-          <div class="field-group">
-            <label>Customer Received (₹)</label>
-            <input type="number" id="entry_received" step="0.01" min="0" value="0">
-          </div>
-          <div class="field-group">
-            <label>Truck Paid Advance (₹)</label>
+            <label>Truck Diesel / Advance Paid (₹)</label>
             <input type="number" id="entry_paid" step="0.01" min="0" value="0">
           </div>
           <div class="field-group">
-            <label>Notes</label>
-            <input type="text" id="entry_notes" placeholder="Remarks">
+            <label>Trip Kharcha / En-route Expenses (₹)</label>
+            <input type="number" id="entry_expenses" step="0.01" min="0" value="0">
+          </div>
+          <div class="field-group full">
+            <label>Dispatch Notes</label>
+            <input type="text" id="entry_notes" placeholder="Remarks, loading conditions, or payment agreements">
+          </div>
+
+          <!-- POD File Upload -->
+          <div class="form-section-title"><i class="fa-solid fa-file-arrow-up"></i> 5. Proof of Delivery (POD) Slip</div>
+          <div class="field-group full">
+            <input type="file" id="podFileInput" accept="image/*" capture="environment" onchange="processPodUpload(event)">
+            <div class="pod-preview-wrapper" id="podPreviewBox" style="margin-top:8px">
+              <span id="podEmptyText" style="color:var(--text-muted);font-size:12px"><i class="fa-solid fa-camera"></i> No signed receipt attached</span>
+              <img id="podPreviewImage" class="pod-preview-img" style="display:none" alt="POD Document">
+            </div>
           </div>
 
           <div class="field-group full">
             <div class="action-banner">
               <div><strong id="previewMargin">Margin: ₹0</strong></div>
-              <div id="previewBalances">Client Due: ₹0 | Owner Due: ₹0</div>
+              <div id="previewBalances">Customer Due: ₹0 | Owner Due: ₹0</div>
             </div>
           </div>
         </div>
 
         <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-          <button type="submit" class="btn btn-primary" id="saveBookingSubmitBtn" style="flex:1"><i class="fa-solid fa-check"></i> Save Booking</button>
+          <button type="submit" class="btn btn-primary" id="saveBookingSubmitBtn" style="flex:1"><i class="fa-solid fa-check"></i> Commit Consignment</button>
           <button type="button" class="btn btn-secondary" onclick="resetEntryForm()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
         </div>
       </form>
     </div>
   </section>
 
-  <!-- PARTIES -->
+  <!-- CUSTOMERS -->
   <section id="customers" class="page">
     <div class="panel">
       <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-users"></i> Parties & Clients</div>
-        <input class="search-box" id="customerSearchInput" placeholder="Search party name..." oninput="renderCustomerMaster()">
+        <div class="panel-title"><i class="fa-solid fa-users"></i> Client & Party Roster</div>
+        <input class="search-box" id="customerSearchInput" placeholder="Filter customer name..." oninput="renderCustomerMaster()">
       </div>
       <div id="customerMasterDesktopTable"></div>
       <div id="customerMasterMobileList" class="mobile-card-list"></div>
@@ -429,19 +473,19 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
   <section id="accounts" class="page">
     <div class="metric-grid">
       <div class="metric-card">
-        <div class="metric-label">Customer Billed</div>
+        <div class="metric-label">Billed Freight</div>
         <div class="metric-value" id="accGrossFreight">₹0</div>
       </div>
       <div class="metric-card profit">
-        <div class="metric-label">Received</div>
+        <div class="metric-label">Received In Bank/Cash</div>
         <div class="metric-value" id="accRealizedCollection">₹0</div>
       </div>
       <div class="metric-card alert">
-        <div class="metric-label">Customer Pending</div>
+        <div class="metric-label">Customer Dues</div>
         <div class="metric-value" id="accOutstandingReceivables">₹0</div>
       </div>
       <div class="metric-card warning">
-        <div class="metric-label">Truck Owner Due</div>
+        <div class="metric-label">Carrier Balance Due</div>
         <div class="metric-value" id="accTruckOwnerPayables">₹0</div>
       </div>
     </div>
@@ -449,13 +493,13 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
     <div style="display:flex;flex-direction:column;gap:16px">
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title text-danger"><i class="fa-solid fa-arrow-down-left"></i> Customer Collection Pending</div>
+          <div class="panel-title text-danger"><i class="fa-solid fa-hand-holding-dollar"></i> Customer Dues & Collect QR</div>
         </div>
         <div id="receivableDuesList"></div>
       </div>
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title text-warning"><i class="fa-solid fa-arrow-up-right-from-square"></i> Truck Owner Payment Due</div>
+          <div class="panel-title text-warning"><i class="fa-solid fa-money-bill-transfer"></i> Truck Owner Balances</div>
         </div>
         <div id="payableDuesList"></div>
       </div>
@@ -466,30 +510,30 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
   <section id="reports" class="page">
     <div class="panel">
       <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-chart-line"></i> Analytics & P&L</div>
+        <div class="panel-title"><i class="fa-solid fa-chart-line"></i> Logistics Performance & P&L</div>
         <select class="search-box" id="reportIntervalSelect" onchange="renderBusinessReports()" style="max-width:180px">
-          <option value="all">All Time</option>
-          <option value="month">This Month</option>
+          <option value="all">Lifetime</option>
+          <option value="month">Current Month</option>
           <option value="today">Today</option>
-          <option value="year">This Year</option>
+          <option value="year">Current FY</option>
         </select>
       </div>
 
       <div class="metric-grid">
         <div class="metric-card">
-          <div class="metric-label">Total Trips</div>
+          <div class="metric-label">Trips Dispatched</div>
           <div class="metric-value" id="repTripVolume">0</div>
         </div>
         <div class="metric-card">
-          <div class="metric-label">Gross Freight</div>
+          <div class="metric-label">Freight Turnover</div>
           <div class="metric-value" id="repFreightTotal">₹0</div>
         </div>
         <div class="metric-card alert">
-          <div class="metric-label">Fleet Costs</div>
+          <div class="metric-label">Fleet Costs + Fuel</div>
           <div class="metric-value" id="repTotalExpenses">₹0</div>
         </div>
         <div class="metric-card profit">
-          <div class="metric-label">Net Profit</div>
+          <div class="metric-label">Net Operating Margin</div>
           <div class="metric-value" id="repNetSurplus">₹0</div>
         </div>
       </div>
@@ -499,12 +543,12 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
   </section>
 </main>
 
-<!-- Mobile Bottom Navigation -->
+<!-- Bottom Navigation for Phones -->
 <nav class="bottom-nav no-print">
   <div class="bottom-nav-inner">
     <button class="bnav-item active" data-bpage="dashboard" onclick="openPage('dashboard')">
       <i class="fa-solid fa-chart-pie"></i>
-      <span>Home</span>
+      <span>Control</span>
     </button>
     <button class="bnav-item" data-bpage="bookings" onclick="openPage('bookings')">
       <i class="fa-solid fa-list-check"></i>
@@ -512,11 +556,11 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
     </button>
     <button class="bnav-item" data-bpage="newBooking" onclick="openPage('newBooking')">
       <i class="fa-solid fa-circle-plus" style="font-size:24px;color:var(--accent)"></i>
-      <span>New</span>
+      <span>Add LR</span>
     </button>
     <button class="bnav-item" data-bpage="accounts" onclick="openPage('accounts')">
       <i class="fa-solid fa-scale-balanced"></i>
-      <span>Hisab</span>
+      <span>Ledger</span>
     </button>
     <button class="bnav-item" data-bpage="reports" onclick="openPage('reports')">
       <i class="fa-solid fa-chart-line"></i>
@@ -525,14 +569,46 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
   </div>
 </nav>
 
-<!-- PRINT AREA -->
+<!-- PRINT STATION -->
 <div id="printStation" class="hidden"></div>
 
-<!-- QUICK PAYMENT POPUP -->
+<!-- DYNAMIC UPI QR MODAL -->
+<div class="modal-overlay" id="upiModal">
+  <div class="modal-card">
+    <div class="panel-header">
+      <div class="panel-title"><i class="fa-solid fa-qrcode text-accent"></i> Scan & Pay via UPI</div>
+      <button class="btn btn-secondary btn-sm" onclick="closeUpiModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="qr-container">
+      <div id="upiQrcodeTarget" style="margin-bottom:12px"></div>
+      <strong id="upiAmountLabel" style="font-size:18px;font-family:var(--font-mono)">₹0</strong>
+      <span id="upiPartyLabel" style="font-size:12px;color:var(--text-muted)"></span>
+    </div>
+    <div style="font-size:11px;color:var(--text-muted);text-align:center;margin:12px 0">
+      Accepts PhonePe, Google Pay, Paytm, BHIM or any banking app.
+    </div>
+    <button class="btn btn-secondary" style="width:100%" onclick="closeUpiModal()">Close</button>
+  </div>
+</div>
+
+<!-- POD PREVIEW MODAL -->
+<div class="modal-overlay" id="podModal">
+  <div class="modal-card">
+    <div class="panel-header">
+      <div class="panel-title"><i class="fa-solid fa-receipt"></i> Signed POD Slip</div>
+      <button class="btn btn-secondary btn-sm" onclick="closePodModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div style="max-height:70vh;overflow:auto;text-align:center">
+      <img id="podModalImg" src="" style="max-width:100%;border-radius:var(--radius-md)" alt="Proof of delivery document">
+    </div>
+  </div>
+</div>
+
+<!-- QUICK LEDGER SETTLEMENT MODAL -->
 <div class="modal-overlay" id="quickPayModal">
   <div class="modal-card">
     <div class="panel-header">
-      <div class="panel-title" id="quickPayTitle">Update Payment</div>
+      <div class="panel-title" id="quickPayTitle">Post Financial Transaction</div>
       <button class="btn btn-secondary btn-sm" onclick="closeQuickPayModal()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <input type="hidden" id="quickPayBookingId">
@@ -544,7 +620,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
     <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px" id="quickPayMeta"></div>
     <div style="display:flex;gap:10px">
       <button class="btn btn-secondary" style="flex:1" onclick="closeQuickPayModal()">Cancel</button>
-      <button class="btn btn-primary" style="flex:1" onclick="submitQuickPay()">Save</button>
+      <button class="btn btn-primary" style="flex:1" onclick="submitQuickPay()">Commit Entry</button>
     </div>
   </div>
 </div>
@@ -557,9 +633,13 @@ td{padding:11px 12px;border-bottom:1px solid var(--border-light);white-space:now
 <script>
 "use strict";
 
-const DB_KEY = "sklogistics_enterprise_v2";
+const DB_KEY = "sklogistics_enterprise_v3";
 let fleetData = [];
 let toastDismissTimer;
+
+// Defaults
+const LOGISTICS_VPA = "sklogistics@upi"; // Configure your UPI ID
+const LOGISTICS_NAME = "SK Logistics";
 
 function getTodayDate() {
   const d = new Date();
@@ -570,9 +650,7 @@ function getTodayDate() {
 
 function formatINR(val) {
   const num = Number(val) || 0;
-  return "₹" + num.toLocaleString("en-IN", {
-    maximumFractionDigits: 0
-  });
+  return "₹" + num.toLocaleString("en-IN", { maximumFractionDigits: 0 });
 }
 
 function parseValidNum(val) {
@@ -590,11 +668,12 @@ function escapeHtml(str) {
   }[c]));
 }
 
+// Storage Management
 function loadPersistence() {
   try {
     const raw = localStorage.getItem(DB_KEY);
     if (!raw) {
-      const legacy = localStorage.getItem("sklogistics_bookings_v1");
+      const legacy = localStorage.getItem("sklogistics_enterprise_v2") || localStorage.getItem("sklogistics_bookings_v1");
       fleetData = legacy ? JSON.parse(legacy) : [];
       return;
     }
@@ -610,21 +689,26 @@ function savePersistence() {
     localStorage.setItem(DB_KEY, JSON.stringify(fleetData));
     return true;
   } catch (err) {
-    alert("Storage limit reached! Please backup old data.");
+    alert("Storage limit reached! Please export backup or purge older PODs.");
     return false;
   }
 }
 
-function calcProfit(entry) {
-  return parseValidNum(entry.freight) - parseValidNum(entry.ownerFreight) - parseValidNum(entry.expenses);
+// Multi-stage Financials
+function totalCustomerReceived(b) {
+  return parseValidNum(b.loadingAdvance) + parseValidNum(b.unloadingAdvance);
 }
 
-function calcCustomerDue(entry) {
-  return Math.max(0, parseValidNum(entry.freight) - parseValidNum(entry.received));
+function calcCustomerDue(b) {
+  return Math.max(0, parseValidNum(b.freight) - totalCustomerReceived(b));
 }
 
-function calcOwnerDue(entry) {
-  return Math.max(0, parseValidNum(entry.ownerFreight) - parseValidNum(entry.paid));
+function calcOwnerDue(b) {
+  return Math.max(0, parseValidNum(b.ownerFreight) - parseValidNum(b.paid));
+}
+
+function calcProfit(b) {
+  return parseValidNum(b.freight) - parseValidNum(b.ownerFreight) - parseValidNum(b.expenses);
 }
 
 function generateLRSeries() {
@@ -670,11 +754,12 @@ function openPage(pageKey) {
   window.scrollTo({top: 0, behavior: "smooth"});
 }
 
+// Form Population & Image Compression
 const entryFieldKeys = [
-  "bookingDate", "customer", "customerMobile", "pickup", "destination",
-  "goods", "weight", "vehicleType", "vehicleNo", "driver", "driverMobile",
-  "owner", "ownerMobile", "status", "deliveryDate", "freight", "ownerFreight",
-  "expenses", "received", "paid", "notes"
+  "bookingDate", "customer", "customerMobile", "ewayBill", "ewayExpiry", "gstin",
+  "pickup", "destination", "goods", "weight", "vehicleType", "vehicleNo",
+  "driver", "driverMobile", "owner", "ownerMobile", "status", "deliveryDate",
+  "freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses", "notes"
 ];
 
 function extractFormDataset() {
@@ -683,9 +768,10 @@ function extractFormDataset() {
     const el = document.getElementById("entry_" + k);
     payload[k] = el ? cleanStr(el.value) : "";
   });
-  ["freight", "ownerFreight", "expenses", "received", "paid"].forEach(k => {
+  ["freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses"].forEach(k => {
     payload[k] = parseValidNum(payload[k]);
   });
+  payload.podImage = document.getElementById("entry_podImage").value;
   return payload;
 }
 
@@ -694,46 +780,96 @@ function populateEntryForm(b) {
     const el = document.getElementById("entry_" + k);
     if (el) el.value = b[k] ?? "";
   });
+  document.getElementById("entry_podImage").value = b.podImage || "";
+  if (b.podImage) {
+    document.getElementById("podPreviewImage").src = b.podImage;
+    document.getElementById("podPreviewImage").style.display = "block";
+    document.getElementById("podEmptyText").style.display = "none";
+  } else {
+    document.getElementById("podPreviewImage").style.display = "none";
+    document.getElementById("podEmptyText").style.display = "inline";
+  }
   recalculateFormMargins();
 }
 
 function resetEntryForm() {
   document.getElementById("consignmentForm").reset();
   document.getElementById("entry_recordId").value = "";
+  document.getElementById("entry_podImage").value = "";
   document.getElementById("entry_bookingDate").value = getTodayDate();
-  document.getElementById("bookingFormModeText").textContent = "New Consignment Entry";
-  document.getElementById("saveBookingSubmitBtn").innerHTML = '<i class="fa-solid fa-check"></i> Save Booking';
-  ["freight", "ownerFreight", "expenses", "received", "paid"].forEach(k => {
+  document.getElementById("podPreviewImage").style.display = "none";
+  document.getElementById("podEmptyText").style.display = "inline";
+  document.getElementById("bookingFormModeText").textContent = "Consignment Dispatch Form";
+  document.getElementById("saveBookingSubmitBtn").innerHTML = '<i class="fa-solid fa-check"></i> Commit Consignment';
+  ["freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses"].forEach(k => {
     const el = document.getElementById("entry_" + k);
     if (el) el.value = "0";
   });
   recalculateFormMargins();
 }
 
+function processPodUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      // Compress with 800px max dimension
+      const canvas = document.createElement("canvas");
+      let width = img.width;
+      let height = img.height;
+      const maxDim = 800;
+      if (width > height && width > maxDim) {
+        height = Math.round((height * maxDim) / width);
+        width = maxDim;
+      } else if (height > maxDim) {
+        width = Math.round((width * maxDim) / height);
+        height = maxDim;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.65);
+
+      document.getElementById("entry_podImage").value = compressedDataUrl;
+      document.getElementById("podPreviewImage").src = compressedDataUrl;
+      document.getElementById("podPreviewImage").style.display = "block";
+      document.getElementById("podEmptyText").style.display = "none";
+      triggerToast("Signed POD compressed & attached");
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function recalculateFormMargins() {
   const freight = parseValidNum(document.getElementById("entry_freight")?.value);
+  const loadingAdv = parseValidNum(document.getElementById("entry_loadingAdvance")?.value);
+  const unloadingAdv = parseValidNum(document.getElementById("entry_unloadingAdvance")?.value);
   const ownerFreight = parseValidNum(document.getElementById("entry_ownerFreight")?.value);
-  const expenses = parseValidNum(document.getElementById("entry_expenses")?.value);
-  const received = parseValidNum(document.getElementById("entry_received")?.value);
   const paid = parseValidNum(document.getElementById("entry_paid")?.value);
+  const expenses = parseValidNum(document.getElementById("entry_expenses")?.value);
 
   const margin = freight - ownerFreight - expenses;
-  const clientDue = Math.max(0, freight - received);
+  const clientDue = Math.max(0, freight - (loadingAdv + unloadingAdv));
   const ownerDue = Math.max(0, ownerFreight - paid);
 
   const previewMargin = document.getElementById("previewMargin");
   const previewBalances = document.getElementById("previewBalances");
 
   if (previewMargin) {
-    previewMargin.textContent = `Margin: ${formatINR(margin)}`;
+    previewMargin.textContent = `Operating Margin: ${formatINR(margin)}`;
     previewMargin.style.color = margin >= 0 ? "var(--success)" : "var(--danger)";
   }
   if (previewBalances) {
-    previewBalances.textContent = `Client Due: ${formatINR(clientDue)} | Owner Due: ${formatINR(ownerDue)}`;
+    previewBalances.textContent = `Customer Due: ${formatINR(clientDue)} | Carrier Due: ${formatINR(ownerDue)}`;
   }
 }
 
-["entry_freight", "entry_ownerFreight", "entry_expenses", "entry_received", "entry_paid"].forEach(id => {
+["entry_freight", "entry_loadingAdvance", "entry_unloadingAdvance", "entry_ownerFreight", "entry_paid", "entry_expenses"].forEach(id => {
   document.getElementById(id)?.addEventListener("input", recalculateFormMargins);
 });
 
@@ -773,7 +909,7 @@ document.getElementById("consignmentForm").addEventListener("submit", function(e
     openPage("bookings");
     triggerToast(editRecId ? "Booking updated" : `Created: ${payload.lr}`);
   } catch (err) {
-    alert("Error saving record: " + err.message);
+    alert("Error: " + err.message);
   }
 });
 
@@ -783,8 +919,8 @@ function editConsignment(id) {
 
   document.getElementById("entry_recordId").value = item.id;
   populateEntryForm(item);
-  document.getElementById("bookingFormModeText").textContent = "Edit: " + item.lr;
-  document.getElementById("saveBookingSubmitBtn").innerHTML = '<i class="fa-solid fa-check"></i> Update Booking';
+  document.getElementById("bookingFormModeText").textContent = "Edit LR: " + item.lr;
+  document.getElementById("saveBookingSubmitBtn").innerHTML = '<i class="fa-solid fa-check"></i> Update Record';
   openPage("newBooking");
 }
 
@@ -796,7 +932,7 @@ function removeConsignment(id) {
   fleetData = fleetData.filter(x => String(x.id) !== String(id));
   savePersistence();
   renderAllViews();
-  triggerToast("Trip deleted");
+  triggerToast("Trip record removed");
 }
 
 function updateDirectStatus(id, newStatus) {
@@ -809,27 +945,80 @@ function updateDirectStatus(id, newStatus) {
   triggerToast(`Status: ${newStatus}`);
 }
 
+// UPI QR Generator
+function showUpiQr(id) {
+  const b = fleetData.find(x => String(x.id) === String(id));
+  if (!b) return;
+
+  const due = calcCustomerDue(b);
+  if (due <= 0) {
+    alert("No pending dues on this consignment.");
+    return;
+  }
+
+  const container = document.getElementById("upiQrcodeTarget");
+  container.innerHTML = "";
+
+  const upiUrl = `upi://pay?pa=${encodeURIComponent(LOGISTICS_VPA)}&pn=${encodeURIComponent(LOGISTICS_NAME)}&am=${due.toFixed(2)}&cu=INR&tn=${encodeURIComponent('LR_' + b.lr)}`;
+
+  new QRCode(container, {
+    text: upiUrl,
+    width: 180,
+    height: 180,
+    colorDark: "#090e17",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  document.getElementById("upiAmountLabel").textContent = formatINR(due);
+  document.getElementById("upiPartyLabel").textContent = `${b.customer} (${b.lr})`;
+  document.getElementById("upiModal").classList.add("active");
+}
+
+function closeUpiModal() {
+  document.getElementById("upiModal").classList.remove("active");
+}
+
+// POD Viewer
+function viewPodImage(id) {
+  const b = fleetData.find(x => String(x.id) === String(id));
+  if (!b || !b.podImage) {
+    alert("No signed POD uploaded yet.");
+    return;
+  }
+  document.getElementById("podModalImg").src = b.podImage;
+  document.getElementById("podModal").classList.add("active");
+}
+
+function closePodModal() {
+  document.getElementById("podModal").classList.remove("active");
+}
+
+// Pre-filled WhatsApp Share
 function sendWhatsAppBilti(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
 
   const phone = (b.customerMobile || "").replace(/\D/g, "");
   const msg = 
-`*SK LOGISTICS - TRIP UPDATE*
-*LR No:* ${b.lr}
+`*SK LOGISTICS - CONSIGNMENT UPDATE*
+*LR Number:* ${b.lr}
 *Status:* ${b.status}
 *Route:* ${b.pickup} ➔ ${b.destination}
 *Vehicle:* ${b.vehicleNo || 'Allocating'}
-*Material:* ${b.goods}
----------------------
-*Freight:* ${formatINR(b.freight)}
-*Due Balance:* ${formatINR(calcCustomerDue(b))}
----------------------`;
+*E-Way Bill:* ${b.ewayBill || 'N/A'}
+*Cargo:* ${b.goods} (${b.weight || 'Std Load'})
+-------------------------------
+*Total Freight:* ${formatINR(b.freight)}
+*Pending Balance:* ${formatINR(calcCustomerDue(b))}
+-------------------------------
+For delivery coordinates or inquiries, reply back to this desk.`;
 
   const url = `https://wa.me/${phone ? (phone.length === 10 ? '91' + phone : phone) : ''}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
 
+// Quick Payment Posting
 function showQuickPay(id, type) {
   const item = fleetData.find(x => String(x.id) === String(id));
   if (!item) return;
@@ -843,15 +1032,15 @@ function showQuickPay(id, type) {
   const metaEl = document.getElementById("quickPayMeta");
 
   if (type === "customer") {
-    titleEl.textContent = `Payment: ${item.customer}`;
-    labelEl.textContent = "Total Amount Received (₹)";
-    inputEl.value = item.received;
-    metaEl.textContent = `Billed: ${formatINR(item.freight)} | Currently Due: ${formatINR(calcCustomerDue(item))}`;
+    titleEl.textContent = `Collect: ${item.customer}`;
+    labelEl.textContent = "Unloading / Balance Advance Received (₹)";
+    inputEl.value = item.unloadingAdvance || 0;
+    metaEl.textContent = `Billed: ${formatINR(item.freight)} | Current Due: ${formatINR(calcCustomerDue(item))}`;
   } else {
-    titleEl.textContent = `Paid to Truck: ${item.owner || 'Owner'}`;
-    labelEl.textContent = "Total Amount Paid (₹)";
+    titleEl.textContent = `Paid to Truck: ${item.owner || 'Carrier'}`;
+    labelEl.textContent = "Total Amount Paid to Truck (₹)";
     inputEl.value = item.paid;
-    metaEl.textContent = `Truck Hire: ${formatINR(item.ownerFreight)} | Currently Due: ${formatINR(calcOwnerDue(item))}`;
+    metaEl.textContent = `Truck Hire: ${formatINR(item.ownerFreight)} | Current Due: ${formatINR(calcOwnerDue(item))}`;
   }
 
   document.getElementById("quickPayModal").classList.add("active");
@@ -871,7 +1060,7 @@ function submitQuickPay() {
   if (idx === -1) return;
 
   if (type === "customer") {
-    fleetData[idx].received = val;
+    fleetData[idx].unloadingAdvance = val;
   } else {
     fleetData[idx].paid = val;
   }
@@ -880,25 +1069,39 @@ function submitQuickPay() {
   savePersistence();
   closeQuickPayModal();
   renderAllViews();
-  triggerToast("Payment updated");
+  triggerToast("Ledger updated");
 }
 
-/* Dynamic Builders: Desktop Table + Mobile Cards */
+function getEwayStatusTag(b) {
+  if (!b.ewayExpiry) return "";
+  const exp = new Date(b.ewayExpiry + "T23:59:59");
+  const now = new Date();
+  const diffDays = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 0) {
+    return `<span class="badge badge-eway-alert"><i class="fa-solid fa-triangle-exclamation"></i> E-Way Expired</span>`;
+  } else if (diffDays <= 1) {
+    return `<span class="badge badge-eway-alert"><i class="fa-solid fa-clock"></i> E-Way Expiring</span>`;
+  }
+  return `<span class="badge" style="background:#f1f5f9;color:#475569"><i class="fa-solid fa-receipt"></i> E-Way Active</span>`;
+}
+
+// Table / Card Renderers
 function buildDesktopTable(records) {
-  if (!records.length) return `<div style="text-align:center;padding:30px;color:var(--text-muted)">No bookings found.</div>`;
+  if (!records.length) return `<div style="text-align:center;padding:30px;color:var(--text-muted)">No bookings located.</div>`;
   return `
     <div class="table-responsive">
       <table>
         <thead>
           <tr>
-            <th>LR No</th>
+            <th>LR Number</th>
             <th>Date</th>
-            <th>Party</th>
-            <th>Route</th>
-            <th>Vehicle</th>
+            <th>Customer / Party</th>
+            <th>Route Details</th>
+            <th>Vehicle / Driver</th>
             <th>Freight</th>
-            <th>Party Due</th>
-            <th>Profit</th>
+            <th>Customer Due</th>
+            <th>POD</th>
             <th>Status</th>
             <th style="text-align:right">Actions</th>
           </tr>
@@ -906,14 +1109,28 @@ function buildDesktopTable(records) {
         <tbody>
           ${records.map(b => `
             <tr>
-              <td><strong style="color:var(--accent);font-family:var(--font-mono)">${escapeHtml(b.lr)}</strong></td>
+              <td>
+                <strong style="color:var(--accent);font-family:var(--font-mono)">${escapeHtml(b.lr)}</strong>
+                <br>${getEwayStatusTag(b)}
+              </td>
               <td>${escapeHtml(b.bookingDate)}</td>
-              <td><strong>${escapeHtml(b.customer)}</strong></td>
-              <td>${escapeHtml(b.pickup)} ➔${escapeHtml(b.destination)}</td>
-              <td>${escapeHtml(b.vehicleNo || b.vehicleType || '-')}</td>
+              <td>
+                <strong>${escapeHtml(b.customer)}</strong>${b.customerMobile ? `<br><a href="tel:${escapeHtml(b.customerMobile)}" style="color:var(--text-muted);text-decoration:none"><i class="fa-solid fa-phone" style="font-size:10px"></i> ${escapeHtml(b.customerMobile)}</a>` : ''}
+              </td>
+              <td>
+                ${escapeHtml(b.pickup)} ➔${escapeHtml(b.destination)}
+                <br><small style="color:var(--text-muted)">${escapeHtml(b.goods)}</small>
+              </td>
+              <td>
+                <strong style="font-family:var(--font-mono)">${escapeHtml(b.vehicleNo \vert{}\vert{} 'ALLOCATING')}</strong>${b.driverMobile ? `<br><a href="tel:${escapeHtml(b.driverMobile)}" style="font-size:11px;color:var(--text-muted);text-decoration:none"><i class="fa-solid fa-phone" style="font-size:9px"></i> ${escapeHtml(b.driver)}</a>` : ''}
+              </td>
               <td><strong>${formatINR(b.freight)}</strong></td>
-              <td style="color:${calcCustomerDue(b) > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">${formatINR(calcCustomerDue(b))}</td>
-              <td style="color:${calcProfit(b) >= 0 ? 'var(--success)' : 'var(--danger)'};font-weight:700">${formatINR(calcProfit(b))}</td>
+              <td style="color:${calcCustomerDue(b) > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">
+                ${formatINR(calcCustomerDue(b))}${calcCustomerDue(b) > 0 ? `<button class="btn btn-secondary btn-sm" style="padding:2px 6px;margin-left:4px" onclick="showUpiQr('${b.id}')"><i class="fa-solid fa-qrcode"></i></button>` : ''}
+              </td>
+              <td>
+                ${b.podImage ? `<button class="btn btn-secondary btn-sm" onclick="viewPodImage('${b.id}')"><i class="fa-solid fa-receipt text-success"></i> View</button>` : '<span style="color:var(--text-muted);font-size:11px">Pending</span>'}
+              </td>
               <td>
                 <select onchange="updateDirectStatus('${b.id}', this.value)" style="padding:4px;border-radius:6px;font-size:12px">
                   ${["Booked", "In Transit", "Delivered", "Cancelled"].map(s => 
@@ -923,7 +1140,7 @@ function buildDesktopTable(records) {
               </td>
               <td style="text-align:right">
                 <div style="display:inline-flex;gap:4px">
-                  <button class="btn btn-secondary btn-sm" onclick="printStandardBilti('${b.id}')"><i class="fa-solid fa-print"></i></button>
+                  <button class="btn btn-secondary btn-sm" onclick="printStandardBilti('${b.id}')" title="Print Bilti"><i class="fa-solid fa-print"></i></button>
                   <button class="btn btn-secondary btn-sm" onclick="sendWhatsAppBilti('${b.id}')"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
                   <button class="btn btn-secondary btn-sm" onclick="editConsignment('${b.id}')"><i class="fa-solid fa-pen"></i></button>
                   <button class="btn btn-danger btn-sm" onclick="removeConsignment('${b.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -938,7 +1155,7 @@ function buildDesktopTable(records) {
 }
 
 function buildMobileCards(records) {
-  if (!records.length) return `<div style="text-align:center;padding:24px;color:var(--text-muted)">No bookings found.</div>`;
+  if (!records.length) return `<div style="text-align:center;padding:24px;color:var(--text-muted)">No bookings recorded.</div>`;
   return records.map(b => {
     const due = calcCustomerDue(b);
     const prof = calcProfit(b);
@@ -949,22 +1166,29 @@ function buildMobileCards(records) {
             <strong style="color:var(--accent);font-family:var(--font-mono);font-size:14px">${escapeHtml(b.lr)}</strong>
             <span style="font-size:11px;color:var(--text-muted);display:block">${escapeHtml(b.bookingDate)}</span>
           </div>
-          <select onchange="updateDirectStatus('${b.id}', this.value)" style="padding:4px 8px;border-radius:6px;font-size:12px;font-weight:700">
-            ${["Booked", "In Transit", "Delivered", "Cancelled"].map(s => 
-              `<option value="${s}" ${b.status === s ? 'selected' : ''}>${s}</option>`
-            ).join("")}
-          </select>
+          <div style="text-align:right">
+            <select onchange="updateDirectStatus('${b.id}', this.value)" style="padding:4px 8px;border-radius:6px;font-size:12px;font-weight:700">
+              ${["Booked", "In Transit", "Delivered", "Cancelled"].map(s => 
+                `<option value="${s}" ${b.status === s ? 'selected' : ''}>${s}</option>`
+              ).join("")}
+            </select>
+            <div style="margin-top:4px">${getEwayStatusTag(b)}</div>
+          </div>
         </div>
 
         <div class="tcm-body">
-          <div style="font-weight:700;font-size:14px">${escapeHtml(b.customer)}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong style="font-size:14px">${escapeHtml(b.customer)}</strong>
+            ${b.customerMobile ? `<a href="tel:${escapeHtml(b.customerMobile)}" class="btn btn-secondary btn-sm" style="padding:3px 8px"><i class="fa-solid fa-phone"></i> Call Party</a>` : ''}
+          </div>
           <div class="tcm-route">
             <span>${escapeHtml(b.pickup)}</span>
             <i class="fa-solid fa-arrow-right" style="font-size:10px;color:var(--text-muted)"></i>
             <span>${escapeHtml(b.destination)}</span>
           </div>
-          <div style="font-size:12px;color:var(--text-muted)">
-            <i class="fa-solid fa-truck" style="font-size:10px"></i> ${escapeHtml(b.vehicleNo || 'No Vehicle')} · ${escapeHtml(b.goods)}
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted)">
+            <span><i class="fa-solid fa-truck" style="font-size:10px"></i> ${escapeHtml(b.vehicleNo || 'No Rig')} · ${escapeHtml(b.goods)}</span>
+            ${b.driverMobile ? `<a href="tel:${escapeHtml(b.driverMobile)}" style="color:var(--accent);text-decoration:none"><i class="fa-solid fa-phone"></i> Driver</a>` : ''}
           </div>
         </div>
 
@@ -984,9 +1208,11 @@ function buildMobileCards(records) {
         </div>
 
         <div class="tcm-actions">
+          ${due > 0 ? `<button class="btn btn-primary btn-sm" onclick="showUpiQr('${b.id}')"><i class="fa-solid fa-qrcode"></i> Pay QR</button>` : ''}
+          ${b.podImage ? `<button class="btn btn-secondary btn-sm" onclick="viewPodImage('${b.id}')"><i class="fa-solid fa-receipt"></i> POD</button>` : ''}
           <button class="btn btn-secondary btn-sm" onclick="printStandardBilti('${b.id}')"><i class="fa-solid fa-print"></i> Bilti</button>
-          <button class="btn btn-secondary btn-sm" onclick="sendWhatsAppBilti('${b.id}')"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i> Share</button>
-          <button class="btn btn-secondary btn-sm" onclick="editConsignment('${b.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+          <button class="btn btn-secondary btn-sm" onclick="sendWhatsAppBilti('${b.id}')"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
+          <button class="btn btn-secondary btn-sm" onclick="editConsignment('${b.id}')"><i class="fa-solid fa-pen"></i></button>
           <button class="btn btn-danger btn-sm" onclick="removeConsignment('${b.id}')"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>
@@ -1000,7 +1226,7 @@ function renderBookingsTable() {
 
   const list = [...fleetData]
     .filter(b => !filterStatus || b.status === filterStatus)
-    .filter(b => [b.lr, b.customer, b.pickup, b.destination, b.vehicleNo, b.goods]
+    .filter(b => [b.lr, b.customer, b.pickup, b.destination, b.vehicleNo, b.goods, b.ewayBill]
       .some(k => String(k || "").toLowerCase().includes(query)))
     .sort((a, b) => String(b.bookingDate).localeCompare(String(a.bookingDate)));
 
@@ -1037,7 +1263,7 @@ function renderCustomerMaster() {
     const c = group[key];
     c.trips += 1;
     c.freight += parseValidNum(b.freight);
-    c.received += parseValidNum(b.received);
+    c.received += totalCustomerReceived(b);
     c.balance += calcCustomerDue(b);
     if (!c.mobile && b.customerMobile) c.mobile = b.customerMobile;
   });
@@ -1051,8 +1277,8 @@ function renderCustomerMaster() {
       <table>
         <thead>
           <tr>
-            <th>Party</th>
-            <th>Phone</th>
+            <th>Client Name</th>
+            <th>Mobile</th>
             <th>Trips</th>
             <th>Billed</th>
             <th>Received</th>
@@ -1073,15 +1299,15 @@ function renderCustomerMaster() {
         </tbody>
       </table>
     </div>
-  ` : `<div style="text-align:center;padding:24px;color:var(--text-muted)">No parties found.</div>`;
+  ` : `<div style="text-align:center;padding:24px;color:var(--text-muted)">No clients located.</div>`;
 
   document.getElementById("customerMasterMobileList").innerHTML = dataset.map(c => `
     <div class="trip-card-mobile">
       <div style="display:flex;justify-content:space-between">
         <strong>${escapeHtml(c.name)}</strong>
-        <span style="font-size:12px;color:var(--text-muted)">${c.trips} Trips</span>
+        <span style="font-size:12px;color:var(--text-muted)">${c.trips} Loads</span>
       </div>
-      <div style="font-size:12px;color:var(--text-muted)">${escapeHtml(c.mobile || 'No Mobile')}</div>
+      <div style="font-size:12px;color:var(--text-muted)">${escapeHtml(c.mobile || 'No Contact')}</div>
       <div class="tcm-financials">
         <div class="tcm-fin-col"><span>Billed</span><strong>${formatINR(c.freight)}</strong></div>
         <div class="tcm-fin-col"><span>Received</span><strong style="color:var(--success)">${formatINR(c.received)}</strong></div>
@@ -1096,7 +1322,7 @@ function renderCustomerMaster() {
 
 function renderLedgerOverview() {
   document.getElementById("accGrossFreight").textContent = formatINR(fleetData.reduce((acc, b) => acc + parseValidNum(b.freight), 0));
-  document.getElementById("accRealizedCollection").textContent = formatINR(fleetData.reduce((acc, b) => acc + parseValidNum(b.received), 0));
+  document.getElementById("accRealizedCollection").textContent = formatINR(fleetData.reduce((acc, b) => acc + totalCustomerReceived(b), 0));
   document.getElementById("accOutstandingReceivables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
   document.getElementById("accTruckOwnerPayables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
 
@@ -1108,14 +1334,17 @@ function renderLedgerOverview() {
     return list.map(b => `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-light)">
         <div>
-          <strong>${escapeHtml(type === 'customer' ? b.customer : (b.owner || 'Truck Owner'))}</strong>
+          <strong>${escapeHtml(type === 'customer' ? b.customer : (b.owner || 'Truck Carrier'))}</strong>
           <div style="font-size:11px;color:var(--text-muted)">${escapeHtml(b.lr)} · ${escapeHtml(b.pickup)} ➔ ${escapeHtml(b.destination)}</div>
         </div>
         <div style="text-align:right">
           <div style="font-weight:700;color:${type === 'customer' ? 'var(--danger)' : 'var(--warning)'}">
             ${formatINR(type === 'customer' ? calcCustomerDue(b) : calcOwnerDue(b))}
           </div>
-          <button class="btn btn-secondary btn-sm" style="margin-top:3px" onclick="showQuickPay('${b.id}', '${type}')">Pay</button>
+          <div style="display:inline-flex;gap:4px;margin-top:3px">
+            ${type === 'customer' ? `<button class="btn btn-secondary btn-sm" onclick="showUpiQr('${b.id}')"><i class="fa-solid fa-qrcode"></i> QR</button>` : ''}
+            <button class="btn btn-secondary btn-sm" onclick="showQuickPay('${b.id}', '${type}')">Record</button>
+          </div>
         </div>
       </div>
     `).join("");
@@ -1154,8 +1383,8 @@ function renderBusinessReports() {
     <div style="padding:12px;border:1px solid var(--border-light);border-radius:var(--radius-md);margin-top:12px;font-size:13px;line-height:1.8">
       <div>Booked Trips: <strong>${statuses.Booked}</strong></div>
       <div>In Transit: <strong>${statuses['In Transit']}</strong></div>
-      <div>Delivered: <strong>${statuses.Delivered}</strong></div>
-      <div>Cancelled: <strong>${statuses.Cancelled}</strong></div>
+      <div>Delivered (POD): <strong>${statuses.Delivered}</strong></div>
+      <div>Void / Cancelled: <strong>${statuses.Cancelled}</strong></div>
     </div>
   `;
 }
@@ -1168,11 +1397,12 @@ function renderAllViews() {
   renderBusinessReports();
 }
 
+// Bilti Consignment Print
 function printStandardBilti(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
 
-  const copies = ["Consignor Copy", "Driver Copy", "Consignee Copy"];
+  const copies = ["Consignor Copy", "Driver / Transit Copy", "Consignee Copy"];
   const station = document.getElementById("printStation");
   
   station.innerHTML = copies.map(copyName => `
@@ -1180,23 +1410,32 @@ function printStandardBilti(id) {
       <div class="bilti-header">
         <div>
           <h2 style="font-size:18px;margin:0">SK LOGISTICS</h2>
-          <small>Fleet Transport Management</small>
+          <small>Fleet Transport & Cargo Movers</small>
         </div>
         <div style="text-align:right">
           <strong>${copyName}</strong><br>
           <span>LR: ${escapeHtml(b.lr)}</span><br>
-          <small>${escapeHtml(b.bookingDate)}</small>
+          <small>Date: ${escapeHtml(b.bookingDate)}</small>
         </div>
       </div>
       <table class="grid-table">
-        <tr><td><strong>Party:</strong> ${escapeHtml(b.customer)}</td><td><strong>Route:</strong> ${escapeHtml(b.pickup)} ➔ ${escapeHtml(b.destination)}</td></tr>
-        <tr><td><strong>Vehicle:</strong> ${escapeHtml(b.vehicleNo || '-')}</td><td><strong>Goods:</strong> ${escapeHtml(b.goods)} (${escapeHtml(b.weight || 'Std')})</td></tr>
-        <tr><td><strong>Freight:</strong> ${formatINR(b.freight)}</td><td><strong>Balance Due:</strong> ${formatINR(calcCustomerDue(b))}</td></tr>
+        <tr>
+          <td><strong>Party (Sender):</strong> ${escapeHtml(b.customer)}<br>GSTIN: ${escapeHtml(b.gstin || 'N/A')}</td>
+          <td><strong>Route:</strong> ${escapeHtml(b.pickup)} ➔ ${escapeHtml(b.destination)}<br>E-Way Bill: ${escapeHtml(b.ewayBill || 'N/A')}</td>
+        </tr>
+        <tr>
+          <td><strong>Vehicle:</strong> ${escapeHtml(b.vehicleNo || 'ALLOCATING')} (${escapeHtml(b.vehicleType)})</td>
+          <td><strong>Cargo:</strong> ${escapeHtml(b.goods)} (${escapeHtml(b.weight || 'Std Load')})</td>
+        </tr>
+        <tr>
+          <td><strong>Freight:</strong> ${formatINR(b.freight)}</td>
+          <td><strong>Balance Due:</strong> ${formatINR(calcCustomerDue(b))}</td>
+        </tr>
       </table>
       <div class="bilti-signatures">
-        <div class="signature-line">Consignor</div>
-        <div class="signature-line">Driver</div>
-        <div class="signature-line">SK Logistics</div>
+        <div class="signature-line">Consignor Signature</div>
+        <div class="signature-line">Driver Signature</div>
+        <div class="signature-line">SK Logistics Authorized</div>
       </div>
     </div>
   `).join("");
@@ -1208,9 +1447,9 @@ function printStandardBilti(id) {
 
 function exportCSV() {
   if (!fleetData.length) { alert("No data to export"); return; }
-  const headers = ["LR", "Date", "Customer", "Pickup", "Destination", "Goods", "Freight", "Customer Due", "Profit", "Status"];
+  const headers = ["LR", "Date", "Customer", "EWayBill", "Pickup", "Destination", "Goods", "Freight", "Customer Due", "Profit", "Status"];
   const rows = fleetData.map(b => [
-    b.lr, b.bookingDate, `"${b.customer}"`, `"${b.pickup}"`, `"${b.destination}"`, `"${b.goods}"`,
+    b.lr, b.bookingDate, `"${b.customer}"`, `"${b.ewayBill || ''}"`, `"${b.pickup}"`, `"${b.destination}"`, `"${b.goods}"`,
     b.freight, calcCustomerDue(b), calcProfit(b), b.status
   ]);
   const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
@@ -1218,15 +1457,18 @@ function exportCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `SK-Logistics-${getTodayDate()}.csv`;
+  a.download = `SK-Logistics-Ledger-${getTodayDate()}.csv`;
+  document.body.appendChild(a);
   a.click();
 }
 
 function exportDataBackup() {
   const blob = new Blob([JSON.stringify(fleetData, null, 2)], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `SK-Logistics-Backup-${getTodayDate()}.json`;
+  a.href = url;
+  a.download = `SK-Logistics-FullDB-${getTodayDate()}.json`;
+  document.body.appendChild(a);
   a.click();
 }
 
@@ -1241,15 +1483,16 @@ function importDataBackup(e) {
         fleetData = data;
         savePersistence();
         renderAllViews();
-        triggerToast("Data restored");
+        triggerToast("Ledger restored");
       }
     } catch (err) {
-      alert("Invalid backup file");
+      alert("Invalid backup file: " + err.message);
     }
   };
   reader.readAsText(file);
 }
 
+// Initial Boot
 loadPersistence();
 resetEntryForm();
 renderAllViews();
