@@ -24,11 +24,11 @@
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius: 10px;
-  --bottom-h: 64px;
+  --bottom-h: 68px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:var(--font-sans);background:var(--bg-body);color:#0f172a;line-height:1.5;padding-bottom:calc(var(--bottom-h) + 16px)}
+body{font-family:var(--font-sans);background:var(--bg-body);color:#0f172a;line-height:1.5;padding-bottom:calc(var(--bottom-h) + 24px)}
 button,input,select,textarea{font-family:inherit}
 
 .hidden { display: none !important; }
@@ -49,11 +49,47 @@ button,input,select,textarea{font-family:inherit}
 .nav-pill{background:#fff;border:1px solid var(--border);color:#64748b;padding:9px 16px;border-radius:var(--radius);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .nav-pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 
-/* Mobile Bottom Navigation */
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--bottom-h);background:#fff;border-top:1px solid var(--border);z-index:1000;box-shadow:0 -4px 15px rgba(0,0,0,0.06);padding:0 8px}
-.bottom-nav-inner{display:flex;height:100%;align-items:center;justify-content:space-around}
-.bnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#64748b;font-size:10px;font-weight:600;gap:4px;flex:1;height:100%;background:transparent;border:0;cursor:pointer}
-.bnav-item i{font-size:18px}
+/* Mobile Bottom Navigation - FIXED TOUCH & POINTER BEHAVIOR */
+.bottom-nav{
+  display:none;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:var(--bottom-h);
+  background:#ffffff;
+  border-top:1px solid var(--border);
+  z-index:9999;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+  padding:0 4px;
+}
+.bottom-nav-inner{
+  display:flex;
+  height:100%;
+  align-items:center;
+  justify-content:space-around;
+}
+.bnav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:#64748b;
+  font-size:11px;
+  font-weight:600;
+  gap:3px;
+  flex:1;
+  height:100%;
+  background:transparent;
+  border:0;
+  cursor:pointer;
+  touch-action:manipulation;
+  user-select:none;
+}
+.bnav-item * {
+  pointer-events:none; /* Icons and text won't block click/touch */
+}
+.bnav-item i{font-size:19px}
 .bnav-item.active{color:var(--accent)}
 
 .page{display:none}
@@ -110,11 +146,11 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 .trip-card-actions .btn{flex:1;min-width:65px}
 
 /* Modals */
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,14,23,0.7);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,14,23,0.7);display:none;align-items:center;justify-content:center;z-index:10000;padding:16px}
 .modal-overlay.active{display:flex}
 .modal-card{background:#fff;border-radius:var(--radius);width:100%;max-width:440px;padding:22px}
 
-.toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;font-size:12.5px;font-weight:600;z-index:9999;opacity:0;transition:all .25s ease;pointer-events:none}
+.toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;font-size:12.5px;font-weight:600;z-index:99999;opacity:0;transition:all .25s ease;pointer-events:none}
 .toast.show{transform:translate(-50%,0);opacity:1}
 
 .pod-preview-wrapper{width:100%;height:180px;border:2px dashed var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa}
@@ -123,7 +159,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 /* Responsive Grid */
 @media(min-width: 768px){
   body{padding-bottom:0}
-  .bottom-nav{display:none}
+  .bottom-nav{display:none !important}
   .layout-container{padding:24px}
   .metric-grid{grid-template-columns:repeat(3, 1fr);gap:16px}
   .form-grid{grid-template-columns:repeat(3, minmax(0, 1fr))}
@@ -133,8 +169,8 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   .card-list{display:none!important}
 }
 @media(max-width: 767px){
-  .nav-pills{display:none}
-  .bottom-nav{display:block}
+  .nav-pills{display:none !important}
+  .bottom-nav{display:block !important}
   .table-wrap{display:none}
   .card-list{display:flex}
   .metric-value{font-size:18px}
@@ -504,26 +540,26 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   </section>
 </main>
 
-<!-- Bottom Nav -->
+<!-- Bottom Nav (Optimized for Mobile Touch) -->
 <nav class="bottom-nav no-print">
   <div class="bottom-nav-inner">
-    <button type="button" class="bnav-item active" data-action="goto" data-target="dashboard">
+    <button type="button" class="bnav-item active" data-nav="dashboard">
       <i class="fa-solid fa-chart-pie"></i>
       <span>Control</span>
     </button>
-    <button type="button" class="bnav-item" data-action="goto" data-target="bookings">
+    <button type="button" class="bnav-item" data-nav="bookings">
       <i class="fa-solid fa-list-check"></i>
       <span>Trips</span>
     </button>
-    <button type="button" class="bnav-item" data-action="goto" data-target="newBooking">
+    <button type="button" class="bnav-item" data-nav="newBooking">
       <i class="fa-solid fa-circle-plus" style="font-size:24px;color:var(--accent)"></i>
       <span>Add LR</span>
     </button>
-    <button type="button" class="bnav-item" data-action="goto" data-target="accounts">
+    <button type="button" class="bnav-item" data-nav="accounts">
       <i class="fa-solid fa-scale-balanced"></i>
       <span>Ledger</span>
     </button>
-    <button type="button" class="bnav-item" data-action="goto" data-target="reports">
+    <button type="button" class="bnav-item" data-nav="reports">
       <i class="fa-solid fa-chart-line"></i>
       <span>Reports</span>
     </button>
@@ -590,7 +626,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 
 <script>
 // CENTRAL APPLICATION ENGINE
-const STORAGE_KEY = "sklogistics_clean_v6";
+const STORAGE_KEY = "sklogistics_clean_v7";
 let fleetData = [];
 
 const LOGISTICS_VPA = "sklogistics@upi";
@@ -627,15 +663,17 @@ function loadPersistence() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      const legacyKeys = ["sklogistics_clean_v5", "sklogistics_clean_v4", "sklogistics_enterprise_v3", "sklogistics_bookings_v1"];
+      const legacyKeys = ["sklogistics_clean_v6", "sklogistics_clean_v5", "sklogistics_clean_v4", "sklogistics_enterprise_v3", "sklogistics_bookings_v1"];
       for (const k of legacyKeys) {
         const val = localStorage.getItem(k);
         if (val) {
-          const parsed = JSON.parse(val);
-          if (Array.isArray(parsed)) {
-            fleetData = parsed;
-            return;
-          }
+          try {
+            const parsed = JSON.parse(val);
+            if (Array.isArray(parsed)) {
+              fleetData = parsed;
+              return;
+            }
+          } catch(e) {}
         }
       }
       fleetData = [];
@@ -653,7 +691,7 @@ function savePersistence() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(fleetData));
     return true;
   } catch (err) {
-    alert("Storage limit exceeded. Export a backup to clear space.");
+    alert("Phone storage full. Please export a backup to free space.");
     return false;
   }
 }
@@ -695,27 +733,34 @@ function triggerToast(msg) {
   setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
+// BULLET-PROOF NAVIGATION FUNCTION
 function navigateTo(pageKey) {
   if (!pageKey) return;
+
+  // 1. Pages
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".nav-pill").forEach(pill => pill.classList.remove("active"));
-  document.querySelectorAll(".bnav-item").forEach(b => b.classList.remove("active"));
-
   const targetPage = document.getElementById(pageKey);
-  const targetPill = document.querySelector(`.nav-pill[data-target="${pageKey}"]`);
-  const targetBnav = document.querySelector(`.bnav-item[data-target="${pageKey}"]`);
+  if (targetPage) {
+    targetPage.classList.add("active");
+  }
 
-  if (targetPage) targetPage.classList.add("active");
-  if (targetPill) targetPill.classList.add("active");
-  if (targetBnav) targetBnav.classList.add("active");
+  // 2. Desktop nav pills
+  document.querySelectorAll(".nav-pill").forEach(pill => {
+    pill.classList.toggle("active", pill.getAttribute("data-target") === pageKey);
+  });
 
+  // 3. Mobile bottom nav items
+  document.querySelectorAll(".bnav-item").forEach(item => {
+    item.classList.toggle("active", item.getAttribute("data-nav") === pageKey);
+  });
+
+  // 4. Default date check
   const editIdEl = document.getElementById("entry_recordId");
   const dateEl = document.getElementById("entry_bookingDate");
   if (pageKey === "newBooking" && editIdEl && !editIdEl.value && dateEl) {
     dateEl.value = getTodayDate();
   }
 
-  renderAllViews();
   window.scrollTo({top: 0, behavior: "smooth"});
 }
 
@@ -845,7 +890,9 @@ function updateDirectStatus(id, newStatus) {
   fleetData[idx].status = newStatus;
   fleetData[idx].updatedAt = new Date().toISOString();
   savePersistence();
-  renderAllViews();
+  renderDashboardView();
+  renderLedgerOverview();
+  renderBusinessReports();
   triggerToast(`Status: ${newStatus}`);
 }
 
@@ -1364,13 +1411,31 @@ function exportDataBackup() {
   a.click();
 }
 
-// SAFE INITIALIZATION & BINDINGS ON DOM READY
+// BULLETPROOF EVENT ATTACHMENTS
 document.addEventListener("DOMContentLoaded", function() {
   loadPersistence();
   resetEntryForm();
   renderAllViews();
 
-  // Inputs & Filters
+  // 1. Direct Touch & Click Listeners for Mobile Bottom Navigation
+  document.querySelectorAll(".bnav-item").forEach(button => {
+    button.addEventListener("click", function(e) {
+      e.preventDefault();
+      const targetPage = this.getAttribute("data-nav");
+      navigateTo(targetPage);
+    });
+  });
+
+  // 2. Direct Listeners for Desktop Nav Pills
+  document.querySelectorAll(".nav-pill").forEach(pill => {
+    pill.addEventListener("click", function(e) {
+      e.preventDefault();
+      const targetPage = this.getAttribute("data-target");
+      navigateTo(targetPage);
+    });
+  });
+
+  // 3. Inputs & Filters
   document.getElementById("globalTripSearch")?.addEventListener("input", renderBookingsTable);
   document.getElementById("statusFilterSelector")?.addEventListener("change", renderBookingsTable);
   document.getElementById("customerSearchInput")?.addEventListener("input", renderCustomerMaster);
@@ -1380,50 +1445,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById(id)?.addEventListener("input", recalculateFormMargins);
   });
 
-  // POD Upload Handler
-  document.getElementById("podFileInput")?.addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      const img = new Image();
-      img.onload = function() {
-        const canvas = document.createElement("canvas");
-        let width = img.width;
-        let height = img.height;
-        const maxDim = 800;
-        if (width > height && width > maxDim) {
-          height = Math.round((height * maxDim) / width);
-          width = maxDim;
-        } else if (height > maxDim) {
-          width = Math.round((width * maxDim) / height);
-          height = maxDim;
-        }
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.65);
-
-        const podField = document.getElementById("entry_podImage");
-        const previewImg = document.getElementById("podPreviewImage");
-        const emptyTxt = document.getElementById("podEmptyText");
-
-        if (podField) podField.value = compressedDataUrl;
-        if (previewImg) {
-          previewImg.src = compressedDataUrl;
-          previewImg.style.display = "block";
-        }
-        if (emptyTxt) emptyTxt.style.display = "none";
-        triggerToast("Signed POD attached");
-      };
-      img.src = evt.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // Form Submit Handler
+  // 4. Form Submit
   document.getElementById("consignmentForm")?.addEventListener("submit", function(evt) {
     evt.preventDefault();
     try {
@@ -1464,28 +1486,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  // Restore Database Handler
-  document.getElementById("importInput")?.addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      try {
-        const data = JSON.parse(evt.target.result);
-        if (Array.isArray(data)) {
-          fleetData = data;
-          savePersistence();
-          renderAllViews();
-          triggerToast("Ledger restored");
-        }
-      } catch (err) {
-        alert("Invalid backup file: " + err.message);
-      }
-    };
-    reader.readAsText(file);
-  });
-
-  // Universal Click Delegation
+  // 5. General Actions Delegation (Buttons, QR, POD, Bilti)
   document.addEventListener("click", function(e) {
     const target = e.target.closest("[data-action]");
     if (!target) return;
