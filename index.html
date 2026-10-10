@@ -28,7 +28,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:var(--font-sans);background:var(--bg-body);color:#0f172a;line-height:1.5;padding-bottom:calc(var(--bottom-h) + 24px)}
+body{font-family:var(--font-sans);background:var(--bg-body);color:#0f172a;line-height:1.5;padding-bottom:calc(var(--bottom-h) + 20px)}
 button,input,select,textarea{font-family:inherit}
 
 .hidden { display: none !important; }
@@ -49,7 +49,7 @@ button,input,select,textarea{font-family:inherit}
 .nav-pill{background:#fff;border:1px solid var(--border);color:#64748b;padding:9px 16px;border-radius:var(--radius);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .nav-pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 
-/* Mobile Bottom Navigation - FIXED TOUCH & POINTER BEHAVIOR */
+/* Mobile Bottom Navigation */
 .bottom-nav{
   display:none;
   position:fixed;
@@ -59,9 +59,9 @@ button,input,select,textarea{font-family:inherit}
   height:var(--bottom-h);
   background:#ffffff;
   border-top:1px solid var(--border);
-  z-index:9999;
-  box-shadow:0 -4px 20px rgba(0,0,0,0.08);
-  padding:0 4px;
+  z-index:99999;
+  box-shadow:0 -4px 15px rgba(0,0,0,0.08);
+  padding:0 6px;
 }
 .bottom-nav-inner{
   display:flex;
@@ -83,13 +83,8 @@ button,input,select,textarea{font-family:inherit}
   background:transparent;
   border:0;
   cursor:pointer;
-  touch-action:manipulation;
-  user-select:none;
 }
-.bnav-item * {
-  pointer-events:none; /* Icons and text won't block click/touch */
-}
-.bnav-item i{font-size:19px}
+.bnav-item i{font-size:18px}
 .bnav-item.active{color:var(--accent)}
 
 .page{display:none}
@@ -146,11 +141,11 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 .trip-card-actions .btn{flex:1;min-width:65px}
 
 /* Modals */
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,14,23,0.7);display:none;align-items:center;justify-content:center;z-index:10000;padding:16px}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,14,23,0.7);display:none;align-items:center;justify-content:center;z-index:999999;padding:16px}
 .modal-overlay.active{display:flex}
 .modal-card{background:#fff;border-radius:var(--radius);width:100%;max-width:440px;padding:22px}
 
-.toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;font-size:12.5px;font-weight:600;z-index:99999;opacity:0;transition:all .25s ease;pointer-events:none}
+.toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;font-size:12.5px;font-weight:600;z-index:9999999;opacity:0;transition:all .25s ease;pointer-events:none}
 .toast.show{transform:translate(-50%,0);opacity:1}
 
 .pod-preview-wrapper{width:100%;height:180px;border:2px dashed var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa}
@@ -204,24 +199,24 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn secondary sm" data-action="backup" title="Backup Database"><i class="fa-solid fa-download"></i></button>
+      <button class="btn secondary sm" onclick="exportDataBackup()" title="Backup Database"><i class="fa-solid fa-download"></i></button>
       <label class="btn secondary sm" style="cursor:pointer" title="Restore Data">
         <i class="fa-solid fa-upload"></i>
-        <input type="file" id="importInput" style="display:none" accept=".json">
+        <input type="file" id="importInput" style="display:none" accept=".json" onchange="importData(event)">
       </label>
-      <button class="btn sm" data-action="goto" data-target="newBooking"><i class="fa-solid fa-plus"></i> New Trip</button>
+      <button class="btn sm" onclick="navigateTo('newBooking')"><i class="fa-solid fa-plus"></i> New Trip</button>
     </div>
   </div>
 </header>
 
 <main class="layout-container no-print">
   <nav class="nav-pills">
-    <button class="nav-pill active" data-action="goto" data-target="dashboard"><i class="fa-solid fa-chart-pie"></i> Control Tower</button>
-    <button class="nav-pill" data-action="goto" data-target="bookings"><i class="fa-solid fa-list-check"></i> Trips & Waybills</button>
-    <button class="nav-pill" data-action="goto" data-target="newBooking"><i class="fa-solid fa-file-circle-plus"></i> New Consignment</button>
-    <button class="nav-pill" data-action="goto" data-target="customers"><i class="fa-solid fa-users"></i> Party Directory</button>
-    <button class="nav-pill" data-action="goto" data-target="accounts"><i class="fa-solid fa-scale-balanced"></i> Freight Ledger</button>
-    <button class="nav-pill" data-action="goto" data-target="reports"><i class="fa-solid fa-chart-line"></i> P&L Reports</button>
+    <button class="nav-pill active" onclick="navigateTo('dashboard')"><i class="fa-solid fa-chart-pie"></i> Control Tower</button>
+    <button class="nav-pill" onclick="navigateTo('bookings')"><i class="fa-solid fa-list-check"></i> Trips & Waybills</button>
+    <button class="nav-pill" onclick="navigateTo('newBooking')"><i class="fa-solid fa-file-circle-plus"></i> New Consignment</button>
+    <button class="nav-pill" onclick="navigateTo('customers')"><i class="fa-solid fa-users"></i> Party Directory</button>
+    <button class="nav-pill" onclick="navigateTo('accounts')"><i class="fa-solid fa-scale-balanced"></i> Freight Ledger</button>
+    <button class="nav-pill" onclick="navigateTo('reports')"><i class="fa-solid fa-chart-line"></i> P&L Reports</button>
   </nav>
 
   <!-- DASHBOARD -->
@@ -262,7 +257,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title"><i class="fa-solid fa-bolt text-accent"></i> Active Stream & Trips</div>
-        <button class="btn secondary sm" data-action="goto" data-target="bookings">Open Master List</button>
+        <button class="btn secondary sm" onclick="navigateTo('bookings')">Open Master List</button>
       </div>
       <div class="table-wrap"><div id="recentDesktopTable"></div></div>
       <div class="card-list" id="recentMobileList"></div>
@@ -275,16 +270,16 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
       <div class="panel-header">
         <div class="panel-title"><i class="fa-solid fa-list-check"></i> Freight Registry</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%">
-          <input class="search-box" id="globalTripSearch" placeholder="Search LR, Party, Route, Vehicle, E-Way Bill...">
+          <input class="search-box" id="globalTripSearch" oninput="renderBookingsTable()" placeholder="Search LR, Party, Route, Vehicle, E-Way Bill...">
           <div style="display:flex;gap:8px;width:100%">
-            <select class="search-box" id="statusFilterSelector" style="flex:1">
+            <select class="search-box" id="statusFilterSelector" onchange="renderBookingsTable()" style="flex:1">
               <option value="">All Statuses</option>
               <option value="Booked">Booked</option>
               <option value="In Transit">In Transit</option>
               <option value="Delivered">Delivered</option>
               <option value="Cancelled">Cancelled</option>
             </select>
-            <button class="btn secondary sm" data-action="exportCSV"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
+            <button class="btn secondary sm" onclick="exportCSV()"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
           </div>
         </div>
       </div>
@@ -303,7 +298,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
         </div>
       </div>
 
-      <form id="consignmentForm">
+      <form id="consignmentForm" onsubmit="handleFormSubmit(event)">
         <input type="hidden" id="entry_recordId">
         <input type="hidden" id="entry_podImage">
         
@@ -402,27 +397,27 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
           <div class="form-title"><i class="fa-solid fa-indian-rupee-sign"></i> 4. Freight Commercials & Advance Breakout</div>
           <div class="field">
             <label>Total Customer Freight (₹) *</label>
-            <input type="number" id="entry_freight" step="1" min="0" value="0" required>
+            <input type="number" id="entry_freight" oninput="recalculateFormMargins()" step="1" min="0" value="0" required>
           </div>
           <div class="field">
             <label>Customer Loading Advance (₹)</label>
-            <input type="number" id="entry_loadingAdvance" step="1" min="0" value="0">
+            <input type="number" id="entry_loadingAdvance" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
           <div class="field">
             <label>Customer Unloading Advance (₹)</label>
-            <input type="number" id="entry_unloadingAdvance" step="1" min="0" value="0">
+            <input type="number" id="entry_unloadingAdvance" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
           <div class="field">
             <label>Truck Owner Hire Cost (₹)</label>
-            <input type="number" id="entry_ownerFreight" step="1" min="0" value="0">
+            <input type="number" id="entry_ownerFreight" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
           <div class="field">
             <label>Truck Diesel / Advance Paid (₹)</label>
-            <input type="number" id="entry_paid" step="1" min="0" value="0">
+            <input type="number" id="entry_paid" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
           <div class="field">
             <label>Trip Kharcha / En-route Expenses (₹)</label>
-            <input type="number" id="entry_expenses" step="1" min="0" value="0">
+            <input type="number" id="entry_expenses" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
           <div class="field full">
             <label>Dispatch Notes</label>
@@ -431,7 +426,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 
           <div class="form-title"><i class="fa-solid fa-file-arrow-up"></i> 5. Proof of Delivery (POD) Slip</div>
           <div class="field full">
-            <input type="file" id="podFileInput" accept="image/*">
+            <input type="file" id="podFileInput" accept="image/*" onchange="handlePodUpload(event)">
             <div class="pod-preview-wrapper" id="podPreviewBox" style="margin-top:8px">
               <span id="podEmptyText" style="color:#64748b;font-size:12px"><i class="fa-solid fa-camera"></i> No signed receipt attached</span>
               <img id="podPreviewImage" class="pod-preview-img" style="display:none" alt="POD Document">
@@ -448,7 +443,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 
         <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
           <button type="submit" class="btn" id="saveBookingSubmitBtn" style="flex:1"><i class="fa-solid fa-check"></i> Commit Consignment</button>
-          <button type="button" class="btn secondary" data-action="resetForm"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          <button type="button" class="btn secondary" onclick="resetEntryForm()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
         </div>
       </form>
     </div>
@@ -459,7 +454,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title"><i class="fa-solid fa-users"></i> Client & Party Roster</div>
-        <input class="search-box" id="customerSearchInput" placeholder="Filter customer name...">
+        <input class="search-box" id="customerSearchInput" oninput="renderCustomerMaster()" placeholder="Filter customer name...">
       </div>
       <div class="table-wrap"><div id="customerMasterDesktopTable"></div></div>
       <div class="card-list" id="customerMasterMobileList"></div>
@@ -508,7 +503,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title"><i class="fa-solid fa-chart-line"></i> Logistics Performance & P&L</div>
-        <select class="search-box" id="reportIntervalSelect" style="max-width:180px">
+        <select class="search-box" id="reportIntervalSelect" onchange="renderBusinessReports()" style="max-width:180px">
           <option value="all">Lifetime</option>
           <option value="month">Current Month</option>
           <option value="today">Today</option>
@@ -540,26 +535,26 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   </section>
 </main>
 
-<!-- Bottom Nav (Optimized for Mobile Touch) -->
+<!-- Bottom Nav (Direct Onclick Support) -->
 <nav class="bottom-nav no-print">
   <div class="bottom-nav-inner">
-    <button type="button" class="bnav-item active" data-nav="dashboard">
+    <button type="button" class="bnav-item active" id="btn_nav_dashboard" onclick="navigateTo('dashboard')">
       <i class="fa-solid fa-chart-pie"></i>
       <span>Control</span>
     </button>
-    <button type="button" class="bnav-item" data-nav="bookings">
+    <button type="button" class="bnav-item" id="btn_nav_bookings" onclick="navigateTo('bookings')">
       <i class="fa-solid fa-list-check"></i>
       <span>Trips</span>
     </button>
-    <button type="button" class="bnav-item" data-nav="newBooking">
+    <button type="button" class="bnav-item" id="btn_nav_newBooking" onclick="navigateTo('newBooking')">
       <i class="fa-solid fa-circle-plus" style="font-size:24px;color:var(--accent)"></i>
       <span>Add LR</span>
     </button>
-    <button type="button" class="bnav-item" data-nav="accounts">
+    <button type="button" class="bnav-item" id="btn_nav_accounts" onclick="navigateTo('accounts')">
       <i class="fa-solid fa-scale-balanced"></i>
       <span>Ledger</span>
     </button>
-    <button type="button" class="bnav-item" data-nav="reports">
+    <button type="button" class="bnav-item" id="btn_nav_reports" onclick="navigateTo('reports')">
       <i class="fa-solid fa-chart-line"></i>
       <span>Reports</span>
     </button>
@@ -574,7 +569,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   <div class="modal-card">
     <div class="panel-header">
       <div class="panel-title"><i class="fa-solid fa-qrcode text-accent"></i> Scan & Pay via UPI</div>
-      <button class="btn secondary sm" data-action="closeModal" data-modal="upiModal"><i class="fa-solid fa-xmark"></i></button>
+      <button class="btn secondary sm" onclick="closeModal('upiModal')"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;background:#fff;border-radius:var(--radius);border:1px solid var(--border)">
       <div id="upiQrcodeTarget" style="margin-bottom:12px;min-height:160px;display:flex;align-items:center;justify-content:center"></div>
@@ -584,7 +579,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     <div style="font-size:11px;color:#64748b;text-align:center;margin:12px 0">
       Accepts PhonePe, Google Pay, Paytm, BHIM or any banking app.
     </div>
-    <button class="btn secondary" style="width:100%" data-action="closeModal" data-modal="upiModal">Close</button>
+    <button class="btn secondary" style="width:100%" onclick="closeModal('upiModal')">Close</button>
   </div>
 </div>
 
@@ -593,7 +588,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   <div class="modal-card">
     <div class="panel-header">
       <div class="panel-title"><i class="fa-solid fa-receipt"></i> Signed POD Slip</div>
-      <button class="btn secondary sm" data-action="closeModal" data-modal="podModal"><i class="fa-solid fa-xmark"></i></button>
+      <button class="btn secondary sm" onclick="closeModal('podModal')"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div style="max-height:70vh;overflow:auto;text-align:center">
       <img id="podModalImg" src="" style="max-width:100%;border-radius:var(--radius)" alt="Proof of delivery document">
@@ -606,7 +601,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   <div class="modal-card">
     <div class="panel-header">
       <div class="panel-title" id="quickPayTitle">Post Financial Transaction</div>
-      <button class="btn secondary sm" data-action="closeModal" data-modal="quickPayModal"><i class="fa-solid fa-xmark"></i></button>
+      <button class="btn secondary sm" onclick="closeModal('quickPayModal')"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <input type="hidden" id="quickPayBookingId">
     <input type="hidden" id="quickPayType">
@@ -616,8 +611,8 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     </div>
     <div style="font-size:12px;color:#64748b;margin-bottom:16px" id="quickPayMeta"></div>
     <div style="display:flex;gap:10px">
-      <button class="btn secondary" style="flex:1" data-action="closeModal" data-modal="quickPayModal">Cancel</button>
-      <button class="btn" style="flex:1" data-action="submitQuickPay">Commit Entry</button>
+      <button class="btn secondary" style="flex:1" onclick="closeModal('quickPayModal')">Cancel</button>
+      <button class="btn" style="flex:1" onclick="submitQuickPay()">Commit Entry</button>
     </div>
   </div>
 </div>
@@ -625,8 +620,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 <div class="toast" id="liveToast">Action completed</div>
 
 <script>
-// CENTRAL APPLICATION ENGINE
-const STORAGE_KEY = "sklogistics_clean_v7";
+const STORAGE_KEY = "sklogistics_clean_v8";
 let fleetData = [];
 
 const LOGISTICS_VPA = "sklogistics@upi";
@@ -663,7 +657,7 @@ function loadPersistence() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      const legacyKeys = ["sklogistics_clean_v6", "sklogistics_clean_v5", "sklogistics_clean_v4", "sklogistics_enterprise_v3", "sklogistics_bookings_v1"];
+      const legacyKeys = ["sklogistics_clean_v7", "sklogistics_clean_v6", "sklogistics_clean_v5", "sklogistics_bookings_v1"];
       for (const k of legacyKeys) {
         const val = localStorage.getItem(k);
         if (val) {
@@ -673,7 +667,7 @@ function loadPersistence() {
               fleetData = parsed;
               return;
             }
-          } catch(e) {}
+          } catch(e){}
         }
       }
       fleetData = [];
@@ -691,7 +685,7 @@ function savePersistence() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(fleetData));
     return true;
   } catch (err) {
-    alert("Phone storage full. Please export a backup to free space.");
+    alert("Phone storage full. Please export backup.");
     return false;
   }
 }
@@ -733,34 +727,36 @@ function triggerToast(msg) {
   setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
-// BULLET-PROOF NAVIGATION FUNCTION
+// 100% RELIABLE NAVIGATION
 function navigateTo(pageKey) {
   if (!pageKey) return;
 
-  // 1. Pages
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const pages = document.querySelectorAll(".page");
+  pages.forEach(p => p.classList.remove("active"));
+  
   const targetPage = document.getElementById(pageKey);
   if (targetPage) {
     targetPage.classList.add("active");
   }
 
-  // 2. Desktop nav pills
+  // Update tabs
   document.querySelectorAll(".nav-pill").forEach(pill => {
-    pill.classList.toggle("active", pill.getAttribute("data-target") === pageKey);
+    const fnStr = pill.getAttribute("onclick") || "";
+    pill.classList.toggle("active", fnStr.includes(pageKey));
   });
 
-  // 3. Mobile bottom nav items
+  // Update bottom nav
   document.querySelectorAll(".bnav-item").forEach(item => {
-    item.classList.toggle("active", item.getAttribute("data-nav") === pageKey);
+    item.classList.toggle("active", item.id === `btn_nav_${pageKey}`);
   });
 
-  // 4. Default date check
   const editIdEl = document.getElementById("entry_recordId");
   const dateEl = document.getElementById("entry_bookingDate");
   if (pageKey === "newBooking" && editIdEl && !editIdEl.value && dateEl) {
     dateEl.value = getTodayDate();
   }
 
+  renderAllViews();
   window.scrollTo({top: 0, behavior: "smooth"});
 }
 
@@ -858,6 +854,89 @@ function recalculateFormMargins() {
   }
 }
 
+function handlePodUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement("canvas");
+      let width = img.width;
+      let height = img.height;
+      const maxDim = 800;
+      if (width > height && width > maxDim) {
+        height = Math.round((height * maxDim) / width);
+        width = maxDim;
+      } else if (height > maxDim) {
+        width = Math.round((width * maxDim) / height);
+        height = maxDim;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.65);
+
+      const podField = document.getElementById("entry_podImage");
+      const previewImg = document.getElementById("podPreviewImage");
+      const emptyTxt = document.getElementById("podEmptyText");
+
+      if (podField) podField.value = compressedDataUrl;
+      if (previewImg) {
+        previewImg.src = compressedDataUrl;
+        previewImg.style.display = "block";
+      }
+      if (emptyTxt) emptyTxt.style.display = "none";
+      triggerToast("Signed POD attached");
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+  try {
+    const payload = extractFormDataset();
+    const editRecId = document.getElementById("entry_recordId")?.value;
+
+    if (!payload.customer || !payload.pickup || !payload.destination || !payload.goods) {
+      alert("Party, Pickup, Destination and Goods details are required.");
+      return;
+    }
+
+    const stamp = new Date().toISOString();
+
+    if (editRecId) {
+      const idx = fleetData.findIndex(x => String(x.id) === String(editRecId));
+      if (idx !== -1) {
+        payload.id = editRecId;
+        payload.lr = fleetData[idx].lr || generateLRSeries();
+        payload.createdAt = fleetData[idx].createdAt || stamp;
+        payload.updatedAt = stamp;
+        fleetData[idx] = payload;
+      }
+    } else {
+      payload.id = "TRIP-" + Date.now();
+      payload.lr = generateLRSeries();
+      payload.createdAt = stamp;
+      payload.updatedAt = stamp;
+      fleetData.unshift(payload);
+    }
+
+    if (!savePersistence()) return;
+
+    resetEntryForm();
+    renderAllViews();
+    navigateTo("bookings");
+    triggerToast(editRecId ? "Booking updated" : `Created: ${payload.lr}`);
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+}
+
 function editConsignment(id) {
   const item = fleetData.find(x => String(x.id) === String(id));
   if (!item) return;
@@ -890,9 +969,7 @@ function updateDirectStatus(id, newStatus) {
   fleetData[idx].status = newStatus;
   fleetData[idx].updatedAt = new Date().toISOString();
   savePersistence();
-  renderDashboardView();
-  renderLedgerOverview();
-  renderBusinessReports();
+  renderAllViews();
   triggerToast(`Status: ${newStatus}`);
 }
 
@@ -926,6 +1003,11 @@ function showUpiQr(id) {
   document.getElementById("upiAmountLabel").textContent = formatINR(due);
   document.getElementById("upiPartyLabel").textContent = `${b.customer} (${b.lr})`;
   document.getElementById("upiModal").classList.add("active");
+}
+
+function closeModal(modalId) {
+  const el = document.getElementById(modalId);
+  if (el) el.classList.remove("active");
 }
 
 function viewPodImage(id) {
@@ -1005,7 +1087,7 @@ function submitQuickPay() {
   fleetData[idx].updatedAt = new Date().toISOString();
 
   savePersistence();
-  document.getElementById("quickPayModal").classList.remove("active");
+  closeModal("quickPayModal");
   renderAllViews();
   triggerToast("Ledger updated");
 }
@@ -1062,13 +1144,13 @@ function buildDesktopTable(records) {
             </td>
             <td><strong>${formatINR(b.freight)}</strong></td>
             <td style="color:${calcCustomerDue(b) > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">
-              ${formatINR(calcCustomerDue(b))}${calcCustomerDue(b) > 0 ? `<button class="btn secondary sm" style="padding:2px 6px;margin-left:4px" data-action="showUpiQr" data-id="${b.id}"><i class="fa-solid fa-qrcode"></i></button>` : ''}
+              ${formatINR(calcCustomerDue(b))}${calcCustomerDue(b) > 0 ? `<button class="btn secondary sm" style="padding:2px 6px;margin-left:4px" onclick="showUpiQr('${b.id}')"><i class="fa-solid fa-qrcode"></i></button>` : ''}
             </td>
             <td>
-              ${b.podImage ? `<button class="btn secondary sm" data-action="viewPodImage" data-id="${b.id}"><i class="fa-solid fa-receipt text-success"></i> View</button>` : '<span style="color:#64748b;font-size:11px">Pending</span>'}
+              ${b.podImage ? `<button class="btn secondary sm" onclick="viewPodImage('${b.id}')"><i class="fa-solid fa-receipt text-success"></i> View</button>` : '<span style="color:#64748b;font-size:11px">Pending</span>'}
             </td>
             <td>
-              <select class="status-selector" data-id="${b.id}" style="padding:4px;border-radius:6px;font-size:12px">
+              <select onchange="updateDirectStatus('${b.id}', this.value)" style="padding:4px;border-radius:6px;font-size:12px">
                 ${["Booked", "In Transit", "Delivered", "Cancelled"].map(s => 
                   `<option value="${s}" ${b.status === s ? 'selected' : ''}>${s}</option>`
                 ).join("")}
@@ -1076,10 +1158,10 @@ function buildDesktopTable(records) {
             </td>
             <td style="text-align:right">
               <div style="display:inline-flex;gap:4px">
-                <button class="btn secondary sm" data-action="printStandardBilti" data-id="${b.id}" title="Print Bilti"><i class="fa-solid fa-print"></i></button>
-                <button class="btn secondary sm" data-action="sendWhatsAppBilti" data-id="${b.id}"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
-                <button class="btn secondary sm" data-action="editConsignment" data-id="${b.id}"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn danger sm" data-action="removeConsignment" data-id="${b.id}"><i class="fa-solid fa-trash"></i></button>
+                <button class="btn secondary sm" onclick="printStandardBilti('${b.id}')" title="Print Bilti"><i class="fa-solid fa-print"></i></button>
+                <button class="btn secondary sm" onclick="sendWhatsAppBilti('${b.id}')"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
+                <button class="btn secondary sm" onclick="editConsignment('${b.id}')"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn danger sm" onclick="removeConsignment('${b.id}')"><i class="fa-solid fa-trash"></i></button>
               </div>
             </td>
           </tr>
@@ -1102,7 +1184,7 @@ function buildMobileCards(records) {
             <span style="font-size:11px;color:#64748b;display:block">${escapeHtml(b.bookingDate)}</span>
           </div>
           <div style="text-align:right">
-            <select class="status-selector" data-id="${b.id}" style="padding:4px 8px;border-radius:6px;font-size:12px;font-weight:700">
+            <select onchange="updateDirectStatus('${b.id}', this.value)" style="padding:4px 8px;border-radius:6px;font-size:12px;font-weight:700">
               ${["Booked", "In Transit", "Delivered", "Cancelled"].map(s => 
                 `<option value="${s}" ${b.status === s ? 'selected' : ''}>${s}</option>`
               ).join("")}
@@ -1143,12 +1225,12 @@ function buildMobileCards(records) {
         </div>
 
         <div class="trip-card-actions">
-          ${due > 0 ? `<button class="btn sm" data-action="showUpiQr" data-id="${b.id}"><i class="fa-solid fa-qrcode"></i> Pay QR</button>` : ''}
-          ${b.podImage ? `<button class="btn secondary sm" data-action="viewPodImage" data-id="${b.id}"><i class="fa-solid fa-receipt"></i> POD</button>` : ''}
-          <button class="btn secondary sm" data-action="printStandardBilti" data-id="${b.id}"><i class="fa-solid fa-print"></i> Bilti</button>
-          <button class="btn secondary sm" data-action="sendWhatsAppBilti" data-id="${b.id}"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
-          <button class="btn secondary sm" data-action="editConsignment" data-id="${b.id}"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn danger sm" data-action="removeConsignment" data-id="${b.id}"><i class="fa-solid fa-trash"></i></button>
+          ${due > 0 ? `<button class="btn sm" onclick="showUpiQr('${b.id}')"><i class="fa-solid fa-qrcode"></i> Pay QR</button>` : ''}
+          ${b.podImage ? `<button class="btn secondary sm" onclick="viewPodImage('${b.id}')"><i class="fa-solid fa-receipt"></i> POD</button>` : ''}
+          <button class="btn secondary sm" onclick="printStandardBilti('${b.id}')"><i class="fa-solid fa-print"></i> Bilti</button>
+          <button class="btn secondary sm" onclick="sendWhatsAppBilti('${b.id}')"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
+          <button class="btn secondary sm" onclick="editConsignment('${b.id}')"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn danger sm" onclick="removeConsignment('${b.id}')"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>
     `;
@@ -1175,12 +1257,12 @@ function renderDashboardView() {
   const activeTrips = fleetData.filter(b => ["Booked", "In Transit"].includes(b.status));
   const deliveredTrips = fleetData.filter(b => b.status === "Delivered");
 
-  document.getElementById("kpiBookings").textContent = fleetData.length;
-  document.getElementById("kpiActive").textContent = activeTrips.length;
-  document.getElementById("kpiDelivered").textContent = deliveredTrips.length;
-  document.getElementById("kpiNetProfit").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcProfit(b), 0));
-  document.getElementById("kpiCustomerDue").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
-  document.getElementById("kpiOwnerDue").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
+  if (document.getElementById("kpiBookings")) document.getElementById("kpiBookings").textContent = fleetData.length;
+  if (document.getElementById("kpiActive")) document.getElementById("kpiActive").textContent = activeTrips.length;
+  if (document.getElementById("kpiDelivered")) document.getElementById("kpiDelivered").textContent = deliveredTrips.length;
+  if (document.getElementById("kpiNetProfit")) document.getElementById("kpiNetProfit").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcProfit(b), 0));
+  if (document.getElementById("kpiCustomerDue")) document.getElementById("kpiCustomerDue").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
+  if (document.getElementById("kpiOwnerDue")) document.getElementById("kpiOwnerDue").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
 
   const recent = [...fleetData].sort((a,b) => String(b.createdAt || "").localeCompare(String(a.createdAt || ""))).slice(0, 5);
   const rTable = document.getElementById("recentDesktopTable");
@@ -1261,10 +1343,10 @@ function renderCustomerMaster() {
 }
 
 function renderLedgerOverview() {
-  document.getElementById("accGrossFreight").textContent = formatINR(fleetData.reduce((acc, b) => acc + parseValidNum(b.freight), 0));
-  document.getElementById("accRealizedCollection").textContent = formatINR(fleetData.reduce((acc, b) => acc + totalCustomerReceived(b), 0));
-  document.getElementById("accOutstandingReceivables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
-  document.getElementById("accTruckOwnerPayables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
+  if (document.getElementById("accGrossFreight")) document.getElementById("accGrossFreight").textContent = formatINR(fleetData.reduce((acc, b) => acc + parseValidNum(b.freight), 0));
+  if (document.getElementById("accRealizedCollection")) document.getElementById("accRealizedCollection").textContent = formatINR(fleetData.reduce((acc, b) => acc + totalCustomerReceived(b), 0));
+  if (document.getElementById("accOutstandingReceivables")) document.getElementById("accOutstandingReceivables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
+  if (document.getElementById("accTruckOwnerPayables")) document.getElementById("accTruckOwnerPayables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
 
   const clientDueList = fleetData.filter(b => calcCustomerDue(b) > 0);
   const ownerDueList = fleetData.filter(b => calcOwnerDue(b) > 0);
@@ -1282,16 +1364,18 @@ function renderLedgerOverview() {
             ${formatINR(type === 'customer' ? calcCustomerDue(b) : calcOwnerDue(b))}
           </div>
           <div style="display:inline-flex;gap:4px;margin-top:3px">
-            ${type === 'customer' ? `<button class="btn secondary sm" data-action="showUpiQr" data-id="${b.id}"><i class="fa-solid fa-qrcode"></i> QR</button>` : ''}
-            <button class="btn secondary sm" data-action="showQuickPay" data-id="${b.id}" data-type="${type}">Record</button>
+            ${type === 'customer' ? `<button class="btn secondary sm" onclick="showUpiQr('${b.id}')"><i class="fa-solid fa-qrcode"></i> QR</button>` : ''}
+            <button class="btn secondary sm" onclick="showQuickPay('${b.id}', '${type}')">Record</button>
           </div>
         </div>
       </div>
     `).join("");
   }
 
-  document.getElementById("receivableDuesList").innerHTML = buildDues(clientDueList, 'customer');
-  document.getElementById("payableDuesList").innerHTML = buildDues(ownerDueList, 'owner');
+  const recList = document.getElementById("receivableDuesList");
+  const payList = document.getElementById("payableDuesList");
+  if (recList) recList.innerHTML = buildDues(clientDueList, 'customer');
+  if (payList) payList.innerHTML = buildDues(ownerDueList, 'owner');
 }
 
 function renderBusinessReports() {
@@ -1311,22 +1395,25 @@ function renderBusinessReports() {
   const freightSum = filtered.reduce((s, b) => s + parseValidNum(b.freight), 0);
   const outflowSum = filtered.reduce((s, b) => s + parseValidNum(b.ownerFreight) + parseValidNum(b.expenses), 0);
 
-  document.getElementById("repTripVolume").textContent = filtered.length;
-  document.getElementById("repFreightTotal").textContent = formatINR(freightSum);
-  document.getElementById("repTotalExpenses").textContent = formatINR(outflowSum);
-  document.getElementById("repNetSurplus").textContent = formatINR(freightSum - outflowSum);
+  if (document.getElementById("repTripVolume")) document.getElementById("repTripVolume").textContent = filtered.length;
+  if (document.getElementById("repFreightTotal")) document.getElementById("repFreightTotal").textContent = formatINR(freightSum);
+  if (document.getElementById("repTotalExpenses")) document.getElementById("repTotalExpenses").textContent = formatINR(outflowSum);
+  if (document.getElementById("repNetSurplus")) document.getElementById("repNetSurplus").textContent = formatINR(freightSum - outflowSum);
 
   const statuses = {Booked: 0, "In Transit": 0, Delivered: 0, Cancelled: 0};
   filtered.forEach(b => { if (statuses[b.status] !== undefined) statuses[b.status]++; });
 
-  document.getElementById("reportAnalyticalSummary").innerHTML = `
-    <div style="padding:12px;border:1px solid var(--border);border-radius:var(--radius);margin-top:12px;font-size:13px;line-height:1.8">
-      <div>Booked Trips: <strong>${statuses.Booked}</strong></div>
-      <div>In Transit: <strong>${statuses['In Transit']}</strong></div>
-      <div>Delivered (POD): <strong>${statuses.Delivered}</strong></div>
-      <div>Void / Cancelled: <strong>${statuses.Cancelled}</strong></div>
-    </div>
-  `;
+  const summary = document.getElementById("reportAnalyticalSummary");
+  if (summary) {
+    summary.innerHTML = `
+      <div style="padding:12px;border:1px solid var(--border);border-radius:var(--radius);margin-top:12px;font-size:13px;line-height:1.8">
+        <div>Booked Trips: <strong>${statuses.Booked}</strong></div>
+        <div>In Transit: <strong>${statuses['In Transit']}</strong></div>
+        <div>Delivered (POD): <strong>${statuses.Delivered}</strong></div>
+        <div>Void / Cancelled: <strong>${statuses.Cancelled}</strong></div>
+      </div>
+    `;
+  }
 }
 
 function renderAllViews() {
@@ -1411,126 +1498,32 @@ function exportDataBackup() {
   a.click();
 }
 
-// BULLETPROOF EVENT ATTACHMENTS
-document.addEventListener("DOMContentLoaded", function() {
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      const data = JSON.parse(evt.target.result);
+      if (Array.isArray(data)) {
+        fleetData = data;
+        savePersistence();
+        renderAllViews();
+        triggerToast("Ledger restored");
+      }
+    } catch (err) {
+      alert("Invalid backup file: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// IMMEDIATE SELF-EXECUTION
+window.onload = function() {
   loadPersistence();
   resetEntryForm();
   renderAllViews();
-
-  // 1. Direct Touch & Click Listeners for Mobile Bottom Navigation
-  document.querySelectorAll(".bnav-item").forEach(button => {
-    button.addEventListener("click", function(e) {
-      e.preventDefault();
-      const targetPage = this.getAttribute("data-nav");
-      navigateTo(targetPage);
-    });
-  });
-
-  // 2. Direct Listeners for Desktop Nav Pills
-  document.querySelectorAll(".nav-pill").forEach(pill => {
-    pill.addEventListener("click", function(e) {
-      e.preventDefault();
-      const targetPage = this.getAttribute("data-target");
-      navigateTo(targetPage);
-    });
-  });
-
-  // 3. Inputs & Filters
-  document.getElementById("globalTripSearch")?.addEventListener("input", renderBookingsTable);
-  document.getElementById("statusFilterSelector")?.addEventListener("change", renderBookingsTable);
-  document.getElementById("customerSearchInput")?.addEventListener("input", renderCustomerMaster);
-  document.getElementById("reportIntervalSelect")?.addEventListener("change", renderBusinessReports);
-
-  ["entry_freight", "entry_loadingAdvance", "entry_unloadingAdvance", "entry_ownerFreight", "entry_paid", "entry_expenses"].forEach(id => {
-    document.getElementById(id)?.addEventListener("input", recalculateFormMargins);
-  });
-
-  // 4. Form Submit
-  document.getElementById("consignmentForm")?.addEventListener("submit", function(evt) {
-    evt.preventDefault();
-    try {
-      const payload = extractFormDataset();
-      const editRecId = document.getElementById("entry_recordId")?.value;
-
-      if (!payload.customer || !payload.pickup || !payload.destination || !payload.goods) {
-        alert("Party, Pickup, Destination and Goods details are required.");
-        return;
-      }
-
-      const stamp = new Date().toISOString();
-
-      if (editRecId) {
-        const idx = fleetData.findIndex(x => String(x.id) === String(editRecId));
-        if (idx === -1) return;
-        payload.id = editRecId;
-        payload.lr = fleetData[idx].lr || generateLRSeries();
-        payload.createdAt = fleetData[idx].createdAt || stamp;
-        payload.updatedAt = stamp;
-        fleetData[idx] = payload;
-      } else {
-        payload.id = "TRIP-" + Date.now();
-        payload.lr = generateLRSeries();
-        payload.createdAt = stamp;
-        payload.updatedAt = stamp;
-        fleetData.unshift(payload);
-      }
-
-      if (!savePersistence()) return;
-
-      resetEntryForm();
-      renderAllViews();
-      navigateTo("bookings");
-      triggerToast(editRecId ? "Booking updated" : `Created: ${payload.lr}`);
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
-  });
-
-  // 5. General Actions Delegation (Buttons, QR, POD, Bilti)
-  document.addEventListener("click", function(e) {
-    const target = e.target.closest("[data-action]");
-    if (!target) return;
-
-    const action = target.getAttribute("data-action");
-    const id = target.getAttribute("data-id");
-
-    if (action === "goto") {
-      navigateTo(target.getAttribute("data-target"));
-    } else if (action === "resetForm") {
-      resetEntryForm();
-    } else if (action === "editConsignment") {
-      editConsignment(id);
-    } else if (action === "removeConsignment") {
-      removeConsignment(id);
-    } else if (action === "printStandardBilti") {
-      printStandardBilti(id);
-    } else if (action === "sendWhatsAppBilti") {
-      sendWhatsAppBilti(id);
-    } else if (action === "showUpiQr") {
-      showUpiQr(id);
-    } else if (action === "viewPodImage") {
-      viewPodImage(id);
-    } else if (action === "showQuickPay") {
-      showQuickPay(id, target.getAttribute("data-type"));
-    } else if (action === "closeModal") {
-      const modalId = target.getAttribute("data-modal");
-      document.getElementById(modalId)?.classList.remove("active");
-    } else if (action === "submitQuickPay") {
-      submitQuickPay();
-    } else if (action === "exportCSV") {
-      exportCSV();
-    } else if (action === "backup") {
-      exportDataBackup();
-    }
-  });
-
-  document.addEventListener("change", function(e) {
-    if (e.target.classList.contains("status-selector")) {
-      const id = e.target.getAttribute("data-id");
-      updateDirectStatus(id, e.target.value);
-    }
-  });
-});
+};
 </script>
 </body>
 </html>
