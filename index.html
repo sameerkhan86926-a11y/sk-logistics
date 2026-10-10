@@ -3,1525 +3,499 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<title>SK LOGISTICS | Enterprise Fleet & E-Way Ledger</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<title>SK LOGISTICS | Transport Management</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 <style>
 :root {
   --navy: #090e17;
-  --navy-surface: #101726;
   --accent: #2563eb;
-  --accent-light: #3b82f6;
   --success: #059669;
   --danger: #dc2626;
   --warning: #d97706;
-  --bg-body: #f8fafc;
+  --bg: #f8fafc;
   --border: #e2e8f0;
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --radius: 10px;
-  --bottom-h: 64px;
 }
-
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:var(--font-sans);background:var(--bg-body);color:#0f172a;line-height:1.5;padding-bottom:calc(var(--bottom-h) + 16px)}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:#0f172a;line-height:1.5;padding-bottom:80px}
 button,input,select,textarea{font-family:inherit}
 
-/* Header */
-.app-header{background:var(--navy);border-bottom:1px solid #1e293b;position:sticky;top:0;z-index:100}
-.header-inner{max-width:1440px;margin:auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand-group{display:flex;align-items:center;gap:10px}
-.brand-icon{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;flex-shrink:0}
-.brand-text h1{font-size:16px;font-weight:800;color:#fff;letter-spacing:0.5px}
-.brand-text p{font-size:9.5px;font-weight:600;color:#94a3b8;letter-spacing:1px;text-transform:uppercase}
-.header-actions{display:flex;align-items:center;gap:8px}
+.topbar{background:var(--navy);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.brand{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
+.topbar-actions{display:flex;gap:6px}
 
-/* Layout */
-.layout-container{max-width:1440px;margin:auto;padding:16px}
-.nav-pills{display:flex;gap:8px;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:16px;overflow-x:auto}
-.nav-pills::-webkit-scrollbar{display:none}
-.nav-pill{background:#fff;border:1px solid var(--border);color:#64748b;padding:9px 16px;border-radius:var(--radius);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap}
-.nav-pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.container{max-width:1200px;margin:auto;padding:14px}
+.nav-tabs{display:flex;gap:8px;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:16px;overflow-x:auto}
+.nav-tab{background:#fff;border:1px solid var(--border);color:#64748b;padding:8px 14px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
+.nav-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 
-/* Mobile Bottom Navigation */
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--bottom-h);background:#fff;border-top:1px solid var(--border);z-index:1000;box-shadow:0 -4px 15px rgba(0,0,0,0.06);padding:0 8px}
-.bottom-nav-inner{display:flex;height:100%;align-items:center;justify-content:space-around}
-.bnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#64748b;font-size:10px;font-weight:600;gap:4px;flex:1;height:100%;background:transparent;border:0;cursor:pointer}
-.bnav-item i{font-size:18px}
-.bnav-item.active{color:var(--accent)}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;height:60px;background:#fff;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;z-index:1000}
+.b-btn{background:transparent;border:0;color:#64748b;font-size:10px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex:1}
+.b-btn i{font-size:17px}
+.b-btn.active{color:var(--accent)}
 
 .page{display:none}
 .page.active{display:block}
 
-.panel{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.02)}
-.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
-.panel-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.panel{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px}
+.panel-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.panel-title{font-size:15px;font-weight:700}
 
-/* Metric Cards */
-.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
-.metric-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;border-left:4px solid var(--accent)}
-.metric-card.profit{border-left-color:var(--success)}
-.metric-card.alert{border-left-color:var(--danger)}
-.metric-card.warning{border-left-color:var(--warning)}
-.metric-label{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase}
-.metric-value{font-size:20px;font-weight:800;margin:6px 0 2px;font-family:var(--font-mono);overflow-wrap:anywhere}
-.metric-note{font-size:11px;color:#64748b}
+.grid-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.kpi-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;border-left:4px solid var(--accent)}
+.kpi-card.profit{border-left-color:var(--success)}
+.kpi-card.alert{border-left-color:var(--danger)}
+.kpi-card.warning{border-left-color:var(--warning)}
+.kpi-label{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase}
+.kpi-val{font-size:18px;font-weight:800;margin-top:4px}
 
-/* UI Elements */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:var(--radius);font-weight:600;font-size:13px;cursor:pointer;border:1px solid transparent;background:var(--accent);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid transparent;background:var(--accent);color:#fff}
 .btn.secondary{background:#fff;border-color:var(--border);color:#0f172a}
 .btn.danger{background:#fef2f2;color:var(--danger);border-color:#fecaca}
-.btn.sm{padding:6px 10px;font-size:11.5px}
+.btn.sm{padding:5px 8px;font-size:11px}
 
-.form-grid{display:grid;grid-template-columns:1fr;gap:14px}
-.field{display:flex;flex-direction:column;gap:5px}
+.form-grid{display:grid;grid-template-columns:1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:12px;font-weight:600;color:#334155}
-.field input,.field select,.field textarea,.search-box{border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:14px;background:#fff;width:100%;outline:none}
-.field input:focus,.field select:focus,.search-box:focus{border-color:var(--accent)}
+.field input,.field select,.field textarea{border:1px solid var(--border);border-radius:8px;padding:9px;font-size:14px;background:#fff;width:100%}
 .field.full{grid-column:1/-1}
-.form-title{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;padding:12px 0 4px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 
-.action-banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius);padding:12px;font-size:12.5px;display:flex;flex-direction:column;gap:6px}
+.trip-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+.trip-head{display:flex;justify-content:space-between;align-items:center}
+.trip-route{font-weight:700;font-size:13px}
+.trip-metrics{display:grid;grid-template-columns:repeat(3,1fr);background:#f8fafc;padding:6px;border-radius:6px;text-align:center;font-size:12px}
+.trip-metrics span{display:block;font-size:9.5px;color:#64748b;text-transform:uppercase}
+.trip-actions{display:flex;gap:6px;flex-wrap:wrap;border-top:1px dashed var(--border);padding-top:8px}
+.trip-actions .btn{flex:1;min-width:60px}
 
-/* Tables & Mobile Cards */
-.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:#fff}
-table{width:100%;border-collapse:collapse;font-size:13px;text-align:left}
-th{background:#f8fafc;padding:11px 12px;font-weight:700;color:#475569;border-bottom:1px solid var(--border);font-size:11.5px;text-transform:uppercase;white-space:nowrap}
-td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
+.modal.active{display:flex}
+.modal-box{background:#fff;border-radius:10px;width:100%;max-width:400px;padding:16px}
 
-.badge{padding:3px 8px;border-radius:12px;font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:4px}
-.badge.eway-alert{background:#fef2f2;color:#b91c1c;border:1px solid #f87171}
-.badge.eway-ok{background:#f1f5f9;color:#475569}
-
-.card-list{display:none;flex-direction:column;gap:12px}
-.trip-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
-.trip-card-head{display:flex;justify-content:space-between;align-items:flex-start}
-.trip-card-route{display:flex;align-items:center;gap:6px;font-weight:700}
-.trip-card-metrics{display:grid;grid-template-columns:repeat(3,1fr);background:#f8fafc;padding:8px;border-radius:var(--radius);text-align:center;gap:4px;margin-top:4px}
-.trip-card-metrics span{display:block;font-size:10px;color:#64748b;text-transform:uppercase}
-.trip-card-metrics strong{font-size:13px;font-family:var(--font-mono)}
-.trip-card-actions{display:flex;gap:6px;flex-wrap:wrap;border-top:1px dashed var(--border);padding-top:10px}
-.trip-card-actions .btn{flex:1;min-width:65px}
-
-/* Modals */
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,14,23,0.7);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
-.modal-overlay.active{display:flex}
-.modal-card{background:#fff;border-radius:var(--radius);width:100%;max-width:440px;padding:22px}
-
-.toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;font-size:12.5px;font-weight:600;z-index:9999;opacity:0;transition:all .25s ease;pointer-events:none}
+.toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:all .2s ease;pointer-events:none}
 .toast.show{transform:translate(-50%,0);opacity:1}
 
-.pod-preview-wrapper{width:100%;height:180px;border:2px dashed var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa}
-.pod-preview-img{width:100%;height:100%;object-fit:cover}
-
-/* Responsive Grid */
-@media(min-width: 768px){
+@media(min-width:768px){
   body{padding-bottom:0}
-  .bottom-nav{display:none}
-  .layout-container{padding:24px}
-  .metric-grid{grid-template-columns:repeat(3, 1fr);gap:16px}
-  .form-grid{grid-template-columns:repeat(3, minmax(0, 1fr))}
-  .form-title,.field.full{grid-column:1/-1}
-  .action-banner{flex-direction:row;justify-content:space-between;align-items:center}
-  .table-wrap{display:block}
-  .card-list{display:none!important}
+  .bottom-bar{display:none}
+  .form-grid{grid-template-columns:repeat(3,1fr)}
+  .grid-cards{grid-template-columns:repeat(4,1fr)}
 }
-@media(max-width: 767px){
-  .nav-pills{display:none}
-  .bottom-nav{display:block}
-  .table-wrap{display:none}
-  .card-list{display:flex}
-  .metric-value{font-size:18px}
-  .panel-header > div{width:100%}
-  .search-box{width:100%!important}
-}
-
-@media print {
+@media print{
   body *{visibility:hidden!important}
   #printStation, #printStation *{visibility:visible!important}
-  #printStation{position:absolute;left:0;top:0;width:100%;margin:0;padding:0;background:#fff;display:block!important}
-  .no-print{display:none!important}
-  .bilti-container{border:2px solid #000;padding:16px;margin-bottom:20px;page-break-after:always;font-family:Arial,sans-serif;font-size:12px}
-  .bilti-header{display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px}
-  .grid-table{width:100%;border-collapse:collapse;margin:8px 0}
-  .grid-table th, .grid-table td{border:1px solid #000;padding:6px;text-align:left}
-  .bilti-signatures{display:flex;justify-content:space-between;margin-top:35px}
-  .signature-line{border-top:1px dashed #000;width:160px;text-align:center;font-size:10px;font-weight:bold}
+  #printStation{position:absolute;left:0;top:0;width:100%;display:block!important}
 }
 </style>
 </head>
 <body>
 
-<header class="app-header no-print">
-  <div class="header-inner">
-    <div class="brand-group">
-      <div class="brand-icon"><i class="fa-solid fa-truck-fast"></i></div>
-      <div class="brand-text">
-        <h1>SK LOGISTICS</h1>
-        <p>Enterprise Fleet TMS</p>
-      </div>
-    </div>
-    <div class="header-actions">
-      <button class="btn secondary sm" data-action="backup" title="Backup Database"><i class="fa-solid fa-download"></i></button>
-      <label class="btn secondary sm" style="cursor:pointer" title="Restore Data">
-        <i class="fa-solid fa-upload"></i>
-        <input type="file" id="importInput" style="display:none" accept=".json">
-      </label>
-      <button class="btn sm" data-action="goto" data-target="newBooking"><i class="fa-solid fa-plus"></i> New Trip</button>
-    </div>
+<header class="topbar">
+  <div class="brand"><i class="fa-solid fa-truck"></i> SK LOGISTICS</div>
+  <div class="topbar-actions">
+    <button class="btn danger sm" id="btnHardReset" title="Fix Frozen App"><i class="fa-solid fa-rotate"></i> Reset Storage</button>
+    <button class="btn sm" id="btnQuickAdd"><i class="fa-solid fa-plus"></i> New Trip</button>
   </div>
 </header>
 
-<main class="layout-container no-print">
-  <nav class="nav-pills">
-    <button class="nav-pill active" data-action="goto" data-target="dashboard"><i class="fa-solid fa-chart-pie"></i> Control Tower</button>
-    <button class="nav-pill" data-action="goto" data-target="bookings"><i class="fa-solid fa-list-check"></i> Trips & Waybills</button>
-    <button class="nav-pill" data-action="goto" data-target="newBooking"><i class="fa-solid fa-file-circle-plus"></i> New Consignment</button>
-    <button class="nav-pill" data-action="goto" data-target="customers"><i class="fa-solid fa-users"></i> Party Directory</button>
-    <button class="nav-pill" data-action="goto" data-target="accounts"><i class="fa-solid fa-scale-balanced"></i> Freight Ledger</button>
-    <button class="nav-pill" data-action="goto" data-target="reports"><i class="fa-solid fa-chart-line"></i> P&L Reports</button>
+<main class="container">
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+    <button class="nav-tab" data-tab="bookings">Bookings</button>
+    <button class="nav-tab" data-tab="newBooking">New Trip</button>
+    <button class="nav-tab" data-tab="accounts">Hisab-Kitab</button>
   </nav>
 
   <!-- DASHBOARD -->
-  <section id="dashboard" class="page active">
-    <div class="metric-grid">
-      <div class="metric-card">
-        <div class="metric-label">Total Consignments</div>
-        <div class="metric-value" id="kpiBookings">0</div>
-        <div class="metric-note">Lifetime operations</div>
-      </div>
-      <div class="metric-card warning">
-        <div class="metric-label">Active En-Route</div>
-        <div class="metric-value" id="kpiActive">0</div>
-        <div class="metric-note">Transit & Booked</div>
-      </div>
-      <div class="metric-card profit">
-        <div class="metric-label">Delivered (POD)</div>
-        <div class="metric-value" id="kpiDelivered">0</div>
-        <div class="metric-note">POD confirmed</div>
-      </div>
-      <div class="metric-card profit">
-        <div class="metric-label">Est. Net Profit</div>
-        <div class="metric-value" id="kpiNetProfit">₹0</div>
-        <div class="metric-note">Revenue minus costs</div>
-      </div>
-      <div class="metric-card alert">
-        <div class="metric-label">Customer Dues</div>
-        <div class="metric-value" id="kpiCustomerDue">₹0</div>
-        <div class="metric-note">Pending collection</div>
-      </div>
-      <div class="metric-card warning">
-        <div class="metric-label">Carrier Payables</div>
-        <div class="metric-value" id="kpiOwnerDue">₹0</div>
-        <div class="metric-note">Owed to truck suppliers</div>
-      </div>
+  <section id="page_dashboard" class="page active">
+    <div class="grid-cards">
+      <div class="kpi-card"><div class="kpi-label">Total Trips</div><div class="kpi-val" id="kpiTotal">0</div></div>
+      <div class="kpi-card warning"><div class="kpi-label">Active Trips</div><div class="kpi-val" id="kpiActive">0</div></div>
+      <div class="kpi-card profit"><div class="kpi-label">Est. Profit</div><div class="kpi-val" id="kpiProfit">₹0</div></div>
+      <div class="kpi-card alert"><div class="kpi-label">Party Due</div><div class="kpi-val" id="kpiDue">₹0</div></div>
     </div>
-
     <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-bolt text-accent"></i> Active Stream & Trips</div>
-        <button class="btn secondary sm" data-action="goto" data-target="bookings">Open Master List</button>
-      </div>
-      <div class="table-wrap"><div id="recentDesktopTable"></div></div>
-      <div class="card-list" id="recentMobileList"></div>
+      <div class="panel-h"><div class="panel-title">Recent Trips</div></div>
+      <div id="recentTripsContainer"></div>
     </div>
   </section>
 
   <!-- BOOKINGS -->
-  <section id="bookings" class="page">
+  <section id="page_bookings" class="page">
     <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-list-check"></i> Freight Registry</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%">
-          <input class="search-box" id="globalTripSearch" placeholder="Search LR, Party, Route, Vehicle, E-Way Bill...">
-          <div style="display:flex;gap:8px;width:100%">
-            <select class="search-box" id="statusFilterSelector" style="flex:1">
-              <option value="">All Statuses</option>
-              <option value="Booked">Booked</option>
-              <option value="In Transit">In Transit</option>
-              <option value="Delivered">Delivered</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-            <button class="btn secondary sm" data-action="exportCSV"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
-          </div>
-        </div>
+      <div class="panel-h">
+        <div class="panel-title">All Transport Trips</div>
+        <input type="text" id="tripSearchInput" placeholder="Search LR, Party, Route..." style="border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px">
       </div>
-      <div class="table-wrap"><div id="masterBookingsDesktopTable"></div></div>
-      <div class="card-list" id="masterBookingsMobileList"></div>
+      <div id="allTripsContainer"></div>
     </div>
   </section>
 
-  <!-- NEW/EDIT BOOKING -->
-  <section id="newBooking" class="page">
+  <!-- NEW/EDIT TRIP -->
+  <section id="page_newBooking" class="page">
     <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title">
-          <i class="fa-solid fa-file-signature"></i>
-          <span id="bookingFormModeText">Consignment Dispatch Form</span>
-        </div>
-      </div>
-
-      <form id="consignmentForm">
-        <input type="hidden" id="entry_recordId">
-        <input type="hidden" id="entry_podImage">
-        
+      <div class="panel-h"><div class="panel-title" id="formHeaderTitle">New Consignment Form</div></div>
+      <form id="tripEntryForm">
+        <input type="hidden" id="f_id">
         <div class="form-grid">
-          <!-- 1. Metadata & Compliance -->
-          <div class="form-title"><i class="fa-solid fa-shield-halved"></i> 1. Compliance & Consignor Info</div>
-          <div class="field">
-            <label>Consignment Date *</label>
-            <input type="date" id="entry_bookingDate" required>
-          </div>
-          <div class="field">
-            <label>Party / Consignor Name *</label>
-            <input type="text" id="entry_customer" placeholder="Firm or client name" required>
-          </div>
-          <div class="field">
-            <label>Customer Mobile No.</label>
-            <input type="tel" id="entry_customerMobile" placeholder="Contact number" maxlength="15">
-          </div>
-          <div class="field">
-            <label>E-Way Bill Number</label>
-            <input type="text" id="entry_ewayBill" placeholder="12-digit E-Way Bill No.">
-          </div>
-          <div class="field">
-            <label>E-Way Bill Expiry Date</label>
-            <input type="date" id="entry_ewayExpiry">
-          </div>
-          <div class="field">
-            <label>Consignor GSTIN</label>
-            <input type="text" id="entry_gstin" placeholder="07AAAAA0000A1Z5" style="text-transform:uppercase">
-          </div>
-
-          <!-- 2. Route & Cargo -->
-          <div class="form-title"><i class="fa-solid fa-route"></i> 2. Origin, Route & Cargo</div>
-          <div class="field">
-            <label>Origin Hub (From) *</label>
-            <input type="text" id="entry_pickup" placeholder="Loading city / warehouse" required>
-          </div>
-          <div class="field">
-            <label>Destination (To) *</label>
-            <input type="text" id="entry_destination" placeholder="Unloading city" required>
-          </div>
-          <div class="field">
-            <label>Material / Commodity *</label>
-            <input type="text" id="entry_goods" placeholder="Goods description" required>
-          </div>
-          <div class="field">
-            <label>Weight / Quantity</label>
-            <input type="text" id="entry_weight" placeholder="e.g. 18.50 MT / 450 Bags">
-          </div>
-          <div class="field">
-            <label>Vehicle Configuration</label>
-            <select id="entry_vehicleType">
-              <option value="Multi-Axle Truck">Multi-Axle Truck</option>
-              <option value="10 Wheeler Taurus">10 Wheeler Taurus</option>
-              <option value="Container 32ft MX">Container 32ft MX</option>
-              <option value="Trailer 40ft">Trailer 40ft</option>
-              <option value="Pickup / Bolero">Pickup / Bolero</option>
-              <option value="Tata Ace">Tata Ace</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Vehicle Number</label>
-            <input type="text" id="entry_vehicleNo" placeholder="HR55AB1234" style="text-transform:uppercase">
-          </div>
-
-          <!-- 3. Driver & Fleet Carrier -->
-          <div class="form-title"><i class="fa-solid fa-user-gear"></i> 3. Fleet Carrier & Driver</div>
-          <div class="field">
-            <label>Driver In-Charge</label>
-            <input type="text" id="entry_driver" placeholder="Driver full name">
-          </div>
-          <div class="field">
-            <label>Driver Contact</label>
-            <input type="tel" id="entry_driverMobile" placeholder="Driver mobile" maxlength="15">
-          </div>
-          <div class="field">
-            <label>Truck Owner / Broker</label>
-            <input type="text" id="entry_owner" placeholder="Owner / Supplier name">
-          </div>
-          <div class="field">
-            <label>Owner Contact</label>
-            <input type="tel" id="entry_ownerMobile" placeholder="Owner mobile" maxlength="15">
-          </div>
-          <div class="field">
-            <label>Trip Status</label>
-            <select id="entry_status">
+          <div class="field"><label>Booking Date *</label><input type="date" id="f_date" required></div>
+          <div class="field"><label>Party Name *</label><input type="text" id="f_customer" placeholder="Customer name" required></div>
+          <div class="field"><label>Party Mobile</label><input type="tel" id="f_phone" placeholder="WhatsApp / Phone"></div>
+          <div class="field"><label>Pickup City *</label><input type="text" id="f_pickup" placeholder="From city" required></div>
+          <div class="field"><label>Drop City *</label><input type="text" id="f_drop" placeholder="To city" required></div>
+          <div class="field"><label>Material / Cargo *</label><input type="text" id="f_goods" placeholder="Goods description" required></div>
+          <div class="field"><label>Vehicle No.</label><input type="text" id="f_truck" placeholder="HR55AB1234" style="text-transform:uppercase"></div>
+          <div class="field"><label>Trip Status</label>
+            <select id="f_status">
               <option value="Booked">Booked</option>
               <option value="In Transit">In Transit</option>
               <option value="Delivered">Delivered</option>
               <option value="Cancelled">Cancelled</option>
             </select>
           </div>
-          <div class="field">
-            <label>Expected Unloading</label>
-            <input type="date" id="entry_deliveryDate">
-          </div>
-
-          <!-- 4. Freight Ledger & Breakout -->
-          <div class="form-title"><i class="fa-solid fa-indian-rupee-sign"></i> 4. Freight Commercials & Advance Breakout</div>
-          <div class="field">
-            <label>Total Customer Freight (₹) *</label>
-            <input type="number" id="entry_freight" step="1" min="0" value="0" required>
-          </div>
-          <div class="field">
-            <label>Customer Loading Advance (₹)</label>
-            <input type="number" id="entry_loadingAdvance" step="1" min="0" value="0">
-          </div>
-          <div class="field">
-            <label>Customer Unloading Advance (₹)</label>
-            <input type="number" id="entry_unloadingAdvance" step="1" min="0" value="0">
-          </div>
-          <div class="field">
-            <label>Truck Owner Hire Cost (₹)</label>
-            <input type="number" id="entry_ownerFreight" step="1" min="0" value="0">
-          </div>
-          <div class="field">
-            <label>Truck Diesel / Advance Paid (₹)</label>
-            <input type="number" id="entry_paid" step="1" min="0" value="0">
-          </div>
-          <div class="field">
-            <label>Trip Kharcha / En-route Expenses (₹)</label>
-            <input type="number" id="entry_expenses" step="1" min="0" value="0">
-          </div>
-          <div class="field full">
-            <label>Dispatch Notes</label>
-            <input type="text" id="entry_notes" placeholder="Remarks, loading conditions, or payment agreements">
-          </div>
-
-          <!-- POD File Upload -->
-          <div class="form-title"><i class="fa-solid fa-file-arrow-up"></i> 5. Proof of Delivery (POD) Slip</div>
-          <div class="field full">
-            <input type="file" id="podFileInput" accept="image/*">
-            <div class="pod-preview-wrapper" id="podPreviewBox" style="margin-top:8px">
-              <span id="podEmptyText" style="color:#64748b;font-size:12px"><i class="fa-solid fa-camera"></i> No signed receipt attached</span>
-              <img id="podPreviewImage" class="pod-preview-img" style="display:none" alt="POD Document">
-            </div>
-          </div>
-
-          <div class="field full">
-            <div class="action-banner">
-              <div><strong id="previewMargin">Margin: ₹0</strong></div>
-              <div id="previewBalances">Customer Due: ₹0 | Owner Due: ₹0</div>
-            </div>
-          </div>
+          <div class="field"><label>Customer Freight (₹) *</label><input type="number" id="f_freight" value="0" min="0" required></div>
+          <div class="field"><label>Truck Hire Cost (₹)</label><input type="number" id="f_ownerFreight" value="0" min="0"></div>
+          <div class="field"><label>Advance Received (₹)</label><input type="number" id="f_received" value="0" min="0"></div>
+          <div class="field"><label>Expenses (₹)</label><input type="number" id="f_expenses" value="0" min="0"></div>
         </div>
-
-        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-          <button type="submit" class="btn" id="saveBookingSubmitBtn" style="flex:1"><i class="fa-solid fa-check"></i> Commit Consignment</button>
-          <button type="button" class="btn secondary" data-action="resetForm"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <button type="submit" class="btn" style="flex:1" id="btnSubmitForm">Save Trip</button>
+          <button type="button" class="btn secondary" id="btnResetForm">Clear</button>
         </div>
       </form>
     </div>
   </section>
 
-  <!-- CUSTOMERS -->
-  <section id="customers" class="page">
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-users"></i> Client & Party Roster</div>
-        <input class="search-box" id="customerSearchInput" placeholder="Filter customer name...">
-      </div>
-      <div class="table-wrap"><div id="customerMasterDesktopTable"></div></div>
-      <div class="card-list" id="customerMasterMobileList"></div>
-    </div>
-  </section>
-
   <!-- HISAB-KITAB -->
-  <section id="accounts" class="page">
-    <div class="metric-grid">
-      <div class="metric-card">
-        <div class="metric-label">Billed Freight</div>
-        <div class="metric-value" id="accGrossFreight">₹0</div>
-      </div>
-      <div class="metric-card profit">
-        <div class="metric-label">Received In Bank/Cash</div>
-        <div class="metric-value" id="accRealizedCollection">₹0</div>
-      </div>
-      <div class="metric-card alert">
-        <div class="metric-label">Customer Dues</div>
-        <div class="metric-value" id="accOutstandingReceivables">₹0</div>
-      </div>
-      <div class="metric-card warning">
-        <div class="metric-label">Carrier Balance Due</div>
-        <div class="metric-value" id="accTruckOwnerPayables">₹0</div>
-      </div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:16px">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title text-danger"><i class="fa-solid fa-hand-holding-dollar"></i> Customer Dues & Collect QR</div>
-        </div>
-        <div id="receivableDuesList"></div>
-      </div>
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title text-warning"><i class="fa-solid fa-money-bill-transfer"></i> Truck Owner Balances</div>
-        </div>
-        <div id="payableDuesList"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- REPORTS -->
-  <section id="reports" class="page">
+  <section id="page_accounts" class="page">
     <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-chart-line"></i> Logistics Performance & P&L</div>
-        <select class="search-box" id="reportIntervalSelect" style="max-width:180px">
-          <option value="all">Lifetime</option>
-          <option value="month">Current Month</option>
-          <option value="today">Today</option>
-          <option value="year">Current FY</option>
-        </select>
-      </div>
-
-      <div class="metric-grid">
-        <div class="metric-card">
-          <div class="metric-label">Trips Dispatched</div>
-          <div class="metric-value" id="repTripVolume">0</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Freight Turnover</div>
-          <div class="metric-value" id="repFreightTotal">₹0</div>
-        </div>
-        <div class="metric-card alert">
-          <div class="metric-label">Fleet Costs + Fuel</div>
-          <div class="metric-value" id="repTotalExpenses">₹0</div>
-        </div>
-        <div class="metric-card profit">
-          <div class="metric-label">Net Operating Margin</div>
-          <div class="metric-value" id="repNetSurplus">₹0</div>
-        </div>
-      </div>
-
-      <div id="reportAnalyticalSummary"></div>
+      <div class="panel-h"><div class="panel-title" style="color:var(--danger)">Pending Customer Recoveries</div></div>
+      <div id="duesContainer"></div>
     </div>
   </section>
 </main>
 
-<!-- Bottom Nav -->
-<nav class="bottom-nav no-print">
-  <div class="bottom-nav-inner">
-    <button class="bnav-item active" data-action="goto" data-target="dashboard">
-      <i class="fa-solid fa-chart-pie"></i>
-      <span>Control</span>
-    </button>
-    <button class="bnav-item" data-action="goto" data-target="bookings">
-      <i class="fa-solid fa-list-check"></i>
-      <span>Trips</span>
-    </button>
-    <button class="bnav-item" data-action="goto" data-target="newBooking">
-      <i class="fa-solid fa-circle-plus" style="font-size:24px;color:var(--accent)"></i>
-      <span>Add LR</span>
-    </button>
-    <button class="bnav-item" data-action="goto" data-target="accounts">
-      <i class="fa-solid fa-scale-balanced"></i>
-      <span>Ledger</span>
-    </button>
-    <button class="bnav-item" data-action="goto" data-target="reports">
-      <i class="fa-solid fa-chart-line"></i>
-      <span>Reports</span>
-    </button>
-  </div>
+<nav class="bottom-bar">
+  <button class="b-btn active" data-tab="dashboard"><i class="fa-solid fa-chart-pie"></i><span>Home</span></button>
+  <button class="b-btn" data-tab="bookings"><i class="fa-solid fa-list"></i><span>Trips</span></button>
+  <button class="b-btn" data-tab="newBooking"><i class="fa-solid fa-circle-plus" style="font-size:22px;color:var(--accent)"></i><span>Add</span></button>
+  <button class="b-btn" data-tab="accounts"><i class="fa-solid fa-scale-balanced"></i><span>Hisab</span></button>
 </nav>
 
-<!-- PRINT STATION -->
-<div id="printStation" class="hidden"></div>
-
-<!-- DYNAMIC UPI QR MODAL -->
-<div class="modal-overlay" id="upiModal">
-  <div class="modal-card">
-    <div class="panel-header">
-      <div class="panel-title"><i class="fa-solid fa-qrcode text-accent"></i> Scan & Pay via UPI</div>
-      <button class="btn secondary sm" data-action="closeModal" data-modal="upiModal"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;background:#fff;border-radius:var(--radius);border:1px solid var(--border)">
-      <div id="upiQrcodeTarget" style="margin-bottom:12px;min-height:160px;display:flex;align-items:center;justify-content:center"></div>
-      <strong id="upiAmountLabel" style="font-size:18px;font-family:var(--font-mono)">₹0</strong>
-      <span id="upiPartyLabel" style="font-size:12px;color:#64748b"></span>
-    </div>
-    <div style="font-size:11px;color:#64748b;text-align:center;margin:12px 0">
-      Accepts PhonePe, Google Pay, Paytm, BHIM or any banking app.
-    </div>
-    <button class="btn secondary" style="width:100%" data-action="closeModal" data-modal="upiModal">Close</button>
+<div class="modal" id="qrModal">
+  <div class="modal-box" style="text-align:center">
+    <h3 style="margin-bottom:10px">Scan & Pay via UPI</h3>
+    <div id="qrBox" style="margin:12px auto;min-height:160px;display:flex;align-items:center;justify-content:center"></div>
+    <h4 id="qrAmtText" style="color:var(--accent);margin-bottom:12px">₹0</h4>
+    <button class="btn secondary" style="width:100%" id="btnCloseQr">Close</button>
   </div>
 </div>
 
-<!-- POD PREVIEW MODAL -->
-<div class="modal-overlay" id="podModal">
-  <div class="modal-card">
-    <div class="panel-header">
-      <div class="panel-title"><i class="fa-solid fa-receipt"></i> Signed POD Slip</div>
-      <button class="btn secondary sm" data-action="closeModal" data-modal="podModal"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div style="max-height:70vh;overflow:auto;text-align:center">
-      <img id="podModalImg" src="" style="max-width:100%;border-radius:var(--radius)" alt="Proof of delivery document">
-    </div>
-  </div>
-</div>
-
-<!-- QUICK LEDGER SETTLEMENT MODAL -->
-<div class="modal-overlay" id="quickPayModal">
-  <div class="modal-card">
-    <div class="panel-header">
-      <div class="panel-title" id="quickPayTitle">Post Financial Transaction</div>
-      <button class="btn secondary sm" data-action="closeModal" data-modal="quickPayModal"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <input type="hidden" id="quickPayBookingId">
-    <input type="hidden" id="quickPayType">
-    <div class="field" style="margin-bottom:12px">
-      <label id="quickPayLabel">Amount (₹)</label>
-      <input type="number" id="quickPayInput" step="1" min="0">
-    </div>
-    <div style="font-size:12px;color:#64748b;margin-bottom:16px" id="quickPayMeta"></div>
-    <div style="display:flex;gap:10px">
-      <button class="btn secondary" style="flex:1" data-action="closeModal" data-modal="quickPayModal">Cancel</button>
-      <button class="btn" style="flex:1" data-action="submitQuickPay">Commit Entry</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="liveToast">Action completed</div>
+<div class="toast" id="toastBox">Notification</div>
+<div id="printStation" style="display:none"></div>
 
 <script>
-// CENTRAL GUARANTEED ENGINE
-const STORAGE_KEY = "sklogistics_clean_v4";
-let fleetData = [];
+// PURE FAIL-SAFE STORAGE SYSTEM
+const STORAGE_KEY = "sk_logistics_v5_live";
+let trips = [];
 
-const LOGISTICS_VPA = "sklogistics@upi";
-const LOGISTICS_NAME = "SK Logistics";
-
-function getTodayDate() {
+function getToday() {
   const d = new Date();
-  return d.getFullYear() + "-" +
-    String(d.getMonth() + 1).padStart(2, "0") + "-" +
-    String(d.getDate()).padStart(2, "0");
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
 }
 
-function formatINR(val) {
-  const num = Number(val) || 0;
-  return "₹" + num.toLocaleString("en-IN", { maximumFractionDigits: 0 });
-}
-
-function parseValidNum(val) {
+function parseN(val) {
   const n = parseFloat(val);
-  return (Number.isFinite(n) && n >= 0) ? n : 0;
+  return (!isNaN(n) && n >= 0) ? n : 0;
 }
 
-function cleanStr(s) {
-  return String(s ?? "").trim();
+function inr(val) {
+  return "₹" + parseN(val).toLocaleString("en-IN");
 }
 
-function escapeHtml(str) {
-  return String(str ?? "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-  }[c]));
+function calcDue(t) {
+  return Math.max(0, parseN(t.freight) - parseN(t.received));
 }
 
-// STORAGE ENGINE (Crash Proof)
-function loadPersistence() {
+function calcProfit(t) {
+  return parseN(t.freight) - parseN(t.ownerFreight) - parseN(t.expenses);
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toastBox");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2000);
+}
+
+function loadData() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      const legacy = localStorage.getItem("sklogistics_enterprise_v3") || localStorage.getItem("sklogistics_enterprise_v2") || localStorage.getItem("sklogistics_bookings_v1");
-      fleetData = legacy ? JSON.parse(legacy) : [];
-      if (!Array.isArray(fleetData)) fleetData = [];
-      return;
-    }
-    const parsed = JSON.parse(raw);
-    fleetData = Array.isArray(parsed) ? parsed : [];
-  } catch (err) {
-    fleetData = [];
+    trips = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(trips)) trips = [];
+  } catch (e) {
+    trips = [];
   }
 }
 
-function savePersistence() {
+function saveData() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(fleetData));
-    return true;
-  } catch (err) {
-    alert("Phone storage full. Please export backup.");
-    return false;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(trips));
+  } catch (e) {
+    alert("Phone storage full!");
   }
-}
-
-function totalCustomerReceived(b) {
-  return parseValidNum(b.loadingAdvance) + parseValidNum(b.unloadingAdvance);
-}
-
-function calcCustomerDue(b) {
-  return Math.max(0, parseValidNum(b.freight) - totalCustomerReceived(b));
-}
-
-function calcOwnerDue(b) {
-  return Math.max(0, parseValidNum(b.ownerFreight) - parseValidNum(b.paid));
-}
-
-function calcProfit(b) {
-  return parseValidNum(b.freight) - parseValidNum(b.ownerFreight) - parseValidNum(b.expenses);
-}
-
-function generateLRSeries() {
-  const prefix = "SKL-" + getTodayDate().replace(/-/g, "") + "-";
-  let maxSeq = 0;
-  fleetData.forEach(b => {
-    const lr = String(b.lr || "");
-    if (lr.startsWith(prefix)) {
-      const seq = parseInt(lr.slice(prefix.length), 10);
-      if (!isNaN(seq) && seq > maxSeq) maxSeq = seq;
-    }
-  });
-  return prefix + String(maxSeq + 1).padStart(4, "0");
-}
-
-function triggerToast(msg) {
-  const toast = document.getElementById("liveToast");
-  if (!toast) return;
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
 // NAVIGATION
-function navigateTo(pageKey) {
+function switchPage(pageName) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".nav-pill").forEach(pill => pill.classList.remove("active"));
-  document.querySelectorAll(".bnav-item").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".b-btn").forEach(b => b.classList.remove("active"));
 
-  const targetPage = document.getElementById(pageKey);
-  const targetPill = document.querySelector(`.nav-pill[data-target="${pageKey}"]`);
-  const targetBnav = document.querySelector(`.bnav-item[data-target="${pageKey}"]`);
-
+  const targetPage = document.getElementById("page_" + pageName);
   if (targetPage) targetPage.classList.add("active");
-  if (targetPill) targetPill.classList.add("active");
-  if (targetBnav) targetBnav.classList.add("active");
 
-  const editIdEl = document.getElementById("entry_recordId");
-  const dateEl = document.getElementById("entry_bookingDate");
-  if (pageKey === "newBooking" && editIdEl && !editIdEl.value && dateEl) {
-    dateEl.value = getTodayDate();
+  const tabBtn = document.querySelector(`.nav-tab[data-tab="${pageName}"]`);
+  if (tabBtn) tabBtn.classList.add("active");
+
+  const bBtn = document.querySelector(`.b-btn[data-tab="${pageName}"]`);
+  if (bBtn) bBtn.classList.add("active");
+
+  if (pageName === "newBooking" && !document.getElementById("f_id").value) {
+    document.getElementById("f_date").value = getToday();
   }
 
-  renderAllViews();
-  window.scrollTo({top: 0, behavior: "smooth"});
+  renderAll();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-const entryFieldKeys = [
-  "bookingDate", "customer", "customerMobile", "ewayBill", "ewayExpiry", "gstin",
-  "pickup", "destination", "goods", "weight", "vehicleType", "vehicleNo",
-  "driver", "driverMobile", "owner", "ownerMobile", "status", "deliveryDate",
-  "freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses", "notes"
-];
+// RENDERERS
+function renderCards(list, elementId) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
 
-function extractFormDataset() {
-  const payload = {};
-  entryFieldKeys.forEach(k => {
-    const el = document.getElementById("entry_" + k);
-    payload[k] = el ? cleanStr(el.value) : "";
-  });
-  ["freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses"].forEach(k => {
-    payload[k] = parseValidNum(payload[k]);
-  });
-  payload.podImage = document.getElementById("entry_podImage")?.value || "";
-  return payload;
-}
-
-function populateEntryForm(b) {
-  entryFieldKeys.forEach(k => {
-    const el = document.getElementById("entry_" + k);
-    if (el) el.value = b[k] ?? "";
-  });
-  const podEl = document.getElementById("entry_podImage");
-  if (podEl) podEl.value = b.podImage || "";
-  
-  const previewImg = document.getElementById("podPreviewImage");
-  const emptyTxt = document.getElementById("podEmptyText");
-  if (previewImg && emptyTxt) {
-    if (b.podImage) {
-      previewImg.src = b.podImage;
-      previewImg.style.display = "block";
-      emptyTxt.style.display = "none";
-    } else {
-      previewImg.style.display = "none";
-      emptyTxt.style.display = "inline";
-    }
-  }
-  recalculateFormMargins();
-}
-
-function resetEntryForm() {
-  const form = document.getElementById("consignmentForm");
-  if (form) form.reset();
-  
-  const recEl = document.getElementById("entry_recordId");
-  const podEl = document.getElementById("entry_podImage");
-  const dateEl = document.getElementById("entry_bookingDate");
-  const prevImg = document.getElementById("podPreviewImage");
-  const empTxt = document.getElementById("podEmptyText");
-  const modeTxt = document.getElementById("bookingFormModeText");
-  const btn = document.getElementById("saveBookingSubmitBtn");
-
-  if (recEl) recEl.value = "";
-  if (podEl) podEl.value = "";
-  if (dateEl) dateEl.value = getTodayDate();
-  if (prevImg) prevImg.style.display = "none";
-  if (empTxt) empTxt.style.display = "inline";
-  if (modeTxt) modeTxt.textContent = "Consignment Dispatch Form";
-  if (btn) btn.innerHTML = '<i class="fa-solid fa-check"></i> Commit Consignment';
-
-  ["freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses"].forEach(k => {
-    const el = document.getElementById("entry_" + k);
-    if (el) el.value = "0";
-  });
-  recalculateFormMargins();
-}
-
-// POD Image Processing
-document.getElementById("podFileInput")?.addEventListener("change", function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement("canvas");
-      let width = img.width;
-      let height = img.height;
-      const maxDim = 800;
-      if (width > height && width > maxDim) {
-        height = Math.round((height * maxDim) / width);
-        width = maxDim;
-      } else if (height > maxDim) {
-        width = Math.round((width * maxDim) / height);
-        height = maxDim;
-      }
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
-      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.65);
-
-      const podField = document.getElementById("entry_podImage");
-      const previewImg = document.getElementById("podPreviewImage");
-      const emptyTxt = document.getElementById("podEmptyText");
-
-      if (podField) podField.value = compressedDataUrl;
-      if (previewImg) {
-        previewImg.src = compressedDataUrl;
-        previewImg.style.display = "block";
-      }
-      if (emptyTxt) emptyTxt.style.display = "none";
-      triggerToast("Signed POD attached");
-    };
-    img.src = evt.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-function recalculateFormMargins() {
-  const freight = parseValidNum(document.getElementById("entry_freight")?.value);
-  const loadingAdv = parseValidNum(document.getElementById("entry_loadingAdvance")?.value);
-  const unloadingAdv = parseValidNum(document.getElementById("entry_unloadingAdvance")?.value);
-  const ownerFreight = parseValidNum(document.getElementById("entry_ownerFreight")?.value);
-  const paid = parseValidNum(document.getElementById("entry_paid")?.value);
-  const expenses = parseValidNum(document.getElementById("entry_expenses")?.value);
-
-  const margin = freight - ownerFreight - expenses;
-  const clientDue = Math.max(0, freight - (loadingAdv + unloadingAdv));
-  const ownerDue = Math.max(0, ownerFreight - paid);
-
-  const previewMargin = document.getElementById("previewMargin");
-  const previewBalances = document.getElementById("previewBalances");
-
-  if (previewMargin) {
-    previewMargin.textContent = `Operating Margin: ${formatINR(margin)}`;
-    previewMargin.style.color = margin >= 0 ? "var(--success)" : "var(--danger)";
-  }
-  if (previewBalances) {
-    previewBalances.textContent = `Customer Due: ${formatINR(clientDue)} | Carrier Due: ${formatINR(ownerDue)}`;
-  }
-}
-
-["entry_freight", "entry_loadingAdvance", "entry_unloadingAdvance", "entry_ownerFreight", "entry_paid", "entry_expenses"].forEach(id => {
-  document.getElementById(id)?.addEventListener("input", recalculateFormMargins);
-});
-
-document.getElementById("consignmentForm")?.addEventListener("submit", function(evt) {
-  evt.preventDefault();
-  try {
-    const payload = extractFormDataset();
-    const editRecId = document.getElementById("entry_recordId")?.value;
-
-    if (!payload.customer || !payload.pickup || !payload.destination || !payload.goods) {
-      alert("Party, Pickup, Destination and Goods details are required.");
-      return;
-    }
-
-    const stamp = new Date().toISOString();
-
-    if (editRecId) {
-      const idx = fleetData.findIndex(x => String(x.id) === String(editRecId));
-      if (idx === -1) return;
-      payload.id = editRecId;
-      payload.lr = fleetData[idx].lr || generateLRSeries();
-      payload.createdAt = fleetData[idx].createdAt || stamp;
-      payload.updatedAt = stamp;
-      fleetData[idx] = payload;
-    } else {
-      payload.id = "TRIP-" + Date.now();
-      payload.lr = generateLRSeries();
-      payload.createdAt = stamp;
-      payload.updatedAt = stamp;
-      fleetData.unshift(payload);
-    }
-
-    if (!savePersistence()) return;
-
-    resetEntryForm();
-    renderAllViews();
-    navigateTo("bookings");
-    triggerToast(editRecId ? "Booking updated" : `Created: ${payload.lr}`);
-  } catch (err) {
-    alert("Error: " + err.message);
-  }
-});
-
-function editConsignment(id) {
-  const item = fleetData.find(x => String(x.id) === String(id));
-  if (!item) return;
-
-  const recId = document.getElementById("entry_recordId");
-  const modeTxt = document.getElementById("bookingFormModeText");
-  const btn = document.getElementById("saveBookingSubmitBtn");
-
-  if (recId) recId.value = item.id;
-  populateEntryForm(item);
-  if (modeTxt) modeTxt.textContent = "Edit LR: " + item.lr;
-  if (btn) btn.innerHTML = '<i class="fa-solid fa-check"></i> Update Record';
-  navigateTo("newBooking");
-}
-
-function removeConsignment(id) {
-  const item = fleetData.find(x => String(x.id) === String(id));
-  if (!item) return;
-  if (!confirm(`Delete LR ${item.lr}?`)) return;
-
-  fleetData = fleetData.filter(x => String(x.id) !== String(id));
-  savePersistence();
-  renderAllViews();
-  triggerToast("Trip record removed");
-}
-
-function updateDirectStatus(id, newStatus) {
-  const idx = fleetData.findIndex(x => String(x.id) === String(id));
-  if (idx === -1) return;
-  fleetData[idx].status = newStatus;
-  fleetData[idx].updatedAt = new Date().toISOString();
-  savePersistence();
-  renderAllViews();
-  triggerToast(`Status: ${newStatus}`);
-}
-
-function showUpiQr(id) {
-  const b = fleetData.find(x => String(x.id) === String(id));
-  if (!b) return;
-
-  const due = calcCustomerDue(b);
-  if (due <= 0) {
-    alert("No pending dues on this consignment.");
+  if (!list.length) {
+    el.innerHTML = `<div style="text-align:center;padding:24px;color:#64748b;font-size:13px">No trips found.</div>`;
     return;
   }
 
-  const container = document.getElementById("upiQrcodeTarget");
-  if (!container) return;
-  container.innerHTML = "";
-
-  const upiUrl = `upi://pay?pa=${encodeURIComponent(LOGISTICS_VPA)}&pn=${encodeURIComponent(LOGISTICS_NAME)}&am=${due.toFixed(2)}&cu=INR&tn=${encodeURIComponent('LR_' + b.lr)}`;
-  const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(upiUrl)}`;
-
-  const img = document.createElement("img");
-  img.src = qrApiUrl;
-  img.alt = "UPI QR Code";
-  img.style.width = "160px";
-  img.style.height = "160px";
-  img.onerror = function() {
-    container.innerHTML = `<div style="padding:10px;font-size:12px;color:#64748b;text-align:center">UPI ID: <strong>${LOGISTICS_VPA}</strong><br>Due Amount: <strong>${formatINR(due)}</strong></div>`;
-  };
-  container.appendChild(img);
-
-  document.getElementById("upiAmountLabel").textContent = formatINR(due);
-  document.getElementById("upiPartyLabel").textContent = `${b.customer} (${b.lr})`;
-  document.getElementById("upiModal").classList.add("active");
-}
-
-function viewPodImage(id) {
-  const b = fleetData.find(x => String(x.id) === String(id));
-  if (!b || !b.podImage) {
-    alert("No signed POD uploaded yet.");
-    return;
-  }
-  document.getElementById("podModalImg").src = b.podImage;
-  document.getElementById("podModal").classList.add("active");
-}
-
-function sendWhatsAppBilti(id) {
-  const b = fleetData.find(x => String(x.id) === String(id));
-  if (!b) return;
-
-  const phone = (b.customerMobile || "").replace(/\D/g, "");
-  const msg = 
-`*SK LOGISTICS - CONSIGNMENT UPDATE*
-*LR Number:* ${b.lr}
-*Status:* ${b.status}
-*Route:* ${b.pickup} ➔ ${b.destination}
-*Vehicle:* ${b.vehicleNo || 'Allocating'}
-*E-Way Bill:* ${b.ewayBill || 'N/A'}
-*Cargo:* ${b.goods} (${b.weight || 'Std Load'})
--------------------------------
-*Total Freight:* ${formatINR(b.freight)}
-*Pending Balance:* ${formatINR(calcCustomerDue(b))}
--------------------------------
-For inquiries or coordinates, contact our dispatch desk.`;
-
-  const url = `https://wa.me/${phone ? (phone.length === 10 ? '91' + phone : phone) : ''}?text=${encodeURIComponent(msg)}`;
-  window.open(url, '_blank');
-}
-
-function showQuickPay(id, type) {
-  const item = fleetData.find(x => String(x.id) === String(id));
-  if (!item) return;
-
-  document.getElementById("quickPayBookingId").value = id;
-  document.getElementById("quickPayType").value = type;
-
-  const titleEl = document.getElementById("quickPayTitle");
-  const labelEl = document.getElementById("quickPayLabel");
-  const inputEl = document.getElementById("quickPayInput");
-  const metaEl = document.getElementById("quickPayMeta");
-
-  if (type === "customer") {
-    titleEl.textContent = `Collect: ${item.customer}`;
-    labelEl.textContent = "Unloading / Balance Advance Received (₹)";
-    inputEl.value = item.unloadingAdvance || 0;
-    metaEl.textContent = `Billed: ${formatINR(item.freight)} | Current Due: ${formatINR(calcCustomerDue(item))}`;
-  } else {
-    titleEl.textContent = `Paid to Truck: ${item.owner || 'Carrier'}`;
-    labelEl.textContent = "Total Amount Paid to Truck (₹)";
-    inputEl.value = item.paid;
-    metaEl.textContent = `Truck Hire: ${formatINR(item.ownerFreight)} | Current Due: ${formatINR(calcOwnerDue(item))}`;
-  }
-
-  document.getElementById("quickPayModal").classList.add("active");
-  inputEl.focus();
-}
-
-function submitQuickPay() {
-  const id = document.getElementById("quickPayBookingId")?.value;
-  const type = document.getElementById("quickPayType")?.value;
-  const val = parseValidNum(document.getElementById("quickPayInput")?.value);
-
-  const idx = fleetData.findIndex(x => String(x.id) === String(id));
-  if (idx === -1) return;
-
-  if (type === "customer") {
-    fleetData[idx].unloadingAdvance = val;
-  } else {
-    fleetData[idx].paid = val;
-  }
-  fleetData[idx].updatedAt = new Date().toISOString();
-
-  savePersistence();
-  document.getElementById("quickPayModal").classList.remove("active");
-  renderAllViews();
-  triggerToast("Ledger updated");
-}
-
-function getEwayStatusTag(b) {
-  if (!b.ewayExpiry) return "";
-  const exp = new Date(b.ewayExpiry + "T23:59:59");
-  const now = new Date();
-  const diffDays = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
-
-  if (diffDays < 0) {
-    return `<span class="badge eway-alert"><i class="fa-solid fa-triangle-exclamation"></i> E-Way Expired</span>`;
-  } else if (diffDays <= 1) {
-    return `<span class="badge eway-alert"><i class="fa-solid fa-clock"></i> E-Way Expiring</span>`;
-  }
-  return `<span class="badge eway-ok"><i class="fa-solid fa-receipt"></i> E-Way Active</span>`;
-}
-
-function buildDesktopTable(records) {
-  if (!records.length) return `<div style="text-align:center;padding:30px;color:#64748b">No bookings located.</div>`;
-  return `
-    <table>
-      <thead>
-        <tr>
-          <th>LR Number</th>
-          <th>Date</th>
-          <th>Customer / Party</th>
-          <th>Route Details</th>
-          <th>Vehicle / Driver</th>
-          <th>Freight</th>
-          <th>Customer Due</th>
-          <th>POD</th>
-          <th>Status</th>
-          <th style="text-align:right">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${records.map(b => `
-          <tr>
-            <td>
-              <strong style="color:var(--accent);font-family:var(--font-mono)">${escapeHtml(b.lr)}</strong>
-              <br>${getEwayStatusTag(b)}
-            </td>
-            <td>${escapeHtml(b.bookingDate)}</td>
-            <td>
-              <strong>${escapeHtml(b.customer)}</strong>${b.customerMobile ? `<br><a href="tel:${escapeHtml(b.customerMobile)}" style="color:#64748b;text-decoration:none"><i class="fa-solid fa-phone" style="font-size:10px"></i> ${escapeHtml(b.customerMobile)}</a>` : ''}
-            </td>
-            <td>
-              ${escapeHtml(b.pickup)} ➔${escapeHtml(b.destination)}
-              <br><small style="color:#64748b">${escapeHtml(b.goods)}</small>
-            </td>
-            <td>
-              <strong style="font-family:var(--font-mono)">${escapeHtml(b.vehicleNo \vert{}\vert{} 'ALLOCATING')}</strong>${b.driverMobile ? `<br><a href="tel:${escapeHtml(b.driverMobile)}" style="font-size:11px;color:#64748b;text-decoration:none"><i class="fa-solid fa-phone" style="font-size:9px"></i> ${escapeHtml(b.driver)}</a>` : ''}
-            </td>
-            <td><strong>${formatINR(b.freight)}</strong></td>
-            <td style="color:${calcCustomerDue(b) > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">
-              ${formatINR(calcCustomerDue(b))}${calcCustomerDue(b) > 0 ? `<button class="btn secondary sm" style="padding:2px 6px;margin-left:4px" data-action="showUpiQr" data-id="${b.id}"><i class="fa-solid fa-qrcode"></i></button>` : ''}
-            </td>
-            <td>
-              ${b.podImage ? `<button class="btn secondary sm" data-action="viewPodImage" data-id="${b.id}"><i class="fa-solid fa-receipt text-success"></i> View</button>` : '<span style="color:#64748b;font-size:11px">Pending</span>'}
-            </td>
-            <td>
-              <select class="status-selector" data-id="${b.id}" style="padding:4px;border-radius:6px;font-size:12px">
-                ${["Booked", "In Transit", "Delivered", "Cancelled"].map(s => 
-                  `<option value="${s}" ${b.status === s ? 'selected' : ''}>${s}</option>`
-                ).join("")}
-              </select>
-            </td>
-            <td style="text-align:right">
-              <div style="display:inline-flex;gap:4px">
-                <button class="btn secondary sm" data-action="printStandardBilti" data-id="${b.id}" title="Print Bilti"><i class="fa-solid fa-print"></i></button>
-                <button class="btn secondary sm" data-action="sendWhatsAppBilti" data-id="${b.id}"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
-                <button class="btn secondary sm" data-action="editConsignment" data-id="${b.id}"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn danger sm" data-action="removeConsignment" data-id="${b.id}"><i class="fa-solid fa-trash"></i></button>
-              </div>
-            </td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
-}
-
-function buildMobileCards(records) {
-  if (!records.length) return `<div style="text-align:center;padding:24px;color:#64748b">No bookings recorded.</div>`;
-  return records.map(b => {
-    const due = calcCustomerDue(b);
-    const prof = calcProfit(b);
-    return `
-      <div class="trip-card">
-        <div class="trip-card-head">
-          <div>
-            <strong style="color:var(--accent);font-family:var(--font-mono);font-size:14px">${escapeHtml(b.lr)}</strong>
-            <span style="font-size:11px;color:#64748b;display:block">${escapeHtml(b.bookingDate)}</span>
-          </div>
-          <div style="text-align:right">
-            <select class="status-selector" data-id="${b.id}" style="padding:4px 8px;border-radius:6px;font-size:12px;font-weight:700">
-              ${["Booked", "In Transit", "Delivered", "Cancelled"].map(s => 
-                `<option value="${s}" ${b.status === s ? 'selected' : ''}>${s}</option>`
-              ).join("")}
-            </select>
-            <div style="margin-top:4px">${getEwayStatusTag(b)}</div>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <strong style="font-size:14px">${escapeHtml(b.customer)}</strong>
-            ${b.customerMobile ? `<a href="tel:${escapeHtml(b.customerMobile)}" class="btn secondary sm" style="padding:3px 8px"><i class="fa-solid fa-phone"></i> Call</a>` : ''}
-          </div>
-          <div class="trip-card-route">
-            <span>${escapeHtml(b.pickup)}</span>
-            <i class="fa-solid fa-arrow-right" style="font-size:10px;color:#64748b"></i>
-            <span>${escapeHtml(b.destination)}</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b">
-            <span><i class="fa-solid fa-truck" style="font-size:10px"></i> ${escapeHtml(b.vehicleNo || 'No Rig')} · ${escapeHtml(b.goods)}</span>
-            ${b.driverMobile ? `<a href="tel:${escapeHtml(b.driverMobile)}" style="color:var(--accent);text-decoration:none"><i class="fa-solid fa-phone"></i> Driver</a>` : ''}
-          </div>
-        </div>
-
-        <div class="trip-card-metrics">
-          <div>
-            <span>Freight</span>
-            <strong>${formatINR(b.freight)}</strong>
-          </div>
-          <div>
-            <span>Party Due</span>
-            <strong style="color:${due > 0 ? 'var(--danger)' : 'var(--success)'}">${formatINR(due)}</strong>
-          </div>
-          <div>
-            <span>Margin</span>
-            <strong style="color:${prof >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatINR(prof)}</strong>
-          </div>
-        </div>
-
-        <div class="trip-card-actions">
-          ${due > 0 ? `<button class="btn sm" data-action="showUpiQr" data-id="${b.id}"><i class="fa-solid fa-qrcode"></i> Pay QR</button>` : ''}
-          ${b.podImage ? `<button class="btn secondary sm" data-action="viewPodImage" data-id="${b.id}"><i class="fa-solid fa-receipt"></i> POD</button>` : ''}
-          <button class="btn secondary sm" data-action="printStandardBilti" data-id="${b.id}"><i class="fa-solid fa-print"></i> Bilti</button>
-          <button class="btn secondary sm" data-action="sendWhatsAppBilti" data-id="${b.id}"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
-          <button class="btn secondary sm" data-action="editConsignment" data-id="${b.id}"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn danger sm" data-action="removeConsignment" data-id="${b.id}"><i class="fa-solid fa-trash"></i></button>
-        </div>
+  el.innerHTML = list.map(t => `
+    <div class="trip-card">
+      <div class="trip-head">
+        <strong style="color:var(--accent);font-family:monospace">${t.lr}</strong>
+        <span style="font-weight:700;font-size:11px">${t.status}</span>
       </div>
-    `;
-  }).join("");
-}
-
-function renderBookingsTable() {
-  const query = (document.getElementById("globalTripSearch")?.value || "").toLowerCase();
-  const filterStatus = document.getElementById("statusFilterSelector")?.value || "";
-
-  const list = [...fleetData]
-    .filter(b => !filterStatus || b.status === filterStatus)
-    .filter(b => [b.lr, b.customer, b.pickup, b.destination, b.vehicleNo, b.goods, b.ewayBill]
-      .some(k => String(k || "").toLowerCase().includes(query)))
-    .sort((a, b) => String(b.bookingDate).localeCompare(String(a.bookingDate)));
-
-  const dTable = document.getElementById("masterBookingsDesktopTable");
-  const mList = document.getElementById("masterBookingsMobileList");
-  if (dTable) dTable.innerHTML = buildDesktopTable(list);
-  if (mList) mList.innerHTML = buildMobileCards(list);
-}
-
-function renderDashboardView() {
-  const activeTrips = fleetData.filter(b => ["Booked", "In Transit"].includes(b.status));
-  const deliveredTrips = fleetData.filter(b => b.status === "Delivered");
-
-  document.getElementById("kpiBookings").textContent = fleetData.length;
-  document.getElementById("kpiActive").textContent = activeTrips.length;
-  document.getElementById("kpiDelivered").textContent = deliveredTrips.length;
-  document.getElementById("kpiNetProfit").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcProfit(b), 0));
-  document.getElementById("kpiCustomerDue").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
-  document.getElementById("kpiOwnerDue").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
-
-  const recent = [...fleetData].sort((a,b) => String(b.createdAt || "").localeCompare(String(a.createdAt || ""))).slice(0, 5);
-  const rTable = document.getElementById("recentDesktopTable");
-  const rList = document.getElementById("recentMobileList");
-  if (rTable) rTable.innerHTML = buildDesktopTable(recent);
-  if (rList) rList.innerHTML = buildMobileCards(recent);
-}
-
-function renderCustomerMaster() {
-  const q = (document.getElementById("customerSearchInput")?.value || "").toLowerCase();
-  const group = {};
-
-  fleetData.forEach(b => {
-    const rawName = b.customer || "General Walk-In";
-    const key = rawName.trim().toLowerCase();
-    if (!group[key]) {
-      group[key] = { name: rawName, mobile: b.customerMobile || "", trips: 0, freight: 0, received: 0, balance: 0 };
-    }
-    const c = group[key];
-    c.trips += 1;
-    c.freight += parseValidNum(b.freight);
-    c.received += totalCustomerReceived(b);
-    c.balance += calcCustomerDue(b);
-    if (!c.mobile && b.customerMobile) c.mobile = b.customerMobile;
-  });
-
-  const dataset = Object.values(group)
-    .filter(c => (c.name + " " + c.mobile).toLowerCase().includes(q))
-    .sort((a, b) => b.balance - a.balance);
-
-  const dTable = document.getElementById("customerMasterDesktopTable");
-  if (dTable) {
-    dTable.innerHTML = dataset.length ? `
-      <table>
-        <thead>
-          <tr>
-            <th>Client Name</th>
-            <th>Mobile</th>
-            <th>Trips</th>
-            <th>Billed</th>
-            <th>Received</th>
-            <th>Balance Due</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${dataset.map(c => `
-            <tr>
-              <td><strong>${escapeHtml(c.name)}</strong></td>
-              <td>${escapeHtml(c.mobile || '-')}</td>
-              <td>${c.trips}</td>
-              <td>${formatINR(c.freight)}</td>
-              <td style="color:var(--success)">${formatINR(c.received)}</td>
-              <td style="color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">${formatINR(c.balance)}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    ` : `<div style="text-align:center;padding:24px;color:#64748b">No clients located.</div>`;
-  }
-
-  const mList = document.getElementById("customerMasterMobileList");
-  if (mList) {
-    mList.innerHTML = dataset.map(c => `
-      <div class="trip-card">
-        <div style="display:flex;justify-content:space-between">
-          <strong>${escapeHtml(c.name)}</strong>
-          <span style="font-size:12px;color:#64748b">${c.trips} Loads</span>
-        </div>
-        <div style="font-size:12px;color:#64748b">${escapeHtml(c.mobile || 'No Contact')}</div>
-        <div class="trip-card-metrics">
-          <div><span>Billed</span><strong>${formatINR(c.freight)}</strong></div>
-          <div><span>Received</span><strong style="color:var(--success)">${formatINR(c.received)}</strong></div>
-          <div><span>Balance</span><strong style="color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'}">${formatINR(c.balance)}</strong></div>
-        </div>
+      <div style="font-weight:700;font-size:14px">${t.customer}</div>
+      <div class="trip-route">${t.pickup} ➔ ${t.drop}</div>
+      <div style="font-size:12px;color:#64748b">${t.truck || 'No Vehicle'} · ${t.goods}</div>
+      <div class="trip-metrics">
+        <div><span>Freight</span><strong>${inr(t.freight)}</strong></div>
+        <div><span>Party Due</span><strong style="color:${calcDue(t) > 0 ? 'var(--danger)' : 'var(--success)'}">${inr(calcDue(t))}</strong></div>
+        <div><span>Profit</span><strong style="color:${calcProfit(t) >= 0 ? 'var(--success)' : 'var(--danger)'}">${inr(calcProfit(t))}</strong></div>
       </div>
-    `).join("");
-  }
-}
-
-function renderLedgerOverview() {
-  document.getElementById("accGrossFreight").textContent = formatINR(fleetData.reduce((acc, b) => acc + parseValidNum(b.freight), 0));
-  document.getElementById("accRealizedCollection").textContent = formatINR(fleetData.reduce((acc, b) => acc + totalCustomerReceived(b), 0));
-  document.getElementById("accOutstandingReceivables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
-  document.getElementById("accTruckOwnerPayables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
-
-  const clientDueList = fleetData.filter(b => calcCustomerDue(b) > 0);
-  const ownerDueList = fleetData.filter(b => calcOwnerDue(b) > 0);
-
-  function buildDues(list, type) {
-    if (!list.length) return `<p style="padding:12px;color:#64748b;font-size:13px">All payments cleared.</p>`;
-    return list.map(b => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
-        <div>
-          <strong>${escapeHtml(type === 'customer' ? b.customer : (b.owner || 'Truck Carrier'))}</strong>
-          <div style="font-size:11px;color:#64748b">${escapeHtml(b.lr)} · ${escapeHtml(b.pickup)} ➔ ${escapeHtml(b.destination)}</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-weight:700;color:${type === 'customer' ? 'var(--danger)' : 'var(--warning)'}">
-            ${formatINR(type === 'customer' ? calcCustomerDue(b) : calcOwnerDue(b))}
-          </div>
-          <div style="display:inline-flex;gap:4px;margin-top:3px">
-            ${type === 'customer' ? `<button class="btn secondary sm" data-action="showUpiQr" data-id="${b.id}"><i class="fa-solid fa-qrcode"></i> QR</button>` : ''}
-            <button class="btn secondary sm" data-action="showQuickPay" data-id="${b.id}" data-type="${type}">Record</button>
-          </div>
-        </div>
-      </div>
-    `).join("");
-  }
-
-  document.getElementById("receivableDuesList").innerHTML = buildDues(clientDueList, 'customer');
-  document.getElementById("payableDuesList").innerHTML = buildDues(ownerDueList, 'owner');
-}
-
-function renderBusinessReports() {
-  const period = document.getElementById("reportIntervalSelect")?.value || "all";
-  const now = new Date();
-
-  const filtered = fleetData.filter(b => {
-    if (period === "all") return true;
-    if (!b.bookingDate) return false;
-    const d = new Date(b.bookingDate + "T12:00:00");
-    if (period === "today") return b.bookingDate === getTodayDate();
-    if (period === "month") return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
-    if (period === "year") return d.getFullYear() === now.getFullYear();
-    return true;
-  });
-
-  const freightSum = filtered.reduce((s, b) => s + parseValidNum(b.freight), 0);
-  const outflowSum = filtered.reduce((s, b) => s + parseValidNum(b.ownerFreight) + parseValidNum(b.expenses), 0);
-
-  document.getElementById("repTripVolume").textContent = filtered.length;
-  document.getElementById("repFreightTotal").textContent = formatINR(freightSum);
-  document.getElementById("repTotalExpenses").textContent = formatINR(outflowSum);
-  document.getElementById("repNetSurplus").textContent = formatINR(freightSum - outflowSum);
-
-  const statuses = {Booked: 0, "In Transit": 0, Delivered: 0, Cancelled: 0};
-  filtered.forEach(b => { if (statuses[b.status] !== undefined) statuses[b.status]++; });
-
-  document.getElementById("reportAnalyticalSummary").innerHTML = `
-    <div style="padding:12px;border:1px solid var(--border);border-radius:var(--radius);margin-top:12px;font-size:13px;line-height:1.8">
-      <div>Booked Trips: <strong>${statuses.Booked}</strong></div>
-      <div>In Transit: <strong>${statuses['In Transit']}</strong></div>
-      <div>Delivered (POD): <strong>${statuses.Delivered}</strong></div>
-      <div>Void / Cancelled: <strong>${statuses.Cancelled}</strong></div>
-    </div>
-  `;
-}
-
-function renderAllViews() {
-  renderDashboardView();
-  renderBookingsTable();
-  renderCustomerMaster();
-  renderLedgerOverview();
-  renderBusinessReports();
-}
-
-function printStandardBilti(id) {
-  const b = fleetData.find(x => String(x.id) === String(id));
-  if (!b) return;
-
-  const copies = ["Consignor Copy", "Driver / Transit Copy", "Consignee Copy"];
-  const station = document.getElementById("printStation");
-  if (!station) return;
-  
-  station.innerHTML = copies.map(copyName => `
-    <div class="bilti-container">
-      <div class="bilti-header">
-        <div>
-          <h2 style="font-size:18px;margin:0">SK LOGISTICS</h2>
-          <small>Fleet Transport & Cargo Movers</small>
-        </div>
-        <div style="text-align:right">
-          <strong>${copyName}</strong><br>
-          <span>LR: ${escapeHtml(b.lr)}</span><br>
-          <small>Date: ${escapeHtml(b.bookingDate)}</small>
-        </div>
-      </div>
-      <table class="grid-table">
-        <tr>
-          <td><strong>Party (Sender):</strong> ${escapeHtml(b.customer)}<br>GSTIN: ${escapeHtml(b.gstin || 'N/A')}</td>
-          <td><strong>Route:</strong> ${escapeHtml(b.pickup)} ➔ ${escapeHtml(b.destination)}<br>E-Way Bill: ${escapeHtml(b.ewayBill || 'N/A')}</td>
-        </tr>
-        <tr>
-          <td><strong>Vehicle:</strong> ${escapeHtml(b.vehicleNo || 'ALLOCATING')} (${escapeHtml(b.vehicleType)})</td>
-          <td><strong>Cargo:</strong> ${escapeHtml(b.goods)} (${escapeHtml(b.weight || 'Std Load')})</td>
-        </tr>
-        <tr>
-          <td><strong>Freight:</strong> ${formatINR(b.freight)}</td>
-          <td><strong>Balance Due:</strong> ${formatINR(calcCustomerDue(b))}</td>
-        </tr>
-      </table>
-      <div class="bilti-signatures">
-        <div class="signature-line">Consignor Signature</div>
-        <div class="signature-line">Driver Signature</div>
-        <div class="signature-line">SK Logistics Authorized</div>
+      <div class="trip-actions">
+        ${calcDue(t) > 0 ? `<button class="btn sm" data-qr="${t.id}"><i class="fa-solid fa-qrcode"></i> Pay QR</button>` : ''}
+        ${t.phone ? `<a href="tel:${t.phone}" class="btn secondary sm"><i class="fa-solid fa-phone"></i> Call</a>` : ''}
+        <button class="btn secondary sm" data-print="${t.id}"><i class="fa-solid fa-print"></i> Bilti</button>
+        <button class="btn secondary sm" data-edit="${t.id}"><i class="fa-solid fa-pen"></i> Edit</button>
+        <button class="btn danger sm" data-del="${t.id}"><i class="fa-solid fa-trash"></i></button>
       </div>
     </div>
   `).join("");
-
-  station.classList.remove("hidden");
-  window.print();
-  setTimeout(() => station.classList.add("hidden"), 1000);
 }
 
-function exportCSV() {
-  if (!fleetData.length) { alert("No data to export"); return; }
-  const headers = ["LR", "Date", "Customer", "EWayBill", "Pickup", "Destination", "Goods", "Freight", "Customer Due", "Profit", "Status"];
-  const rows = fleetData.map(b => [
-    b.lr, b.bookingDate, `"${b.customer}"`, `"${b.ewayBill || ''}"`, `"${b.pickup}"`, `"${b.destination}"`, `"${b.goods}"`,
-    b.freight, calcCustomerDue(b), calcProfit(b), b.status
-  ]);
-  const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
-  const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `SK-Logistics-Ledger-${getTodayDate()}.csv`;
-  document.body.appendChild(a);
-  a.click();
+function renderAll() {
+  document.getElementById("kpiTotal").textContent = trips.length;
+  document.getElementById("kpiActive").textContent = trips.filter(t => t.status === "Booked" || t.status === "In Transit").length;
+  document.getElementById("kpiProfit").textContent = inr(trips.reduce((acc, t) => acc + calcProfit(t), 0));
+  document.getElementById("kpiDue").textContent = inr(trips.reduce((acc, t) => acc + calcDue(t), 0));
+
+  renderCards(trips.slice(0, 5), "recentTripsContainer");
+
+  const query = (document.getElementById("tripSearchInput")?.value || "").toLowerCase();
+  const filtered = trips.filter(t => [t.lr, t.customer, t.pickup, t.drop, t.truck, t.goods].some(x => String(x || "").toLowerCase().includes(query)));
+  renderCards(filtered, "allTripsContainer");
+
+  const dues = trips.filter(t => calcDue(t) > 0);
+  const duesEl = document.getElementById("duesContainer");
+  if (duesEl) {
+    duesEl.innerHTML = dues.length ? dues.map(t => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div>
+          <strong>${t.customer}</strong>
+          <div style="font-size:11px;color:#64748b">${t.lr} · ${t.pickup} ➔ ${t.drop}</div>
+        </div>
+        <div style="text-align:right">
+          <strong style="color:var(--danger)">${inr(calcDue(t))}</strong><br>
+          <button class="btn secondary sm" data-pay="${t.id}" style="margin-top:3px">Collect</button>
+        </div>
+      </div>
+    `).join("") : `<div style="padding:16px;color:#64748b;font-size:13px">All accounts cleared!</div>`;
+  }
 }
 
-function exportDataBackup() {
-  const blob = new Blob([JSON.stringify(fleetData, null, 2)], {type: "application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `SK-Logistics-FullDB-${getTodayDate()}.json`;
-  document.body.appendChild(a);
-  a.click();
-}
-
-document.getElementById("importInput")?.addEventListener("change", function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    try {
-      const data = JSON.parse(evt.target.result);
-      if (Array.isArray(data)) {
-        fleetData = data;
-        savePersistence();
-        renderAllViews();
-        triggerToast("Ledger restored");
-      }
-    } catch (err) {
-      alert("Invalid backup file: " + err.message);
-    }
+// FORM SUBMIT
+document.getElementById("tripEntryForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const editId = document.getElementById("f_id").value;
+  const payload = {
+    date: document.getElementById("f_date").value,
+    customer: document.getElementById("f_customer").value.trim(),
+    phone: document.getElementById("f_phone").value.trim(),
+    pickup: document.getElementById("f_pickup").value.trim(),
+    drop: document.getElementById("f_drop").value.trim(),
+    goods: document.getElementById("f_goods").value.trim(),
+    truck: document.getElementById("f_truck").value.trim().toUpperCase(),
+    status: document.getElementById("f_status").value,
+    freight: parseN(document.getElementById("f_freight").value),
+    ownerFreight: parseN(document.getElementById("f_ownerFreight").value),
+    received: parseN(document.getElementById("f_received").value),
+    expenses: parseN(document.getElementById("f_expenses").value)
   };
-  reader.readAsText(file);
+
+  if (editId) {
+    const idx = trips.findIndex(t => String(t.id) === String(editId));
+    if (idx !== -1) {
+      payload.id = editId;
+      payload.lr = trips[idx].lr;
+      trips[idx] = payload;
+      showToast("Trip updated!");
+    }
+  } else {
+    payload.id = "TRIP_" + Date.now();
+    payload.lr = "SKL-" + getToday().replace(/-/g, "") + "-" + String(trips.length + 1).padStart(4, "0");
+    trips.unshift(payload);
+    showToast("LR Created: " + payload.lr);
+  }
+
+  saveData();
+  resetEntryForm();
+  switchPage("bookings");
 });
 
-// Realtime listeners
-document.getElementById("globalTripSearch")?.addEventListener("input", renderBookingsTable);
-document.getElementById("statusFilterSelector")?.addEventListener("change", renderBookingsTable);
-document.getElementById("customerSearchInput")?.addEventListener("input", renderCustomerMaster);
-document.getElementById("reportIntervalSelect")?.addEventListener("change", renderBusinessReports);
+function resetEntryForm() {
+  document.getElementById("tripEntryForm").reset();
+  document.getElementById("f_id").value = "";
+  document.getElementById("f_date").value = getToday();
+  document.getElementById("formHeaderTitle").textContent = "New Consignment Form";
+  document.getElementById("btnSubmitForm").textContent = "Save Trip";
+}
 
-// CENTRAL EVENT DELEGATION (GUARANTEED NO-FREEZE CLICK DISPATCHER)
+// GUARANTEED GLOBAL EVENT DELEGATION
 document.addEventListener("click", function(e) {
-  const target = e.target.closest("[data-action]");
-  if (!target) return;
+  const tabBtn = e.target.closest("[data-tab]");
+  if (tabBtn) {
+    switchPage(tabBtn.getAttribute("data-tab"));
+    return;
+  }
 
-  const action = target.getAttribute("data-action");
-  const id = target.getAttribute("data-id");
+  const editBtn = e.target.closest("[data-edit]");
+  if (editBtn) {
+    const id = editBtn.getAttribute("data-edit");
+    const t = trips.find(x => String(x.id) === String(id));
+    if (!t) return;
+    document.getElementById("f_id").value = t.id;
+    document.getElementById("f_date").value = t.date || getToday();
+    document.getElementById("f_customer").value = t.customer || "";
+    document.getElementById("f_phone").value = t.phone || "";
+    document.getElementById("f_pickup").value = t.pickup || "";
+    document.getElementById("f_drop").value = t.drop || "";
+    document.getElementById("f_goods").value = t.goods || "";
+    document.getElementById("f_truck").value = t.truck || "";
+    document.getElementById("f_status").value = t.status || "Booked";
+    document.getElementById("f_freight").value = t.freight || 0;
+    document.getElementById("f_ownerFreight").value = t.ownerFreight || 0;
+    document.getElementById("f_received").value = t.received || 0;
+    document.getElementById("f_expenses").value = t.expenses || 0;
+    document.getElementById("formHeaderTitle").textContent = "Edit LR: " + t.lr;
+    document.getElementById("btnSubmitForm").textContent = "Update Trip";
+    switchPage("newBooking");
+    return;
+  }
 
-  if (action === "goto") {
-    navigateTo(target.getAttribute("data-target"));
-  } else if (action === "resetForm") {
-    resetEntryForm();
-  } else if (action === "editConsignment") {
-    editConsignment(id);
-  } else if (action === "removeConsignment") {
-    removeConsignment(id);
-  } else if (action === "printStandardBilti") {
-    printStandardBilti(id);
-  } else if (action === "sendWhatsAppBilti") {
-    sendWhatsAppBilti(id);
-  } else if (action === "showUpiQr") {
-    showUpiQr(id);
-  } else if (action === "viewPodImage") {
-    viewPodImage(id);
-  } else if (action === "showQuickPay") {
-    showQuickPay(id, target.getAttribute("data-type"));
-  } else if (action === "closeModal") {
-    const modalId = target.getAttribute("data-modal");
-    document.getElementById(modalId)?.classList.remove("active");
-  } else if (action === "submitQuickPay") {
-    submitQuickPay();
-  } else if (action === "exportCSV") {
-    exportCSV();
-  } else if (action === "backup") {
-    exportDataBackup();
+  const delBtn = e.target.closest("[data-del]");
+  if (delBtn) {
+    const id = delBtn.getAttribute("data-del");
+    if (confirm("Delete this trip?")) {
+      trips = trips.filter(x => String(x.id) !== String(id));
+      saveData();
+      renderAll();
+      showToast("Trip deleted");
+    }
+    return;
+  }
+
+  const printBtn = e.target.closest("[data-print]");
+  if (printBtn) {
+    const id = printBtn.getAttribute("data-print");
+    const t = trips.find(x => String(x.id) === String(id));
+    if (!t) return;
+    const p = document.getElementById("printStation");
+    p.innerHTML = `
+      <div style="border:2px solid #000;padding:16px;font-family:sans-serif">
+        <h2 style="text-align:center;margin:0">SK LOGISTICS</h2>
+        <p style="text-align:center;font-size:12px;margin:2px 0 10px">TRANSPORT BILTI</p>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <strong>LR: ${t.lr}</strong><span>Date: ${t.date}</span>
+        </div>
+        <table border="1" cellpadding="6" style="width:100%;border-collapse:collapse;font-size:13px">
+          <tr><td>Party: ${t.customer}</td><td>Route: ${t.pickup} ➔ ${t.drop}</td></tr>
+          <tr><td>Vehicle: ${t.truck || '-'}</td><td>Goods: ${t.goods}</td></tr>
+          <tr><td>Freight: ${inr(t.freight)}</td><td>Due: ${inr(calcDue(t))}</td></tr>
+        </table>
+        <div style="display:flex;justify-content:space-between;margin-top:40px;font-size:12px">
+          <div>Consignor Sign</div><div>Authorized Sign</div>
+        </div>
+      </div>
+    `;
+    window.print();
+    return;
+  }
+
+  const qrBtn = e.target.closest("[data-qr]");
+  if (qrBtn) {
+    const id = qrBtn.getAttribute("data-qr");
+    const t = trips.find(x => String(x.id) === String(id));
+    if (!t) return;
+    const due = calcDue(t);
+    const upiUrl = `upi://pay?pa=sklogistics@upi&pn=SKLogistics&am=${due}&cu=INR`;
+    document.getElementById("qrBox").innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(upiUrl)}" style="width:160px;height:160px" alt="QR">`;
+    document.getElementById("qrAmtText").textContent = inr(due) + " (" + t.customer + ")";
+    document.getElementById("qrModal").classList.add("active");
+    return;
+  }
+
+  const payBtn = e.target.closest("[data-pay]");
+  if (payBtn) {
+    const id = payBtn.getAttribute("data-pay");
+    const t = trips.find(x => String(x.id) === String(id));
+    if (!t) return;
+    const amt = prompt("Total amount received so far (₹):", t.received);
+    if (amt !== null) {
+      t.received = parseN(amt);
+      saveData();
+      renderAll();
+      showToast("Payment updated");
+    }
+    return;
   }
 });
 
-// Handle Select Elements in dynamic tables
-document.addEventListener("change", function(e) {
-  if (e.target.classList.contains("status-selector")) {
-    const id = e.target.getAttribute("data-id");
-    updateDirectStatus(id, e.target.value);
+// STATIC BUTTON BINDS
+document.getElementById("btnQuickAdd").onclick = () => switchPage("newBooking");
+document.getElementById("btnResetForm").onclick = resetEntryForm;
+document.getElementById("btnCloseQr").onclick = () => document.getElementById("qrModal").classList.remove("active");
+document.getElementById("tripSearchInput").oninput = renderAll;
+document.getElementById("btnHardReset").onclick = function() {
+  if (confirm("Reset local storage? This will clear corrupted data and unfreeze buttons.")) {
+    localStorage.clear();
+    location.reload();
   }
-});
+};
 
-// SAFE APP INITIALIZATION
-loadPersistence();
+// BOOT
+loadData();
 resetEntryForm();
-renderAllViews();
+renderAll();
 </script>
 </body>
 </html>
