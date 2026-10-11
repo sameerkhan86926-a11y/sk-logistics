@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<title>SK LOGISTICS | Workshop, Fuel & Maintenance Hub</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+  --navy: #090e17;
+  --navy-surface: #101726;
+  --accent: #2563eb;
+  --accent-light: #3b82f6;
+  --success: #059669;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --purple: #7c3aed;
+  --bg-body: #f8fafc;
+  --border: #e2e8f0;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 10px;
+  --bottom-h: 68px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--font-sans);background:var(--bg-body);color:#0f172a;line-height:1.5;padding-bottom:calc(var(--bottom-h) + 20px)}
+button,input,select,textarea{font-family:inherit}
+
+.hidden { display: none !important; }
+
+/* Header */
+.app-header{background:var(--navy);border-bottom:1px solid #1e293b;position:sticky;top:0;z-index:100}
+.header-inner{max-width:1440px;margin:auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand-group{display:flex;align-items:center;gap:10px}
+.brand-icon{width:40px;height:40px;background:var(--purple);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;flex-shrink:0}
+.brand-text h1{font-size:16px;font-weight:800;color:#fff;letter-spacing:0.5px}
+.brand-text p{font-size:9.5px;font-weight:600;color:#94a3b8;letter-spacing:1px;text-transform:uppercase}
+.header-actions{display:flex;align-items:center;gap:8px}
+
+/* Layout */
+.layout-container{max-width:1440px;margin:auto;padding:16px}
+.nav-pills{display:flex;gap:8px;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:16px;overflow-x:auto}
+.nav-pills::-webkit-scrollbar{display:none}
+.nav-pill{background:#fff;border:1px solid var(--border);color:#64748b;padding:9px 16px;border-radius:var(--radius);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.nav-pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.page{display:none}
+.page.active{display:block}
+
+.panel{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.02)}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.panel-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+
+/* Metrics */
+.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+.metric-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;border-left:4px solid var(--purple)}
+.metric-card.alert{border-left-color:var(--danger)}
+.metric-card.warning{border-left-color:var(--warning)}
+.metric-card.success{border-left-color:var(--success)}
+.metric-label{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase}
+.metric-value{font-size:20px;font-weight:800;margin:6px 0 2px;font-family:var(--font-mono);overflow-wrap:anywhere}
+.metric-note{font-size:11px;color:#64748b}
+
+/* UI Elements */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:var(--radius);font-weight:600;font-size:13px;cursor:pointer;border:1px solid transparent;background:var(--accent);color:#fff}
+.btn.purple{background:var(--purple);color:#fff}
+.btn.secondary{background:#fff;border-color:var(--border);color:#0f172a}
+.btn.danger{background:#fef2f2;color:var(--danger);border-color:#fecaca}
+.btn.sm{padding:6px 10px;font-size:11.5px}
+
+.form-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:600;color:#334155}
+.field input,.field select,.field textarea,.search-box{border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:14px;background:#fff;width:100%;outline:none}
+.field input:focus,.field select:focus,.search-box:focus{border-color:var(--accent)}
+.field.full{grid-column:1/-1}
+.form-title{font-size:13px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.5px;padding:12px 0 4px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:#fff}
+table{width:100%;border-collapse:collapse;font-size:13px;text-align:left}
+th{background:#f8fafc;padding:11px 12px;font-weight:700;color:#475569;border-bottom:1px solid var(--border);font-size:11.5px;text-transform:uppercase;white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+
+.card-list{display:none;flex-direction:column;gap:12px}
+.audit-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
+
+.toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;font-size:12.5px;font-weight:600;z-index:9999999;opacity:0;transition:all .25s ease;pointer-events:none}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+@media(min-width: 768px){
+  body{padding-bottom:0}
+  .layout-container{padding:24px}
+  .metric-grid{grid-template-columns:repeat(4, 1fr);gap:16px}
+  .form-grid{grid-template-columns:repeat(3, minmax(0, 1fr))}
+  .form-title,.field.full{grid-column:1/-1}
+  .table-wrap{display:block}
+  .card-list{display:none!important}
+}
+@media(max-width: 767px){
+  .table-wrap{display:none}
+  .card-list{display:flex}
+  .metric-value{font-size:18px}
+}
+
+@media print {
+  body *{visibility:hidden!important}
+  #printSettlement, #printSettlement *{visibility:visible!important}
+  #printSettlement{position:absolute;left:0;top:0;width:100%;background:#fff;display:block!important;padding:20px;font-family:Arial,sans-serif}
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand-group">
+      <div class="brand-icon"><i class="fa-solid fa-wrench"></i></div>
+      <div class="brand-text">
+        <h1>SK LOGISTICS</h1>
+        <p>Workshop & Fleet Operations</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <!-- MAIN TMS LINK -->
+      <a href="index.html" class="btn secondary sm" style="text-decoration:none"><i class="fa-solid fa-arrow-left"></i> Main TMS</a>
+      <button class="btn purple sm" onclick="switchOpTab('newFuel')"><i class="fa-solid fa-plus"></i> Add Fuel</button>
+    </div>
+  </div>
+</header>
+
+<main class="layout-container">
+  <nav class="nav-pills">
+    <button class="nav-pill active" onclick="switchOpTab('dash')"><i class="fa-solid fa-gauge-high"></i> Workshop Control</button>
+    <button class="nav-pill" onclick="switchOpTab('fuelLogs')"><i class="fa-solid fa-gas-pump"></i> Fuel & Pump Slips</button>
+    <button class="nav-pill" onclick="switchOpTab('maintenance')"><i class="fa-solid fa-screwdriver-wrench"></i> Truck Maintenance</button>
+    <button class="nav-pill" onclick="switchOpTab('tyres')"><i class="fa-solid fa-circle-dot"></i> Tyre Inventory</button>
+    <button class="nav-pill" onclick="switchOpTab('driverSettlement')"><i class="fa-solid fa-money-check-dollar"></i> Driver Settlement</button>
+  </nav>
+
+  <!-- WORKSHOP METRICS -->
+  <section id="page_dash" class="page active">
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-label">Total Diesel Consumed</div>
+        <div class="metric-value" id="kpiFuelLiters">0 L</div>
+        <div class="metric-note">Lifetime pump records</div>
+      </div>
+      <div class="metric-card alert">
+        <div class="metric-label">Total Fuel Cost</div>
+        <div class="metric-value" id="kpiFuelCost">₹0</div>
+        <div class="metric-note">Diesel slip disbursements</div>
+      </div>
+      <div class="metric-card warning">
+        <div class="metric-label">Maintenance Spend</div>
+        <div class="metric-value" id="kpiMaintCost">₹0</div>
+        <div class="metric-note">Repairs, oil & parts</div>
+      </div>
+      <div class="metric-card success">
+        <div class="metric-label">Active Tyres In Use</div>
+        <div class="metric-value" id="kpiActiveTyres">0</div>
+        <div class="metric-note">Audit tracked</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-gas-pump text-purple"></i> Recent Diesel Pump Slips</div>
+        <button class="btn secondary sm" onclick="switchOpTab('fuelLogs')">View All Logs</button>
+      </div>
+      <div class="table-wrap"><div id="recentFuelTable"></div></div>
+      <div class="card-list" id="recentFuelCards"></div>
+    </div>
+  </section>
+
+  <!-- FUEL DISBURSEMENT & PUMP LOG -->
+  <section id="page_fuelLogs" class="page">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-gas-pump"></i> Diesel Slip & Pump Entry Form</div>
+      </div>
+      <form id="fuelEntryForm" onsubmit="saveFuelEntry(event)">
+        <div class="form-grid">
+          <div class="field">
+            <label>Slip Date *</label>
+            <input type="date" id="fuel_date" required>
+          </div>
+          <div class="field">
+            <label>Select Vehicle *</label>
+            <select id="fuel_vehicleNo" required></select>
+          </div>
+          <div class="field">
+            <label>Diesel Pump / Bunk Name</label>
+            <input type="text" id="fuel_pumpName" placeholder="e.g. Indian Oil Hub, Sonipat" required>
+          </div>
+          <div class="field">
+            <label>Slip / Receipt No.</label>
+            <input type="text" id="fuel_slipNo" placeholder="Receipt voucher number">
+          </div>
+          <div class="field">
+            <label>Liters *</label>
+            <input type="number" id="fuel_liters" oninput="calcFuelTotal()" step="0.01" min="0" placeholder="Liters filled" required>
+          </div>
+          <div class="field">
+            <label>Rate / Liter (₹) *</label>
+            <input type="number" id="fuel_rate" oninput="calcFuelTotal()" step="0.01" min="0" placeholder="Current diesel rate" required>
+          </div>
+          <div class="field">
+            <label>Total Diesel Cost (₹)</label>
+            <input type="number" id="fuel_total" readonly style="background:#f1f5f9;font-weight:700">
+          </div>
+          <div class="field">
+            <label>Current Odometer (KM)</label>
+            <input type="number" id="fuel_km" placeholder="Vehicle meter reading">
+          </div>
+          <div class="field">
+            <label>Driver In-Charge</label>
+            <input type="text" id="fuel_driver" placeholder="Driver name">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <button type="submit" class="btn purple"><i class="fa-solid fa-check"></i> Commit Fuel Log</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-table-list"></i> Diesel Records Ledger</div>
+      </div>
+      <div class="table-wrap"><div id="fullFuelTable"></div></div>
+      <div class="card-list" id="fullFuelCards"></div>
+    </div>
+  </section>
+
+  <!-- MAINTENANCE & SERVICING -->
+  <section id="page_maintenance" class="page">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-screwdriver-wrench"></i> Post Workshop & Job Card Record</div>
+      </div>
+      <form id="maintForm" onsubmit="saveMaintEntry(event)">
+        <div class="form-grid">
+          <div class="field">
+            <label>Service Date *</label>
+            <input type="date" id="maint_date" required>
+          </div>
+          <div class="field">
+            <label>Vehicle Number *</label>
+            <select id="maint_vehicleNo" required></select>
+          </div>
+          <div class="field">
+            <label>Service / Repair Category *</label>
+            <select id="maint_category">
+              <option value="Engine Oil & Filter">Engine Oil & Filter</option>
+              <option value="Brake Lining & Drums">Brake Lining & Drums</option>
+              <option value="Greasing & Hub Service">Greasing & Hub Service</option>
+              <option value="Suspension / Kamani">Suspension / Kamani (Leaf Springs)</option>
+              <option value="Electrical & Battery">Electrical & Battery</option>
+              <option value="Body & Cabin Work">Body & Cabin Work</option>
+              <option value="Other Repairs">Other General Repairs</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Garage / Workshop Name</label>
+            <input type="text" id="maint_garage" placeholder="Workshop / Mechanic shop">
+          </div>
+          <div class="field">
+            <label>Total Job Cost (₹) *</label>
+            <input type="number" id="maint_cost" step="1" min="0" required placeholder="Repair invoice amount">
+          </div>
+          <div class="field">
+            <label>Next Service Due (KM / Date)</label>
+            <input type="text" id="maint_nextDue" placeholder="e.g. 1,45,000 KM or 15-Nov-2026">
+          </div>
+          <div class="field full">
+            <label>Work Description & Replaced Spare Parts</label>
+            <input type="text" id="maint_desc" placeholder="Details of repair work and parts replaced">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <button type="submit" class="btn purple"><i class="fa-solid fa-wrench"></i> Record Maintenance</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-clock-rotate-left"></i> Workshop History</div>
+      </div>
+      <div class="table-wrap"><div id="maintHistoryTable"></div></div>
+      <div class="card-list" id="maintHistoryCards"></div>
+    </div>
+  </section>
+
+  <!-- TYRE AUDIT -->
+  <section id="page_tyres" class="page">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-circle-dot"></i> Register New Tyre / Position Audit</div>
+      </div>
+      <form id="tyreForm" onsubmit="saveTyreEntry(event)">
+        <div class="form-grid">
+          <div class="field">
+            <label>Tyre Serial Number (Unique) *</label>
+            <input type="text" id="tyre_serial" placeholder="e.g. MRF-894726-X" required style="text-transform:uppercase">
+          </div>
+          <div class="field">
+            <label>Tyre Brand & Model</label>
+            <input type="text" id="tyre_brand" placeholder="Apollo / MRF / JK / Ceat" required>
+          </div>
+          <div class="field">
+            <label>Assigned Vehicle *</label>
+            <select id="tyre_vehicleNo" required></select>
+          </div>
+          <div class="field">
+            <label>Wheel Position</label>
+            <select id="tyre_position">
+              <option value="Front Left (FL)">Front Left (FL)</option>
+              <option value="Front Right (FR)">Front Right (FR)</option>
+              <option value="Rear Outer Left (ROL)">Rear Outer Left (ROL)</option>
+              <option value="Rear Inner Left (RIL)">Rear Inner Left (RIL)</option>
+              <option value="Rear Outer Right (ROR)">Rear Outer Right (ROR)</option>
+              <option value="Rear Inner Right (RIR)">Rear Inner Right (RIR)</option>
+              <option value="Extra Stepney (ST)">Extra Stepney (ST)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Fitting Date</label>
+            <input type="date" id="tyre_date" required>
+          </div>
+          <div class="field">
+            <label>Fitting Odometer Reading (KM)</label>
+            <input type="number" id="tyre_km" placeholder="Vehicle KM when fitted">
+          </div>
+          <div class="field">
+            <label>Current Status</label>
+            <select id="tyre_status">
+              <option value="Active">Active on Rig</option>
+              <option value="Retread">Sent for Retreading</option>
+              <option value="Scrap">Scrapped / Discarded</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Purchase Cost (₹)</label>
+            <input type="number" id="tyre_cost" placeholder="Tyre cost">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <button type="submit" class="btn purple"><i class="fa-solid fa-plus"></i> Save Tyre Record</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-warehouse"></i> Fleet Tyre Inventory & Audit Status</div>
+      </div>
+      <div class="table-wrap"><div id="tyreTable"></div></div>
+      <div class="card-list" id="tyreCards"></div>
+    </div>
+  </section>
+
+  <!-- DRIVER SALARY & SETTLEMENT -->
+  <section id="page_driverSettlement" class="page">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-money-check-dollar"></i> Driver Trip Settlement & Pay Slip</div>
+      </div>
+      <form id="settlementForm" onsubmit="generateDriverSlip(event)">
+        <div class="form-grid">
+          <div class="field">
+            <label>Driver Full Name *</label>
+            <input type="text" id="set_driverName" placeholder="Driver name" required>
+          </div>
+          <div class="field">
+            <label>Trip LR / Reference</label>
+            <select id="set_tripRef" onchange="loadTripDataForSettlement()"></select>
+          </div>
+          <div class="field">
+            <label>Fixed Salary / Agreed Bhatta (₹) *</label>
+            <input type="number" id="set_grossBhatta" oninput="calcNetSettlement()" step="1" min="0" value="0" required>
+          </div>
+          <div class="field">
+            <label>Cash Advance Paid En-Route (₹)</label>
+            <input type="number" id="set_advances" oninput="calcNetSettlement()" step="1" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>Diesel Shortage / Fine Deduction (₹)</label>
+            <input type="number" id="set_deductions" oninput="calcNetSettlement()" step="1" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>Trip Performance Incentive (₹)</label>
+            <input type="number" id="set_incentive" oninput="calcNetSettlement()" step="1" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>Final Net Payable to Driver (₹)</label>
+            <input type="number" id="set_netPayable" readonly style="background:#f1f5f9;font-weight:700">
+          </div>
+          <div class="field full">
+            <label>Remarks</label>
+            <input type="text" id="set_remarks" placeholder="Settlement terms or note">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <button type="submit" class="btn success"><i class="fa-solid fa-receipt"></i> Print Driver Settlement Voucher</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- PRINTABLE DRIVER VOUCHER STATION -->
+<div id="printSettlement" class="hidden"></div>
+<div class="toast" id="liveToast">Success</div>
+
+<script>
+// SHARED DATABASE KEYS WITH TMS
+const TMS_KEY = "sklogistics_v9_master";
+const WORKSHOP_KEY = "sklogistics_workshop_v1";
+
+let fleetBookings = [];
+let workshopData = {
+  fuelLogs: [],
+  maintenanceLogs: [],
+  tyreLogs: []
+};
+
+function formatINR(val) {
+  const n = Number(val) || 0;
+  return "₹" + n.toLocaleString("en-IN", { maximumFractionDigits: 0 });
+}
+
+function parseValidNum(v) {
+  const n = parseFloat(v);
+  return (Number.isFinite(n) && n >= 0) ? n : 0;
+}
+
+function getTodayDate() {
+  const d = new Date();
+  return d.getFullYear() + "-" +
+    String(d.getMonth() + 1).padStart(2, "0") + "-" +
+    String(d.getDate()).padStart(2, "0");
+}
+
+function triggerToast(m) {
+  const t = document.getElementById("liveToast");
+  if (!t) return;
+  t.textContent = m;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
+}
+
+function loadAllData() {
+  try {
+    const rawTms = localStorage.getItem(TMS_KEY);
+    fleetBookings = rawTms ? JSON.parse(rawTms) : [];
+  } catch (e) { fleetBookings = []; }
+
+  try {
+    const rawWk = localStorage.getItem(WORKSHOP_KEY);
+    workshopData = rawWk ? JSON.parse(rawWk) : { fuelLogs: [], maintenanceLogs: [], tyreLogs: [] };
+  } catch (e) {
+    workshopData = { fuelLogs: [], maintenanceLogs: [], tyreLogs: [] };
+  }
+}
+
+function saveWorkshopData() {
+  localStorage.setItem(WORKSHOP_KEY, JSON.stringify(workshopData));
+}
+
+function switchOpTab(tabKey) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const target = document.getElementById("page_" + tabKey);
+  if (target) target.classList.add("active");
+
+  document.querySelectorAll(".nav-pill").forEach(p => {
+    const attr = p.getAttribute("onclick") || "";
+    p.classList.toggle("active", attr.includes(tabKey));
+  });
+
+  renderAllViews();
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+function populateVehicleSelectors() {
+  // Extract unique vehicles from TMS Bookings
+  const vehicleSet = new Set();
+  fleetBookings.forEach(b => {
+    if (b.vehicleNo) vehicleSet.add(b.vehicleNo.trim().toUpperCase());
+  });
+
+  const list = Array.from(vehicleSet);
+  if (!list.length) list.push("HR55AB1234", "DL01AA9999"); // Fallbacks
+
+  const opts = list.map(v => `<option value="${v}">${v}</option>`).join("");
+  ["fuel_vehicleNo", "maint_vehicleNo", "tyre_vehicleNo"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = opts;
+  });
+
+  // Populate Trip Selector for driver settlement
+  const tripSelect = document.getElementById("set_tripRef");
+  if (tripSelect) {
+    tripSelect.innerHTML = `<option value="">-- Choose Dispatched Trip --</option>` +
+      fleetBookings.map(b => `<option value="${b.id}">${b.lr} (${b.vehicleNo}) - ${b.customer}</option>`).join("");
+  }
+}
+
+function calcFuelTotal() {
+  const l = parseValidNum(document.getElementById("fuel_liters")?.value);
+  const r = parseValidNum(document.getElementById("fuel_rate")?.value);
+  const tot = Math.round(l * r);
+  const totEl = document.getElementById("fuel_total");
+  if (totEl) totEl.value = tot;
+}
+
+function saveFuelEntry(e) {
+  e.preventDefault();
+  const entry = {
+    id: "FUEL-" + Date.now(),
+    date: document.getElementById("fuel_date").value,
+    vehicleNo: document.getElementById("fuel_vehicleNo").value,
+    pumpName: document.getElementById("fuel_pumpName").value,
+    slipNo: document.getElementById("fuel_slipNo").value,
+    liters: parseValidNum(document.getElementById("fuel_liters").value),
+    rate: parseValidNum(document.getElementById("fuel_rate").value),
+    total: parseValidNum(document.getElementById("fuel_total").value),
+    km: document.getElementById("fuel_km").value,
+    driver: document.getElementById("fuel_driver").value
+  };
+
+  workshopData.fuelLogs.unshift(entry);
+  saveWorkshopData();
+  document.getElementById("fuelEntryForm").reset();
+  document.getElementById("fuel_date").value = getTodayDate();
+  renderAllViews();
+  triggerToast("Fuel receipt saved");
+}
+
+function saveMaintEntry(e) {
+  e.preventDefault();
+  const entry = {
+    id: "MAINT-" + Date.now(),
+    date: document.getElementById("maint_date").value,
+    vehicleNo: document.getElementById("maint_vehicleNo").value,
+    category: document.getElementById("maint_category").value,
+    garage: document.getElementById("maint_garage").value,
+    cost: parseValidNum(document.getElementById("maint_cost").value),
+    nextDue: document.getElementById("maint_nextDue").value,
+    desc: document.getElementById("maint_desc").value
+  };
+
+  workshopData.maintenanceLogs.unshift(entry);
+  saveWorkshopData();
+  document.getElementById("maintForm").reset();
+  document.getElementById("maint_date").value = getTodayDate();
+  renderAllViews();
+  triggerToast("Maintenance record saved");
+}
+
+function saveTyreEntry(e) {
+  e.preventDefault();
+  const entry = {
+    id: "TYRE-" + Date.now(),
+    serial: document.getElementById("tyre_serial").value.toUpperCase(),
+    brand: document.getElementById("tyre_brand").value,
+    vehicleNo: document.getElementById("tyre_vehicleNo").value,
+    position: document.getElementById("tyre_position").value,
+    date: document.getElementById("tyre_date").value,
+    km: document.getElementById("tyre_km").value,
+    status: document.getElementById("tyre_status").value,
+    cost: parseValidNum(document.getElementById("tyre_cost").value)
+  };
+
+  workshopData.tyreLogs.unshift(entry);
+  saveWorkshopData();
+  document.getElementById("tyreForm").reset();
+  document.getElementById("tyre_date").value = getTodayDate();
+  renderAllViews();
+  triggerToast("Tyre audit registered");
+}
+
+function deleteWorkshopItem(collection, id) {
+  if (!confirm("Delete this record permanently?")) return;
+  workshopData[collection] = workshopData[collection].filter(x => x.id !== id);
+  saveWorkshopData();
+  renderAllViews();
+  triggerToast("Record removed");
+}
+
+function loadTripDataForSettlement() {
+  const tripId = document.getElementById("set_tripRef")?.value;
+  if (!tripId) return;
+
+  const trip = fleetBookings.find(b => b.id === tripId);
+  if (trip) {
+    if (trip.driver) document.getElementById("set_driverName").value = trip.driver;
+    if (trip.driverBhatta) document.getElementById("set_grossBhatta").value = trip.driverBhatta;
+    calcNetSettlement();
+  }
+}
+
+function calcNetSettlement() {
+  const bhatta = parseValidNum(document.getElementById("set_grossBhatta")?.value);
+  const adv = parseValidNum(document.getElementById("set_advances")?.value);
+  const ded = parseValidNum(document.getElementById("set_deductions")?.value);
+  const inc = parseValidNum(document.getElementById("set_incentive")?.value);
+
+  const net = (bhatta + inc) - (adv + ded);
+  const netEl = document.getElementById("set_netPayable");
+  if (netEl) netEl.value = Math.max(0, net);
+}
+
+function generateDriverSlip(e) {
+  e.preventDefault();
+  const driver = document.getElementById("set_driverName").value;
+  const tripId = document.getElementById("set_tripRef").value;
+  const trip = fleetBookings.find(b => b.id === tripId) || {};
+  const gross = parseValidNum(document.getElementById("set_grossBhatta").value);
+  const adv = parseValidNum(document.getElementById("set_advances").value);
+  const ded = parseValidNum(document.getElementById("set_deductions").value);
+  const inc = parseValidNum(document.getElementById("set_incentive").value);
+  const net = parseValidNum(document.getElementById("set_netPayable").value);
+  const remarks = document.getElementById("set_remarks").value;
+
+  const printDiv = document.getElementById("printSettlement");
+  if (!printDiv) return;
+
+  printDiv.innerHTML = `
+    <div style="border:2px solid #000;padding:20px;max-width:700px;margin:auto">
+      <div style="text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:15px">
+        <h2 style="margin:0">SK LOGISTICS FLEET DISPATCH</h2>
+        <p style="margin:4px 0;font-size:12px">Driver Trip Settlement & Bhatta Voucher</p>
+        <small>Date: ${getTodayDate()}</small>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:15px">
+        <tr>
+          <td style="padding:6px;border:1px solid #000"><strong>Driver Name:</strong> ${driver}</td>
+          <td style="padding:6px;border:1px solid #000"><strong>Vehicle No:</strong> ${trip.vehicleNo || 'Fleet Assigned'}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px;border:1px solid #000"><strong>Assigned LR:</strong> ${trip.lr || 'N/A'}</td>
+          <td style="padding:6px;border:1px solid #000"><strong>Route:</strong> ${(trip.pickup || '')} ➔ ${(trip.destination || '')}</td>
+        </tr>
+      </table>
+
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:15px">
+        <tr style="background:#eee">
+          <th style="padding:6px;border:1px solid #000;text-align:left">Head / Component</th>
+          <th style="padding:6px;border:1px solid #000;text-align:right">Amount (₹)</th>
+        </tr>
+        <tr>
+          <td style="padding:6px;border:1px solid #000">Agreed Fixed Trip Bhatta / Khuraki</td>
+          <td style="padding:6px;border:1px solid #000;text-align:right">${formatINR(gross)}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px;border:1px solid #000">Performance / Safe Delivery Incentive</td>
+          <td style="padding:6px;border:1px solid #000;text-align:right">${formatINR(inc)}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px;border:1px solid #000">En-Route Cash Advance Deducted</td>
+          <td style="padding:6px;border:1px solid #000;text-align:right">- ${formatINR(adv)}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px;border:1px solid #000">Shortage / Diesel Penalty Deducted</td>
+          <td style="padding:6px;border:1px solid #000;text-align:right">- ${formatINR(ded)}</td>
+        </tr>
+        <tr style="background:#f9f9f9;font-weight:bold;font-size:15px">
+          <td style="padding:8px;border:1px solid #000">NET CASH DISBURSED TO DRIVER</td>
+          <td style="padding:8px;border:1px solid #000;text-align:right">${formatINR(net)}</td>
+        </tr>
+      </table>
+
+      <div style="font-size:12px;margin-bottom:30px">
+        <strong>Remarks:</strong> ${remarks || 'Settled in full and final.'}
+      </div>
+
+      <div style="display:flex;justify-content:space-between;margin-top:40px;font-size:12px">
+        <div style="border-top:1px dashed #000;width:180px;text-align:center">Driver Signature / Angutha</div>
+        <div style="border-top:1px dashed #000;width:180px;text-align:center">SK Logistics Cashier</div>
+      </div>
+    </div>
+  `;
+
+  printDiv.classList.remove("hidden");
+  window.print();
+  setTimeout(() => printDiv.classList.add("hidden"), 1000);
+}
+
+function renderDashboard() {
+  const totalLiters = workshopData.fuelLogs.reduce((acc, f) => acc + f.liters, 0);
+  const totalFuelCost = workshopData.fuelLogs.reduce((acc, f) => acc + f.total, 0);
+  const totalMaintCost = workshopData.maintenanceLogs.reduce((acc, m) => acc + m.cost, 0);
+  const activeTyres = workshopData.tyreLogs.filter(t => t.status === "Active").length;
+
+  document.getElementById("kpiFuelLiters").textContent = `${totalLiters.toFixed(1)} L`;
+  document.getElementById("kpiFuelCost").textContent = formatINR(totalFuelCost);
+  document.getElementById("kpiMaintCost").textContent = formatINR(totalMaintCost);
+  document.getElementById("kpiActiveTyres").textContent = activeTyres;
+
+  const recent = workshopData.fuelLogs.slice(0, 5);
+  const table = document.getElementById("recentFuelTable");
+  const cards = document.getElementById("recentFuelCards");
+
+  if (table) {
+    table.innerHTML = recent.length ? `
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Vehicle No</th>
+            <th>Pump Name</th>
+            <th>Liters</th>
+            <th>Rate</th>
+            <th>Total Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${recent.map(r => `
+            <tr>
+              <td>${r.date}</td>
+              <td><strong>${r.vehicleNo}</strong></td>
+              <td>${r.pumpName}</td>
+              <td>${r.liters} L</td>
+              <td>₹${r.rate}</td>
+              <td style="font-weight:700">${formatINR(r.total)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    ` : `<p style="padding:16px;color:#64748b">No fuel entries yet.</p>`;
+  }
+
+  if (cards) {
+    cards.innerHTML = recent.map(r => `
+      <div class="audit-card">
+        <div style="display:flex;justify-content:space-between">
+          <strong>${r.vehicleNo}</strong>
+          <span>${r.date}</span>
+        </div>
+        <div style="font-size:12px;color:#64748b">${r.pumpName} · ${r.liters} L @ ₹${r.rate}</div>
+        <div style="font-size:15px;font-weight:700;color:var(--purple)">${formatINR(r.total)}</div>
+      </div>
+    `).join("");
+  }
+}
+
+function renderFuelLogs() {
+  const list = workshopData.fuelLogs;
+  const table = document.getElementById("fullFuelTable");
+  const cards = document.getElementById("fullFuelCards");
+
+  if (table) {
+    table.innerHTML = list.length ? `
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Vehicle No</th>
+            <th>Bunk / Pump</th>
+            <th>Slip #</th>
+            <th>Liters</th>
+            <th>Total Cost</th>
+            <th>Odometer</th>
+            <th>Driver</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(f => `
+            <tr>
+              <td>${f.date}</td>
+              <td><strong>${f.vehicleNo}</strong></td>
+              <td>${f.pumpName}</td>
+              <td>${f.slipNo || '-'}</td>
+              <td>${f.liters} L</td>
+              <td style="font-weight:700">${formatINR(f.total)}</td>
+              <td>${f.km ? f.km + ' KM' : '-'}</td>
+              <td>${f.driver || '-'}</td>
+              <td><button class="btn danger sm" onclick="deleteWorkshopItem('fuelLogs', '${f.id}')"><i class="fa-solid fa-trash"></i></button></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    ` : `<p style="padding:16px;color:#64748b">No diesel entries logged.</p>`;
+  }
+
+  if (cards) {
+    cards.innerHTML = list.map(f => `
+      <div class="audit-card">
+        <div style="display:flex;justify-content:space-between">
+          <strong>${f.vehicleNo}</strong>
+          <span>${f.date}</span>
+        </div>
+        <div style="font-size:12px;color:#64748b">${f.pumpName} | Slip: ${f.slipNo || 'N/A'}</div>
+        <div style="font-size:15px;font-weight:700;color:var(--purple)">${formatINR(f.total)} (${f.liters} L)</div>
+        <div style="display:flex;justify-content:flex-end">
+          <button class="btn danger sm" onclick="deleteWorkshopItem('fuelLogs', '${f.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    `).join("");
+  }
+}
+
+function renderMaintenance() {
+  const list = workshopData.maintenanceLogs;
+  const table = document.getElementById("maintHistoryTable");
+  const cards = document.getElementById("maintHistoryCards");
+
+  if (table) {
+    table.innerHTML = list.length ? `
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Vehicle No</th>
+            <th>Category</th>
+            <th>Garage</th>
+            <th>Cost</th>
+            <th>Next Due</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(m => `
+            <tr>
+              <td>${m.date}</td>
+              <td><strong>${m.vehicleNo}</strong></td>
+              <td>${m.category}</td>
+              <td>${m.garage || '-'}</td>
+              <td style="font-weight:700">${formatINR(m.cost)}</td>
+              <td>${m.nextDue || '-'}</td>
+              <td><button class="btn danger sm" onclick="deleteWorkshopItem('maintenanceLogs', '${m.id}')"><i class="fa-solid fa-trash"></i></button></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    ` : `<p style="padding:16px;color:#64748b">No maintenance history recorded.</p>`;
+  }
+
+  if (cards) {
+    cards.innerHTML = list.map(m => `
+      <div class="audit-card">
+        <div style="display:flex;justify-content:space-between">
+          <strong>${m.vehicleNo}</strong>
+          <span>${m.date}</span>
+        </div>
+        <div style="font-size:12px;color:#64748b">${m.category} @ ${m.garage || 'Workshop'}</div>
+        <div style="font-size:15px;font-weight:700;color:var(--danger)">${formatINR(m.cost)}</div>
+        <div style="display:flex;justify-content:flex-end">
+          <button class="btn danger sm" onclick="deleteWorkshopItem('maintenanceLogs', '${m.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    `).join("");
+  }
+}
+
+function renderTyres() {
+  const list = workshopData.tyreLogs;
+  const table = document.getElementById("tyreTable");
+  const cards = document.getElementById("tyreCards");
+
+  if (table) {
+    table.innerHTML = list.length ? `
+      <table>
+        <thead>
+          <tr>
+            <th>Serial Number</th>
+            <th>Brand</th>
+            <th>Rig</th>
+            <th>Wheel Position</th>
+            <th>Fitting Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(t => `
+            <tr>
+              <td><strong style="font-family:var(--font-mono)">${t.serial}</strong></td>
+              <td>${t.brand}</td>
+              <td><strong>${t.vehicleNo}</strong></td>
+              <td>${t.position}</td>
+              <td>${t.date}</td>
+              <td><span style="font-weight:700;color:${t.status === 'Active' ? 'var(--success)' : 'var(--danger)'}">${t.status}</span></td>
+              <td><button class="btn danger sm" onclick="deleteWorkshopItem('tyreLogs', '${t.id}')"><i class="fa-solid fa-trash"></i></button></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    ` : `<p style="padding:16px;color:#64748b">No tyre logs recorded.</p>`;
+  }
+
+  if (cards) {
+    cards.innerHTML = list.map(t => `
+      <div class="audit-card">
+        <div style="display:flex;justify-content:space-between">
+          <strong>${t.serial}</strong>
+          <span>${t.status}</span>
+        </div>
+        <div style="font-size:12px;color:#64748b">${t.brand} · ${t.vehicleNo} (${t.position})</div>
+        <div style="display:flex;justify-content:flex-end">
+          <button class="btn danger sm" onclick="deleteWorkshopItem('tyreLogs', '${t.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    `).join("");
+  }
+}
+
+function renderAllViews() {
+  populateVehicleSelectors();
+  renderDashboard();
+  renderFuelLogs();
+  renderMaintenance();
+  renderTyres();
+}
+
+window.onload = function() {
+  loadAllData();
+  const d = getTodayDate();
+  if (document.getElementById("fuel_date")) document.getElementById("fuel_date").value = d;
+  if (document.getElementById("maint_date")) document.getElementById("maint_date").value = d;
+  if (document.getElementById("tyre_date")) document.getElementById("tyre_date").value = d;
+  renderAllViews();
+};
+</script>
+</body>
+</html>
