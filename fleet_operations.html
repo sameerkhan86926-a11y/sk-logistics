@@ -20,6 +20,7 @@
   --danger: #dc2626;
   --warning: #d97706;
   --purple: #7c3aed;
+  --purple-light: #8b5cf6;
   --bg-body: #f8fafc;
   --border: #e2e8f0;
   --font-sans: 'Inter', system-ui, sans-serif;
@@ -67,18 +68,24 @@ button,input,select,textarea{font-family:inherit}
 .metric-value{font-size:20px;font-weight:800;margin:6px 0 2px;font-family:var(--font-mono);overflow-wrap:anywhere}
 .metric-note{font-size:11px;color:#64748b}
 
+/* Alert Box */
+.service-alert-banner{background:#fffbeb;border:1px solid #fde68a;border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;display:none}
+.service-alert-title{font-size:13px;font-weight:700;color:#b45309;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.service-alert-list{font-size:12px;color:#92400e;line-height:1.6}
+
 /* UI Elements */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:var(--radius);font-weight:600;font-size:13px;cursor:pointer;border:1px solid transparent;background:var(--accent);color:#fff}
 .btn.purple{background:var(--purple);color:#fff}
 .btn.secondary{background:#fff;border-color:var(--border);color:#0f172a}
 .btn.danger{background:#fef2f2;color:var(--danger);border-color:#fecaca}
+.btn.success{background:#ecfdf5;color:var(--success);border-color:#a7f3d0}
 .btn.sm{padding:6px 10px;font-size:11.5px}
 
 .form-grid{display:grid;grid-template-columns:1fr;gap:14px}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:12px;font-weight:600;color:#334155}
 .field input,.field select,.field textarea,.search-box{border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:14px;background:#fff;width:100%;outline:none}
-.field input:focus,.field select:focus,.search-box:focus{border-color:var(--accent)}
+.field input:focus,.field select:focus,.search-box:focus{border-color:var(--purple)}
 .field.full{grid-column:1/-1}
 .form-title{font-size:13px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.5px;padding:12px 0 4px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 
@@ -89,6 +96,11 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 
 .card-list{display:none;flex-direction:column;gap:12px}
 .audit-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
+
+.badge{padding:3px 8px;border-radius:12px;font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:4px}
+.badge.ok{background:#ecfdf5;color:#059669;border:1px solid #a7f3d0}
+.badge.warn{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
+.badge.bad{background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5}
 
 .toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;font-size:12.5px;font-weight:600;z-index:9999999;opacity:0;transition:all .25s ease;pointer-events:none}
 .toast.show{transform:translate(-50%,0);opacity:1}
@@ -127,9 +139,13 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
       </div>
     </div>
     <div class="header-actions">
-      <!-- MAIN TMS LINK -->
       <a href="index.html" class="btn secondary sm" style="text-decoration:none"><i class="fa-solid fa-arrow-left"></i> Main TMS</a>
-      <button class="btn purple sm" onclick="switchOpTab('newFuel')"><i class="fa-solid fa-plus"></i> Add Fuel</button>
+      <button class="btn secondary sm" onclick="exportWorkshopBackup()" title="Backup Workshop Data"><i class="fa-solid fa-download"></i></button>
+      <label class="btn secondary sm" style="cursor:pointer" title="Restore Data">
+        <i class="fa-solid fa-upload"></i>
+        <input type="file" id="importWkInput" style="display:none" accept=".json" onchange="importWorkshopBackup(event)">
+      </label>
+      <button class="btn purple sm" onclick="switchOpTab('fuelLogs')"><i class="fa-solid fa-plus"></i> Add Fuel</button>
     </div>
   </div>
 </header>
@@ -142,6 +158,12 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     <button class="nav-pill" onclick="switchOpTab('tyres')"><i class="fa-solid fa-circle-dot"></i> Tyre Inventory</button>
     <button class="nav-pill" onclick="switchOpTab('driverSettlement')"><i class="fa-solid fa-money-check-dollar"></i> Driver Settlement</button>
   </nav>
+
+  <!-- WORKSHOP PREVENTIVE ALERTS -->
+  <div class="service-alert-banner" id="serviceAlertBanner">
+    <div class="service-alert-title"><i class="fa-solid fa-bell"></i> Preventive Maintenance Due Soon</div>
+    <div class="service-alert-list" id="serviceAlertList"></div>
+  </div>
 
   <!-- WORKSHOP METRICS -->
   <section id="page_dash" class="page active">
@@ -192,7 +214,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
           </div>
           <div class="field">
             <label>Select Vehicle *</label>
-            <select id="fuel_vehicleNo" required></select>
+            <select id="fuel_vehicleNo" required onchange="fetchPreviousKmForFuel()"></select>
           </div>
           <div class="field">
             <label>Diesel Pump / Bunk Name</label>
@@ -216,11 +238,16 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
           </div>
           <div class="field">
             <label>Current Odometer (KM)</label>
-            <input type="number" id="fuel_km" placeholder="Vehicle meter reading">
+            <input type="number" id="fuel_km" oninput="calcMileagePreview()" placeholder="Vehicle meter reading">
           </div>
           <div class="field">
             <label>Driver In-Charge</label>
             <input type="text" id="fuel_driver" placeholder="Driver name">
+          </div>
+          <div class="field full">
+            <div style="background:#f3e8ff;color:#6b21a8;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600" id="fuelMileagePreview">
+              <i class="fa-solid fa-chart-simple"></i> Calculated Average: Enter KM & Liters to evaluate fuel economy
+            </div>
           </div>
         </div>
         <div style="display:flex;gap:10px;margin-top:14px">
@@ -232,6 +259,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title"><i class="fa-solid fa-table-list"></i> Diesel Records Ledger</div>
+        <button class="btn secondary sm" onclick="exportFuelCSV()"><i class="fa-solid fa-file-excel"></i> Export Fuel CSV</button>
       </div>
       <div class="table-wrap"><div id="fullFuelTable"></div></div>
       <div class="card-list" id="fullFuelCards"></div>
@@ -275,8 +303,12 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="number" id="maint_cost" step="1" min="0" required placeholder="Repair invoice amount">
           </div>
           <div class="field">
-            <label>Next Service Due (KM / Date)</label>
-            <input type="text" id="maint_nextDue" placeholder="e.g. 1,45,000 KM or 15-Nov-2026">
+            <label>Current Service Odometer (KM)</label>
+            <input type="number" id="maint_currentKm" placeholder="Current truck reading">
+          </div>
+          <div class="field">
+            <label>Next Service Due Date</label>
+            <input type="date" id="maint_nextDueDate">
           </div>
           <div class="field full">
             <label>Work Description & Replaced Spare Parts</label>
@@ -379,6 +411,10 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="text" id="set_driverName" placeholder="Driver name" required>
           </div>
           <div class="field">
+            <label>Driver WhatsApp No.</label>
+            <input type="tel" id="set_driverMobile" placeholder="Contact number" maxlength="15">
+          </div>
+          <div class="field">
             <label>Trip LR / Reference</label>
             <select id="set_tripRef" onchange="loadTripDataForSettlement()"></select>
           </div>
@@ -407,8 +443,9 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="text" id="set_remarks" placeholder="Settlement terms or note">
           </div>
         </div>
-        <div style="display:flex;gap:10px;margin-top:14px">
-          <button type="submit" class="btn success"><i class="fa-solid fa-receipt"></i> Print Driver Settlement Voucher</button>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+          <button type="submit" class="btn success" style="flex:1"><i class="fa-solid fa-receipt"></i> Print Driver Settlement Voucher</button>
+          <button type="button" class="btn secondary" onclick="sendWhatsAppSettlement()"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i> Send on WhatsApp</button>
         </div>
       </form>
     </div>
@@ -489,14 +526,13 @@ function switchOpTab(tabKey) {
 }
 
 function populateVehicleSelectors() {
-  // Extract unique vehicles from TMS Bookings
   const vehicleSet = new Set();
   fleetBookings.forEach(b => {
     if (b.vehicleNo) vehicleSet.add(b.vehicleNo.trim().toUpperCase());
   });
 
   const list = Array.from(vehicleSet);
-  if (!list.length) list.push("HR55AB1234", "DL01AA9999"); // Fallbacks
+  if (!list.length) list.push("HR55AB1234", "DL01AA9999");
 
   const opts = list.map(v => `<option value="${v}">${v}</option>`).join("");
   ["fuel_vehicleNo", "maint_vehicleNo", "tyre_vehicleNo"].forEach(id => {
@@ -504,11 +540,42 @@ function populateVehicleSelectors() {
     if (el) el.innerHTML = opts;
   });
 
-  // Populate Trip Selector for driver settlement
   const tripSelect = document.getElementById("set_tripRef");
   if (tripSelect) {
     tripSelect.innerHTML = `<option value="">-- Choose Dispatched Trip --</option>` +
       fleetBookings.map(b => `<option value="${b.id}">${b.lr} (${b.vehicleNo}) - ${b.customer}</option>`).join("");
+  }
+}
+
+// LIVE MILEAGE CALCULATION
+function fetchPreviousKmForFuel() {
+  calcMileagePreview();
+}
+
+function calcMileagePreview() {
+  const vNo = document.getElementById("fuel_vehicleNo")?.value;
+  const currentKm = parseValidNum(document.getElementById("fuel_km")?.value);
+  const liters = parseValidNum(document.getElementById("fuel_liters")?.value);
+  const previewBox = document.getElementById("fuelMileagePreview");
+
+  if (!previewBox) return;
+
+  const pastLogs = workshopData.fuelLogs
+    .filter(f => f.vehicleNo === vNo && parseValidNum(f.km) > 0)
+    .sort((a,b) => parseValidNum(b.km) - parseValidNum(a.km));
+
+  if (!pastLogs.length || currentKm <= 0 || liters <= 0) {
+    previewBox.innerHTML = `<i class="fa-solid fa-chart-simple"></i> Calculated Average: Log consecutive entries with KM readings to compute real economy.`;
+    return;
+  }
+
+  const prevKm = parseValidNum(pastLogs[0].km);
+  if (currentKm > prevKm) {
+    const distance = currentKm - prevKm;
+    const avg = (distance / liters).toFixed(2);
+    previewBox.innerHTML = `<i class="fa-solid fa-gauge"></i> Traveled: <strong>${distance} KM</strong> | Economy: <strong>${avg} KM/L</strong> (Compared to last log ${prevKm} KM)`;
+  } else {
+    previewBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Warning: Current KM (${currentKm}) is less than or equal to previous recorded KM (${prevKm}).`;
   }
 }
 
@@ -518,6 +585,7 @@ function calcFuelTotal() {
   const tot = Math.round(l * r);
   const totEl = document.getElementById("fuel_total");
   if (totEl) totEl.value = tot;
+  calcMileagePreview();
 }
 
 function saveFuelEntry(e) {
@@ -552,7 +620,8 @@ function saveMaintEntry(e) {
     category: document.getElementById("maint_category").value,
     garage: document.getElementById("maint_garage").value,
     cost: parseValidNum(document.getElementById("maint_cost").value),
-    nextDue: document.getElementById("maint_nextDue").value,
+    currentKm: document.getElementById("maint_currentKm").value,
+    nextDueDate: document.getElementById("maint_nextDueDate").value,
     desc: document.getElementById("maint_desc").value
   };
 
@@ -586,12 +655,52 @@ function saveTyreEntry(e) {
   triggerToast("Tyre audit registered");
 }
 
+function rotateTyre(id) {
+  const item = workshopData.tyreLogs.find(x => x.id === id);
+  if (!item) return;
+
+  const newPos = prompt(`Rotate Tyre ${item.serial} to new position:\n(FL, FR, ROL, RIL, ROR, RIR, ST)`, item.position);
+  if (!newPos) return;
+
+  item.position = newPos.trim();
+  saveWorkshopData();
+  renderTyres();
+  triggerToast("Tyre position updated");
+}
+
 function deleteWorkshopItem(collection, id) {
   if (!confirm("Delete this record permanently?")) return;
   workshopData[collection] = workshopData[collection].filter(x => x.id !== id);
   saveWorkshopData();
   renderAllViews();
   triggerToast("Record removed");
+}
+
+function checkServiceAlerts() {
+  const alerts = [];
+  const now = new Date();
+
+  workshopData.maintenanceLogs.forEach(m => {
+    if (!m.nextDueDate) return;
+    const due = new Date(m.nextDueDate + "T23:59:59");
+    const diffDays = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
+    if (diffDays < 0) {
+      alerts.push(`<strong>OVERDUE:</strong> ${m.vehicleNo} - ${m.category} was due on ${m.nextDueDate}`);
+    } else if (diffDays <= 15) {
+      alerts.push(`<strong>Due in ${diffDays} days:</strong> ${m.vehicleNo} - ${m.category} scheduled on ${m.nextDueDate}`);
+    }
+  });
+
+  const banner = document.getElementById("serviceAlertBanner");
+  const list = document.getElementById("serviceAlertList");
+  if (banner && list) {
+    if (alerts.length) {
+      list.innerHTML = alerts.join("<br>");
+      banner.style.display = "block";
+    } else {
+      banner.style.display = "none";
+    }
+  }
 }
 
 function loadTripDataForSettlement() {
@@ -601,6 +710,7 @@ function loadTripDataForSettlement() {
   const trip = fleetBookings.find(b => b.id === tripId);
   if (trip) {
     if (trip.driver) document.getElementById("set_driverName").value = trip.driver;
+    if (trip.driverMobile) document.getElementById("set_driverMobile").value = trip.driverMobile;
     if (trip.driverBhatta) document.getElementById("set_grossBhatta").value = trip.driverBhatta;
     calcNetSettlement();
   }
@@ -615,6 +725,35 @@ function calcNetSettlement() {
   const net = (bhatta + inc) - (adv + ded);
   const netEl = document.getElementById("set_netPayable");
   if (netEl) netEl.value = Math.max(0, net);
+}
+
+function sendWhatsAppSettlement() {
+  const driver = document.getElementById("set_driverName").value;
+  const phone = (document.getElementById("set_driverMobile").value || "").replace(/\D/g, "");
+  const tripId = document.getElementById("set_tripRef").value;
+  const trip = fleetBookings.find(b => b.id === tripId) || {};
+  const gross = parseValidNum(document.getElementById("set_grossBhatta").value);
+  const adv = parseValidNum(document.getElementById("set_advances").value);
+  const ded = parseValidNum(document.getElementById("set_deductions").value);
+  const inc = parseValidNum(document.getElementById("set_incentive").value);
+  const net = parseValidNum(document.getElementById("set_netPayable").value);
+
+  const msg = 
+`*SK LOGISTICS - DRIVER TRIP SETTLEMENT*
+*Driver:* ${driver}
+*LR:* ${trip.lr || 'Direct Fleet'}
+*Vehicle:* ${trip.vehicleNo || 'Fleet Assigned'}
+-------------------------------
+*Agreed Trip Bhatta:* ${formatINR(gross)}
+*Incentive / Bonus:* +${formatINR(inc)}
+*En-Route Advance:* -${formatINR(adv)}
+*Shortage / Fine:* -${formatINR(ded)}
+-------------------------------
+*FINAL NET DISBURSED:* ${formatINR(net)}
+Receipt generated on ${getTodayDate()}`;
+
+  const url = `https://wa.me/${phone ? (phone.length === 10 ? '91' + phone : phone) : ''}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
 }
 
 function generateDriverSlip(e) {
@@ -824,7 +963,7 @@ function renderMaintenance() {
             <th>Category</th>
             <th>Garage</th>
             <th>Cost</th>
-            <th>Next Due</th>
+            <th>Next Due Date</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -836,7 +975,7 @@ function renderMaintenance() {
               <td>${m.category}</td>
               <td>${m.garage || '-'}</td>
               <td style="font-weight:700">${formatINR(m.cost)}</td>
-              <td>${m.nextDue || '-'}</td>
+              <td>${m.nextDueDate || '-'}</td>
               <td><button class="btn danger sm" onclick="deleteWorkshopItem('maintenanceLogs', '${m.id}')"><i class="fa-solid fa-trash"></i></button></td>
             </tr>
           `).join("")}
@@ -890,7 +1029,10 @@ function renderTyres() {
               <td>${t.position}</td>
               <td>${t.date}</td>
               <td><span style="font-weight:700;color:${t.status === 'Active' ? 'var(--success)' : 'var(--danger)'}">${t.status}</span></td>
-              <td><button class="btn danger sm" onclick="deleteWorkshopItem('tyreLogs', '${t.id}')"><i class="fa-solid fa-trash"></i></button></td>
+              <td>
+                <button class="btn secondary sm" onclick="rotateTyre('${t.id}')" title="Rotate Position"><i class="fa-solid fa-arrows-rotate"></i></button>
+                <button class="btn danger sm" onclick="deleteWorkshopItem('tyreLogs', '${t.id}')"><i class="fa-solid fa-trash"></i></button>
+              </td>
             </tr>
           `).join("")}
         </tbody>
@@ -906,7 +1048,8 @@ function renderTyres() {
           <span>${t.status}</span>
         </div>
         <div style="font-size:12px;color:#64748b">${t.brand} · ${t.vehicleNo} (${t.position})</div>
-        <div style="display:flex;justify-content:flex-end">
+        <div style="display:flex;justify-content:flex-end;gap:6px">
+          <button class="btn secondary sm" onclick="rotateTyre('${t.id}')"><i class="fa-solid fa-arrows-rotate"></i> Rotate</button>
           <button class="btn danger sm" onclick="deleteWorkshopItem('tyreLogs', '${t.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
         </div>
       </div>
@@ -914,8 +1057,54 @@ function renderTyres() {
   }
 }
 
+// BACKUP & CSV EXPORT
+function exportWorkshopBackup() {
+  const blob = new Blob([JSON.stringify(workshopData, null, 2)], {type: "application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `SK-Logistics-Workshop-${getTodayDate()}.json`;
+  document.body.appendChild(a);
+  a.click();
+}
+
+function importWorkshopBackup(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      const data = JSON.parse(evt.target.result);
+      if (data && typeof data === 'object') {
+        workshopData = data;
+        saveWorkshopData();
+        renderAllViews();
+        triggerToast("Workshop restored");
+      }
+    } catch(err) {
+      alert("Invalid backup: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function exportFuelCSV() {
+  if (!workshopData.fuelLogs.length) { alert("No fuel logs to export"); return; }
+  const headers = ["Date", "Vehicle", "Pump", "Slip", "Liters", "Rate", "Total", "Odometer", "Driver"];
+  const rows = workshopData.fuelLogs.map(f => [
+    f.date, f.vehicleNo, `"${f.pumpName}"`, `"${f.slipNo || ''}"`, f.liters, f.rate, f.total, f.km || '', `"${f.driver || ''}"`
+  ]);
+  const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+  const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `SK-Fuel-Records-${getTodayDate()}.csv`;
+  document.body.appendChild(a);
+  a.click();
+}
+
 function renderAllViews() {
   populateVehicleSelectors();
+  checkServiceAlerts();
   renderDashboard();
   renderFuelLogs();
   renderMaintenance();
