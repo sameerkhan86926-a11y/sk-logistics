@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<title>SK LOGISTICS | Enterprise Fleet & E-Way Ledger</title>
+<title>SK LOGISTICS | Enterprise Fleet & Transport Management System</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,6 +108,7 @@ button,input,select,textarea{font-family:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:var(--radius);font-weight:600;font-size:13px;cursor:pointer;border:1px solid transparent;background:var(--accent);color:#fff}
 .btn.secondary{background:#fff;border-color:var(--border);color:#0f172a}
 .btn.danger{background:#fef2f2;color:var(--danger);border-color:#fecaca}
+.btn.success{background:#ecfdf5;color:var(--success);border-color:#a7f3d0}
 .btn.sm{padding:6px 10px;font-size:11.5px}
 
 .form-grid{display:grid;grid-template-columns:1fr;gap:14px}
@@ -127,8 +128,9 @@ th{background:#f8fafc;padding:11px 12px;font-weight:700;color:#475569;border-bot
 td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 
 .badge{padding:3px 8px;border-radius:12px;font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:4px}
-.badge.eway-alert{background:#fef2f2;color:#b91c1c;border:1px solid #f87171}
-.badge.eway-ok{background:#f1f5f9;color:#475569}
+.badge.alert{background:#fef2f2;color:#b91c1c;border:1px solid #f87171}
+.badge.ok{background:#f1f5f9;color:#475569}
+.badge.success{background:#ecfdf5;color:#059669;border:1px solid #a7f3d0}
 
 .card-list{display:none;flex-direction:column;gap:12px}
 .trip-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
@@ -140,10 +142,15 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 .trip-card-actions{display:flex;gap:6px;flex-wrap:wrap;border-top:1px dashed var(--border);padding-top:10px}
 .trip-card-actions .btn{flex:1;min-width:65px}
 
+/* Expiry Alert Box */
+.compliance-banner{background:#fff1f2;border:1px solid #fecdd3;border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;display:none}
+.compliance-banner-title{font-size:13px;font-weight:700;color:#be123c;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.compliance-banner-items{font-size:12px;color:#881337;line-height:1.6}
+
 /* Modals */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(9,14,23,0.7);display:none;align-items:center;justify-content:center;z-index:999999;padding:16px}
 .modal-overlay.active{display:flex}
-.modal-card{background:#fff;border-radius:var(--radius);width:100%;max-width:440px;padding:22px}
+.modal-card{background:#fff;border-radius:var(--radius);width:100%;max-width:480px;padding:22px;max-height:90vh;overflow-y:auto}
 
 .toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-50px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:20px;font-size:12.5px;font-weight:600;z-index:9999999;opacity:0;transition:all .25s ease;pointer-events:none}
 .toast.show{transform:translate(-50%,0);opacity:1}
@@ -178,12 +185,12 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   #printStation, #printStation *{visibility:visible!important}
   #printStation{position:absolute;left:0;top:0;width:100%;margin:0;padding:0;background:#fff;display:block!important}
   .no-print{display:none!important}
-  .bilti-container{border:2px solid #000;padding:16px;margin-bottom:20px;page-break-after:always;font-family:Arial,sans-serif;font-size:12px}
-  .bilti-header{display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px}
-  .grid-table{width:100%;border-collapse:collapse;margin:8px 0}
-  .grid-table th, .grid-table td{border:1px solid #000;padding:6px;text-align:left}
-  .bilti-signatures{display:flex;justify-content:space-between;margin-top:35px}
-  .signature-line{border-top:1px dashed #000;width:160px;text-align:center;font-size:10px;font-weight:bold}
+  .bilti-container{border:2px solid #000;padding:16px;margin-bottom:20px;page-break-after:always;font-family:Arial,sans-serif;font-size:11.5px}
+  .bilti-header{display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:8px}
+  .grid-table{width:100%;border-collapse:collapse;margin:6px 0}
+  .grid-table th, .grid-table td{border:1px solid #000;padding:5px;text-align:left}
+  .bilti-signatures{display:flex;justify-content:space-between;margin-top:30px}
+  .signature-line{border-top:1px dashed #000;width:150px;text-align:center;font-size:10px;font-weight:bold}
 }
 </style>
 </head>
@@ -192,10 +199,10 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 <header class="app-header no-print">
   <div class="header-inner">
     <div class="brand-group">
-      <div class="brand-icon"><i class="fa-solid fa-truck-fast"></i></div>
+      <div class="brand-icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
       <div class="brand-text">
         <h1>SK LOGISTICS</h1>
-        <p>Enterprise Fleet TMS</p>
+        <p>Enterprise Fleet & TMS</p>
       </div>
     </div>
     <div class="header-actions">
@@ -214,10 +221,17 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     <button class="nav-pill active" onclick="navigateTo('dashboard')"><i class="fa-solid fa-chart-pie"></i> Control Tower</button>
     <button class="nav-pill" onclick="navigateTo('bookings')"><i class="fa-solid fa-list-check"></i> Trips & Waybills</button>
     <button class="nav-pill" onclick="navigateTo('newBooking')"><i class="fa-solid fa-file-circle-plus"></i> New Consignment</button>
-    <button class="nav-pill" onclick="navigateTo('customers')"><i class="fa-solid fa-users"></i> Party Directory</button>
-    <button class="nav-pill" onclick="navigateTo('accounts')"><i class="fa-solid fa-scale-balanced"></i> Freight Ledger</button>
+    <button class="nav-pill" onclick="navigateTo('customers')"><i class="fa-solid fa-users"></i> Client Roster</button>
+    <button class="nav-pill" onclick="navigateTo('owners')"><i class="fa-solid fa-truck-moving"></i> Truck Khata</button>
+    <button class="nav-pill" onclick="navigateTo('accounts')"><i class="fa-solid fa-scale-balanced"></i> Financial Ledger</button>
     <button class="nav-pill" onclick="navigateTo('reports')"><i class="fa-solid fa-chart-line"></i> P&L Reports</button>
   </nav>
+
+  <!-- EXPIRY NOTIFICATION BANNER -->
+  <div class="compliance-banner" id="complianceBanner">
+    <div class="compliance-banner-title"><i class="fa-solid fa-triangle-exclamation"></i> Document Expiry Alert (Within 7 Days / Expired)</div>
+    <div class="compliance-banner-items" id="complianceBannerItems"></div>
+  </div>
 
   <!-- DASHBOARD -->
   <section id="dashboard" class="page active">
@@ -238,25 +252,25 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
         <div class="metric-note">POD confirmed</div>
       </div>
       <div class="metric-card profit">
-        <div class="metric-label">Est. Net Profit</div>
+        <div class="metric-label">Actual Net Profit</div>
         <div class="metric-value" id="kpiNetProfit">₹0</div>
-        <div class="metric-note">Revenue minus costs</div>
+        <div class="metric-note">Revenue - Fleet - Kharcha</div>
       </div>
       <div class="metric-card alert">
-        <div class="metric-label">Customer Dues</div>
+        <div class="metric-label">Party Dues (Receivable)</div>
         <div class="metric-value" id="kpiCustomerDue">₹0</div>
-        <div class="metric-note">Pending collection</div>
+        <div class="metric-note">Freight collection pending</div>
       </div>
       <div class="metric-card warning">
-        <div class="metric-label">Carrier Payables</div>
+        <div class="metric-label">Carrier Payables (Owed)</div>
         <div class="metric-value" id="kpiOwnerDue">₹0</div>
-        <div class="metric-note">Owed to truck suppliers</div>
+        <div class="metric-note">Hire less TDS & Advance</div>
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-bolt text-accent"></i> Active Stream & Trips</div>
+        <div class="panel-title"><i class="fa-solid fa-bolt text-accent"></i> Active Stream & Dispatches</div>
         <button class="btn secondary sm" onclick="navigateTo('bookings')">Open Master List</button>
       </div>
       <div class="table-wrap"><div id="recentDesktopTable"></div></div>
@@ -268,9 +282,9 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   <section id="bookings" class="page">
     <div class="panel">
       <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-list-check"></i> Freight Registry</div>
+        <div class="panel-title"><i class="fa-solid fa-list-check"></i> Consignment Registry</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%">
-          <input class="search-box" id="globalTripSearch" oninput="renderBookingsTable()" placeholder="Search LR, Party, Route, Vehicle, E-Way Bill...">
+          <input class="search-box" id="globalTripSearch" oninput="renderBookingsTable()" placeholder="Search LR, Party, Route, Vehicle, Driver...">
           <div style="display:flex;gap:8px;width:100%">
             <select class="search-box" id="statusFilterSelector" onchange="renderBookingsTable()" style="flex:1">
               <option value="">All Statuses</option>
@@ -303,18 +317,23 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
         <input type="hidden" id="entry_podImage">
         
         <div class="form-grid">
-          <div class="form-title"><i class="fa-solid fa-shield-halved"></i> 1. Compliance & Consignor Info</div>
+          <!-- 1. Party & Compliance -->
+          <div class="form-title"><i class="fa-solid fa-shield-halved"></i> 1. Consignor & E-Way Compliance</div>
           <div class="field">
             <label>Consignment Date *</label>
             <input type="date" id="entry_bookingDate" required>
           </div>
           <div class="field">
-            <label>Party / Consignor Name *</label>
-            <input type="text" id="entry_customer" placeholder="Firm or client name" required>
+            <label>Consignor / Party Name *</label>
+            <input type="text" id="entry_customer" placeholder="Billing party name" required>
           </div>
           <div class="field">
             <label>Customer Mobile No.</label>
-            <input type="tel" id="entry_customerMobile" placeholder="Contact number" maxlength="15">
+            <input type="tel" id="entry_customerMobile" placeholder="WhatsApp contact number" maxlength="15">
+          </div>
+          <div class="field">
+            <label>Party GSTIN</label>
+            <input type="text" id="entry_gstin" placeholder="07AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase" oninput="calcGSTSplit()">
           </div>
           <div class="field">
             <label>E-Way Bill Number</label>
@@ -324,27 +343,24 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <label>E-Way Bill Expiry Date</label>
             <input type="date" id="entry_ewayExpiry">
           </div>
-          <div class="field">
-            <label>Consignor GSTIN</label>
-            <input type="text" id="entry_gstin" placeholder="07AAAAA0000A1Z5" style="text-transform:uppercase">
-          </div>
 
+          <!-- 2. Route & Cargo -->
           <div class="form-title"><i class="fa-solid fa-route"></i> 2. Origin, Route & Cargo</div>
           <div class="field">
-            <label>Origin Hub (From) *</label>
-            <input type="text" id="entry_pickup" placeholder="Loading city / warehouse" required>
+            <label>Loading Hub (Pickup) *</label>
+            <input type="text" id="entry_pickup" placeholder="Origin city / godown" required>
           </div>
           <div class="field">
-            <label>Destination (To) *</label>
-            <input type="text" id="entry_destination" placeholder="Unloading city" required>
+            <label>Destination Hub (Drop) *</label>
+            <input type="text" id="entry_destination" placeholder="Delivery city" required>
           </div>
           <div class="field">
-            <label>Material / Commodity *</label>
-            <input type="text" id="entry_goods" placeholder="Goods description" required>
+            <label>Material / Cargo Description *</label>
+            <input type="text" id="entry_goods" placeholder="Goods nature" required>
           </div>
           <div class="field">
             <label>Weight / Quantity</label>
-            <input type="text" id="entry_weight" placeholder="e.g. 18.50 MT / 450 Bags">
+            <input type="text" id="entry_weight" placeholder="e.g. 21.4 MT / 550 Bags">
           </div>
           <div class="field">
             <label>Vehicle Configuration</label>
@@ -359,26 +375,43 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             </select>
           </div>
           <div class="field">
-            <label>Vehicle Number</label>
-            <input type="text" id="entry_vehicleNo" placeholder="HR55AB1234" style="text-transform:uppercase">
+            <label>Vehicle Registration No. *</label>
+            <input type="text" id="entry_vehicleNo" placeholder="HR55AB1234" style="text-transform:uppercase" required>
           </div>
 
-          <div class="form-title"><i class="fa-solid fa-user-gear"></i> 3. Fleet Carrier & Driver</div>
+          <!-- 3. Fleet Carrier & Documents Expiry -->
+          <div class="form-title"><i class="fa-solid fa-file-contract"></i> 3. Fleet Carrier & Document Expiries</div>
           <div class="field">
             <label>Driver In-Charge</label>
-            <input type="text" id="entry_driver" placeholder="Driver full name">
+            <input type="text" id="entry_driver" placeholder="Driver name">
           </div>
           <div class="field">
-            <label>Driver Contact</label>
-            <input type="tel" id="entry_driverMobile" placeholder="Driver mobile" maxlength="15">
+            <label>Driver Mobile</label>
+            <input type="tel" id="entry_driverMobile" placeholder="Driver contact" maxlength="15">
           </div>
           <div class="field">
-            <label>Truck Owner / Broker</label>
-            <input type="text" id="entry_owner" placeholder="Owner / Supplier name">
+            <label>Driver License (DL) Expiry</label>
+            <input type="date" id="entry_dlExpiry">
           </div>
           <div class="field">
-            <label>Owner Contact</label>
-            <input type="tel" id="entry_ownerMobile" placeholder="Owner mobile" maxlength="15">
+            <label>Truck Fitness Expiry</label>
+            <input type="date" id="entry_fitnessExpiry">
+          </div>
+          <div class="field">
+            <label>National Permit Expiry</label>
+            <input type="date" id="entry_permitExpiry">
+          </div>
+          <div class="field">
+            <label>Insurance / PUC Expiry</label>
+            <input type="date" id="entry_insuranceExpiry">
+          </div>
+          <div class="field">
+            <label>Truck Supplier / Broker</label>
+            <input type="text" id="entry_owner" placeholder="Truck owner / supplier">
+          </div>
+          <div class="field">
+            <label>Supplier Contact</label>
+            <input type="tel" id="entry_ownerMobile" placeholder="Supplier phone" maxlength="15">
           </div>
           <div class="field">
             <label>Trip Status</label>
@@ -389,42 +422,103 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
               <option value="Cancelled">Cancelled</option>
             </select>
           </div>
-          <div class="field">
-            <label>Expected Unloading</label>
-            <input type="date" id="entry_deliveryDate">
-          </div>
 
-          <div class="form-title"><i class="fa-solid fa-indian-rupee-sign"></i> 4. Freight Commercials & Advance Breakout</div>
+          <!-- 4. Freight & Tax Commercials -->
+          <div class="form-title"><i class="fa-solid fa-indian-rupee-sign"></i> 4. Party Freight & GST Billing</div>
           <div class="field">
-            <label>Total Customer Freight (₹) *</label>
+            <label>Freight Base (Taxable) (₹) *</label>
             <input type="number" id="entry_freight" oninput="recalculateFormMargins()" step="1" min="0" value="0" required>
           </div>
           <div class="field">
-            <label>Customer Loading Advance (₹)</label>
+            <label>GST Treatment</label>
+            <select id="entry_gstType" onchange="recalculateFormMargins()">
+              <option value="rcm">5% GTA (RCM - No GST in Invoice)</option>
+              <option value="forward_12">12% Forward Charge (With ITC)</option>
+              <option value="forward_5">5% Forward Charge (No ITC)</option>
+              <option value="exempt">Exempt / Unregistered</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Calculated GST Amount (₹)</label>
+            <input type="number" id="entry_gstAmount" readonly style="background:#f1f5f9">
+          </div>
+          <div class="field">
+            <label>Total Billed Amount (₹)</label>
+            <input type="number" id="entry_billedTotal" readonly style="background:#f1f5f9;font-weight:700">
+          </div>
+          <div class="field">
+            <label>Party Advance Paid (₹)</label>
             <input type="number" id="entry_loadingAdvance" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
           <div class="field">
-            <label>Customer Unloading Advance (₹)</label>
+            <label>Party Unloading Settlement (₹)</label>
             <input type="number" id="entry_unloadingAdvance" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
+
+          <!-- 5. Carrier Hire & TDS -->
+          <div class="form-title"><i class="fa-solid fa-hand-holding-dollar"></i> 5. Carrier Hire & TDS 194C</div>
           <div class="field">
-            <label>Truck Owner Hire Cost (₹)</label>
+            <label>Agreed Truck Hire Cost (₹)</label>
             <input type="number" id="entry_ownerFreight" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
           <div class="field">
-            <label>Truck Diesel / Advance Paid (₹)</label>
-            <input type="number" id="entry_paid" oninput="recalculateFormMargins()" step="1" min="0" value="0">
+            <label>TDS u/s 194C (%)</label>
+            <select id="entry_tdsRate" onchange="recalculateFormMargins()">
+              <option value="0">0% (Nil / Transporter Decl. Form 197)</option>
+              <option value="1">1% (Individual / Prop Transporter)</option>
+              <option value="2">2% (Company / Firm Transporter)</option>
+            </select>
           </div>
           <div class="field">
-            <label>Trip Kharcha / En-route Expenses (₹)</label>
-            <input type="number" id="entry_expenses" oninput="recalculateFormMargins()" step="1" min="0" value="0">
+            <label>TDS Deducted (₹)</label>
+            <input type="number" id="entry_tdsAmount" readonly style="background:#f1f5f9">
           </div>
-          <div class="field full">
-            <label>Dispatch Notes</label>
-            <input type="text" id="entry_notes" placeholder="Remarks, loading conditions, or payment agreements">
+          <div class="field">
+            <label>Net Hire Payable (₹)</label>
+            <input type="number" id="entry_netOwnerHire" readonly style="background:#f1f5f9;font-weight:700">
+          </div>
+          <div class="field">
+            <label>Advance Paid to Carrier (Cash/Bank) (₹)</label>
+            <input type="number" id="entry_paid" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
 
-          <div class="form-title"><i class="fa-solid fa-file-arrow-up"></i> 5. Proof of Delivery (POD) Slip</div>
+          <!-- 6. Detailed Trip Kharcha -->
+          <div class="form-title"><i class="fa-solid fa-gas-pump"></i> 6. Itemized Trip Kharcha (Fuel & En-Route)</div>
+          <div class="field">
+            <label>Diesel Liters</label>
+            <input type="number" id="entry_dieselLiters" oninput="calcDieselFromLiter()" step="0.1" min="0" placeholder="Liters">
+          </div>
+          <div class="field">
+            <label>Diesel Rate / Liter (₹)</label>
+            <input type="number" id="entry_dieselRate" oninput="calcDieselFromLiter()" step="0.1" min="0" placeholder="Rate">
+          </div>
+          <div class="field">
+            <label>Diesel Total Slip (₹)</label>
+            <input type="number" id="entry_dieselCost" oninput="recalculateFormMargins()" step="1" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>Fastag / Toll Charges (₹)</label>
+            <input type="number" id="entry_tollCost" oninput="recalculateFormMargins()" step="1" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>Driver Bhatta / Khuraki (₹)</label>
+            <input type="number" id="entry_driverBhatta" oninput="recalculateFormMargins()" step="1" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>Palledari / Labor / Unloading (₹)</label>
+            <input type="number" id="entry_laborCost" oninput="recalculateFormMargins()" step="1" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>Police / RTO / En-route Challan (₹)</label>
+            <input type="number" id="entry_challanCost" oninput="recalculateFormMargins()" step="1" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>Total En-Route Kharcha (₹)</label>
+            <input type="number" id="entry_expenses" readonly style="background:#f1f5f9;font-weight:700">
+          </div>
+
+          <!-- 7. POD Slip -->
+          <div class="form-title"><i class="fa-solid fa-file-arrow-up"></i> 7. Proof of Delivery (POD) Slip</div>
           <div class="field full">
             <input type="file" id="podFileInput" accept="image/*" onchange="handlePodUpload(event)">
             <div class="pod-preview-wrapper" id="podPreviewBox" style="margin-top:8px">
@@ -435,8 +529,8 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 
           <div class="field full">
             <div class="action-banner">
-              <div><strong id="previewMargin">Margin: ₹0</strong></div>
-              <div id="previewBalances">Customer Due: ₹0 | Owner Due: ₹0</div>
+              <div><strong id="previewMargin">Net Margin: ₹0</strong></div>
+              <div id="previewBalances">Customer Due: ₹0 | Supplier Due: ₹0</div>
             </div>
           </div>
         </div>
@@ -453,31 +547,43 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   <section id="customers" class="page">
     <div class="panel">
       <div class="panel-header">
-        <div class="panel-title"><i class="fa-solid fa-users"></i> Client & Party Roster</div>
-        <input class="search-box" id="customerSearchInput" oninput="renderCustomerMaster()" placeholder="Filter customer name...">
+        <div class="panel-title"><i class="fa-solid fa-users"></i> Client & Consignor Directory</div>
+        <input class="search-box" id="customerSearchInput" oninput="renderCustomerMaster()" placeholder="Filter client name or GSTIN...">
       </div>
       <div class="table-wrap"><div id="customerMasterDesktopTable"></div></div>
       <div class="card-list" id="customerMasterMobileList"></div>
     </div>
   </section>
 
-  <!-- HISAB-KITAB -->
+  <!-- TRUCK SUPPLIERS (OWNERS KHATA) -->
+  <section id="owners" class="page">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fa-solid fa-truck-moving"></i> Truck Supplier / Owner Khata</div>
+        <input class="search-box" id="ownerSearchInput" oninput="renderOwnerMaster()" placeholder="Filter supplier or vehicle...">
+      </div>
+      <div class="table-wrap"><div id="ownerMasterDesktopTable"></div></div>
+      <div class="card-list" id="ownerMasterMobileList"></div>
+    </div>
+  </section>
+
+  <!-- FINANCIAL LEDGER -->
   <section id="accounts" class="page">
     <div class="metric-grid">
       <div class="metric-card">
-        <div class="metric-label">Billed Freight</div>
+        <div class="metric-label">Billed Turnover (With Tax)</div>
         <div class="metric-value" id="accGrossFreight">₹0</div>
       </div>
       <div class="metric-card profit">
-        <div class="metric-label">Received In Bank/Cash</div>
+        <div class="metric-label">Total Realized Collection</div>
         <div class="metric-value" id="accRealizedCollection">₹0</div>
       </div>
       <div class="metric-card alert">
-        <div class="metric-label">Customer Dues</div>
+        <div class="metric-label">Client Dues (Receivable)</div>
         <div class="metric-value" id="accOutstandingReceivables">₹0</div>
       </div>
       <div class="metric-card warning">
-        <div class="metric-label">Carrier Balance Due</div>
+        <div class="metric-label">Supplier Payables (Net TDS)</div>
         <div class="metric-value" id="accTruckOwnerPayables">₹0</div>
       </div>
     </div>
@@ -485,13 +591,13 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     <div style="display:flex;flex-direction:column;gap:16px">
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title text-danger"><i class="fa-solid fa-hand-holding-dollar"></i> Customer Dues & Collect QR</div>
+          <div class="panel-title text-danger"><i class="fa-solid fa-hand-holding-dollar"></i> Customer Dues & Quick Settlement</div>
         </div>
         <div id="receivableDuesList"></div>
       </div>
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title text-warning"><i class="fa-solid fa-money-bill-transfer"></i> Truck Owner Balances</div>
+          <div class="panel-title text-warning"><i class="fa-solid fa-money-bill-transfer"></i> Truck Owner & Broker Balances</div>
         </div>
         <div id="payableDuesList"></div>
       </div>
@@ -513,19 +619,19 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 
       <div class="metric-grid">
         <div class="metric-card">
-          <div class="metric-label">Trips Dispatched</div>
+          <div class="metric-label">Dispatched Loads</div>
           <div class="metric-value" id="repTripVolume">0</div>
         </div>
         <div class="metric-card">
-          <div class="metric-label">Freight Turnover</div>
+          <div class="metric-label">Net Freight Turnover</div>
           <div class="metric-value" id="repFreightTotal">₹0</div>
         </div>
         <div class="metric-card alert">
-          <div class="metric-label">Fleet Costs + Fuel</div>
+          <div class="metric-label">Fleet Costs + En-Route Kharcha</div>
           <div class="metric-value" id="repTotalExpenses">₹0</div>
         </div>
         <div class="metric-card profit">
-          <div class="metric-label">Net Operating Margin</div>
+          <div class="metric-label">Net Operating Surplus</div>
           <div class="metric-value" id="repNetSurplus">₹0</div>
         </div>
       </div>
@@ -535,7 +641,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   </section>
 </main>
 
-<!-- Bottom Nav (Direct Onclick Support) -->
+<!-- Bottom Nav -->
 <nav class="bottom-nav no-print">
   <div class="bottom-nav-inner">
     <button type="button" class="bnav-item active" id="btn_nav_dashboard" onclick="navigateTo('dashboard')">
@@ -550,13 +656,13 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
       <i class="fa-solid fa-circle-plus" style="font-size:24px;color:var(--accent)"></i>
       <span>Add LR</span>
     </button>
+    <button type="button" class="bnav-item" id="btn_nav_owners" onclick="navigateTo('owners')">
+      <i class="fa-solid fa-truck-moving"></i>
+      <span>Khata</span>
+    </button>
     <button type="button" class="bnav-item" id="btn_nav_accounts" onclick="navigateTo('accounts')">
       <i class="fa-solid fa-scale-balanced"></i>
       <span>Ledger</span>
-    </button>
-    <button type="button" class="bnav-item" id="btn_nav_reports" onclick="navigateTo('reports')">
-      <i class="fa-solid fa-chart-line"></i>
-      <span>Reports</span>
     </button>
   </div>
 </nav>
@@ -577,7 +683,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
       <span id="upiPartyLabel" style="font-size:12px;color:#64748b"></span>
     </div>
     <div style="font-size:11px;color:#64748b;text-align:center;margin:12px 0">
-      Accepts PhonePe, Google Pay, Paytm, BHIM or any banking app.
+      Accepts PhonePe, Google Pay, Paytm, BHIM or any UPI banking app.
     </div>
     <button class="btn secondary" style="width:100%" onclick="closeModal('upiModal')">Close</button>
   </div>
@@ -620,7 +726,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
 <div class="toast" id="liveToast">Action completed</div>
 
 <script>
-const STORAGE_KEY = "sklogistics_clean_v8";
+const STORAGE_KEY = "sklogistics_v9_master";
 let fleetData = [];
 
 const LOGISTICS_VPA = "sklogistics@upi";
@@ -657,7 +763,7 @@ function loadPersistence() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      const legacyKeys = ["sklogistics_clean_v7", "sklogistics_clean_v6", "sklogistics_clean_v5", "sklogistics_bookings_v1"];
+      const legacyKeys = ["sklogistics_clean_v8", "sklogistics_clean_v7", "sklogistics_clean_v6"];
       for (const k of legacyKeys) {
         const val = localStorage.getItem(k);
         if (val) {
@@ -690,20 +796,48 @@ function savePersistence() {
   }
 }
 
+// FINANCIAL CALCULATION SUITE
+function calcTotalBilled(b) {
+  const base = parseValidNum(b.freight);
+  if (b.gstType === "forward_12") return base + Math.round(base * 0.12);
+  if (b.gstType === "forward_5") return base + Math.round(base * 0.05);
+  return base; // RCM or exempt
+}
+
 function totalCustomerReceived(b) {
   return parseValidNum(b.loadingAdvance) + parseValidNum(b.unloadingAdvance);
 }
 
 function calcCustomerDue(b) {
-  return Math.max(0, parseValidNum(b.freight) - totalCustomerReceived(b));
+  return Math.max(0, calcTotalBilled(b) - totalCustomerReceived(b));
+}
+
+function calcOwnerTDS(b) {
+  const rate = parseValidNum(b.tdsRate);
+  const hire = parseValidNum(b.ownerFreight);
+  return Math.round((hire * rate) / 100);
+}
+
+function calcNetOwnerPayable(b) {
+  return Math.max(0, parseValidNum(b.ownerFreight) - calcOwnerTDS(b));
 }
 
 function calcOwnerDue(b) {
-  return Math.max(0, parseValidNum(b.ownerFreight) - parseValidNum(b.paid));
+  return Math.max(0, calcNetOwnerPayable(b) - parseValidNum(b.paid));
+}
+
+function calcTotalTripExpenses(b) {
+  return parseValidNum(b.dieselCost) + 
+         parseValidNum(b.tollCost) + 
+         parseValidNum(b.driverBhatta) + 
+         parseValidNum(b.laborCost) + 
+         parseValidNum(b.challanCost) + 
+         parseValidNum(b.expenses);
 }
 
 function calcProfit(b) {
-  return parseValidNum(b.freight) - parseValidNum(b.ownerFreight) - parseValidNum(b.expenses);
+  const netRevenue = parseValidNum(b.freight); // excluding external GST pass-through
+  return netRevenue - parseValidNum(b.ownerFreight) - calcTotalTripExpenses(b);
 }
 
 function generateLRSeries() {
@@ -727,7 +861,6 @@ function triggerToast(msg) {
   setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
-// 100% RELIABLE NAVIGATION
 function navigateTo(pageKey) {
   if (!pageKey) return;
 
@@ -735,17 +868,13 @@ function navigateTo(pageKey) {
   pages.forEach(p => p.classList.remove("active"));
   
   const targetPage = document.getElementById(pageKey);
-  if (targetPage) {
-    targetPage.classList.add("active");
-  }
+  if (targetPage) targetPage.classList.add("active");
 
-  // Update tabs
   document.querySelectorAll(".nav-pill").forEach(pill => {
     const fnStr = pill.getAttribute("onclick") || "";
     pill.classList.toggle("active", fnStr.includes(pageKey));
   });
 
-  // Update bottom nav
   document.querySelectorAll(".bnav-item").forEach(item => {
     item.classList.toggle("active", item.id === `btn_nav_${pageKey}`);
   });
@@ -761,10 +890,12 @@ function navigateTo(pageKey) {
 }
 
 const entryFieldKeys = [
-  "bookingDate", "customer", "customerMobile", "ewayBill", "ewayExpiry", "gstin",
+  "bookingDate", "customer", "customerMobile", "gstin", "ewayBill", "ewayExpiry",
   "pickup", "destination", "goods", "weight", "vehicleType", "vehicleNo",
-  "driver", "driverMobile", "owner", "ownerMobile", "status", "deliveryDate",
-  "freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses", "notes"
+  "driver", "driverMobile", "dlExpiry", "fitnessExpiry", "permitExpiry", "insuranceExpiry",
+  "owner", "ownerMobile", "status", "freight", "gstType", "loadingAdvance", "unloadingAdvance",
+  "ownerFreight", "tdsRate", "paid", "dieselLiters", "dieselRate", "dieselCost",
+  "tollCost", "driverBhatta", "laborCost", "challanCost", "expenses"
 ];
 
 function extractFormDataset() {
@@ -773,9 +904,16 @@ function extractFormDataset() {
     const el = document.getElementById("entry_" + k);
     payload[k] = el ? cleanStr(el.value) : "";
   });
-  ["freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses"].forEach(k => {
+
+  [
+    "freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid",
+    "dieselLiters", "dieselRate", "dieselCost", "tollCost", "driverBhatta", 
+    "laborCost", "challanCost", "expenses"
+  ].forEach(k => {
     payload[k] = parseValidNum(payload[k]);
   });
+
+  payload.tdsRate = parseValidNum(payload.tdsRate);
   payload.podImage = document.getElementById("entry_podImage")?.value || "";
   return payload;
 }
@@ -823,34 +961,79 @@ function resetEntryForm() {
   if (modeTxt) modeTxt.textContent = "Consignment Dispatch Form";
   if (btn) btn.innerHTML = '<i class="fa-solid fa-check"></i> Commit Consignment';
 
-  ["freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid", "expenses"].forEach(k => {
+  [
+    "freight", "loadingAdvance", "unloadingAdvance", "ownerFreight", "paid",
+    "dieselLiters", "dieselRate", "dieselCost", "tollCost", "driverBhatta",
+    "laborCost", "challanCost", "expenses"
+  ].forEach(k => {
     const el = document.getElementById("entry_" + k);
     if (el) el.value = "0";
   });
   recalculateFormMargins();
 }
 
+function calcDieselFromLiter() {
+  const l = parseValidNum(document.getElementById("entry_dieselLiters")?.value);
+  const r = parseValidNum(document.getElementById("entry_dieselRate")?.value);
+  if (l > 0 && r > 0) {
+    const cost = Math.round(l * r);
+    const costEl = document.getElementById("entry_dieselCost");
+    if (costEl) costEl.value = cost;
+  }
+  recalculateFormMargins();
+}
+
 function recalculateFormMargins() {
   const freight = parseValidNum(document.getElementById("entry_freight")?.value);
+  const gstType = document.getElementById("entry_gstType")?.value || "rcm";
+  let gstAmount = 0;
+  if (gstType === "forward_12") gstAmount = Math.round(freight * 0.12);
+  else if (gstType === "forward_5") gstAmount = Math.round(freight * 0.05);
+
+  const billedTotal = freight + gstAmount;
+  const gstAmtEl = document.getElementById("entry_gstAmount");
+  const billedTotalEl = document.getElementById("entry_billedTotal");
+  if (gstAmtEl) gstAmtEl.value = gstAmount;
+  if (billedTotalEl) billedTotalEl.value = billedTotal;
+
   const loadingAdv = parseValidNum(document.getElementById("entry_loadingAdvance")?.value);
   const unloadingAdv = parseValidNum(document.getElementById("entry_unloadingAdvance")?.value);
-  const ownerFreight = parseValidNum(document.getElementById("entry_ownerFreight")?.value);
-  const paid = parseValidNum(document.getElementById("entry_paid")?.value);
-  const expenses = parseValidNum(document.getElementById("entry_expenses")?.value);
+  const clientDue = Math.max(0, billedTotal - (loadingAdv + unloadingAdv));
 
-  const margin = freight - ownerFreight - expenses;
-  const clientDue = Math.max(0, freight - (loadingAdv + unloadingAdv));
-  const ownerDue = Math.max(0, ownerFreight - paid);
+  const ownerFreight = parseValidNum(document.getElementById("entry_ownerFreight")?.value);
+  const tdsRate = parseValidNum(document.getElementById("entry_tdsRate")?.value);
+  const tdsAmt = Math.round((ownerFreight * tdsRate) / 100);
+  const netHire = Math.max(0, ownerFreight - tdsAmt);
+  const paid = parseValidNum(document.getElementById("entry_paid")?.value);
+  const ownerDue = Math.max(0, netHire - paid);
+
+  const tdsAmtEl = document.getElementById("entry_tdsAmount");
+  const netHireEl = document.getElementById("entry_netOwnerHire");
+  if (tdsAmtEl) tdsAmtEl.value = tdsAmt;
+  if (netHireEl) netHireEl.value = netHire;
+
+  // Itemized Kharcha
+  const dieselCost = parseValidNum(document.getElementById("entry_dieselCost")?.value);
+  const tollCost = parseValidNum(document.getElementById("entry_tollCost")?.value);
+  const bhatta = parseValidNum(document.getElementById("entry_driverBhatta")?.value);
+  const labor = parseValidNum(document.getElementById("entry_laborCost")?.value);
+  const challan = parseValidNum(document.getElementById("entry_challanCost")?.value);
+  const totalKharcha = dieselCost + tollCost + bhatta + labor + challan;
+
+  const expEl = document.getElementById("entry_expenses");
+  if (expEl) expEl.value = totalKharcha;
+
+  const margin = freight - ownerFreight - totalKharcha;
 
   const previewMargin = document.getElementById("previewMargin");
   const previewBalances = document.getElementById("previewBalances");
 
   if (previewMargin) {
-    previewMargin.textContent = `Operating Margin: ${formatINR(margin)}`;
+    previewMargin.textContent = `Net Operating Profit: ${formatINR(margin)}`;
     previewMargin.style.color = margin >= 0 ? "var(--success)" : "var(--danger)";
   }
   if (previewBalances) {
-    previewBalances.textContent = `Customer Due: ${formatINR(clientDue)} | Carrier Due: ${formatINR(ownerDue)}`;
+    previewBalances.textContent = `Party Balance: ${formatINR(clientDue)} | Supplier Balance: ${formatINR(ownerDue)}`;
   }
 }
 
@@ -902,8 +1085,8 @@ function handleFormSubmit(evt) {
     const payload = extractFormDataset();
     const editRecId = document.getElementById("entry_recordId")?.value;
 
-    if (!payload.customer || !payload.pickup || !payload.destination || !payload.goods) {
-      alert("Party, Pickup, Destination and Goods details are required.");
+    if (!payload.customer || !payload.pickup || !payload.destination || !payload.vehicleNo) {
+      alert("Party, Pickup, Destination and Vehicle No are required.");
       return;
     }
 
@@ -1020,24 +1203,55 @@ function viewPodImage(id) {
   document.getElementById("podModal").classList.add("active");
 }
 
-function sendWhatsAppBilti(id) {
+// DRIVER WHATSAPP DISPATCH SLIP
+function sendWhatsAppDriver(id) {
+  const b = fleetData.find(x => String(x.id) === String(id));
+  if (!b) return;
+
+  const phone = (b.driverMobile || "").replace(/\D/g, "");
+  const mapsLink = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(b.pickup)}&destination=${encodeURIComponent(b.destination)}`;
+
+  const msg = 
+`*SK LOGISTICS - DRIVER TRIP ORDER*
+*LR Number:* ${b.lr}
+*Vehicle:* ${b.vehicleNo}
+*Route:* ${b.pickup} ➔ ${b.destination}
+*Material:* ${b.goods} (${b.weight || 'Std Load'})
+-------------------------------
+*Diesel Advance:* ${formatINR(b.dieselCost)}
+*Driver Bhatta:* ${formatINR(b.driverBhatta)}
+*Toll/Fastag:* ${formatINR(b.tollCost)}
+-------------------------------
+*Google Route Navigation:*
+${mapsLink}
+
+Drive safely and ensure delivery receipt (POD) signature.`;
+
+  const url = `https://wa.me/${phone ? (phone.length === 10 ? '91' + phone : phone) : ''}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+// CLIENT INVOICE & PAYMENT REMINDER
+function sendWhatsAppReminder(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
 
   const phone = (b.customerMobile || "").replace(/\D/g, "");
+  const due = calcCustomerDue(b);
+
   const msg = 
-`*SK LOGISTICS - CONSIGNMENT UPDATE*
+`*SK LOGISTICS - PAYMENT MEMORANDUM*
+*To:* ${b.customer}
 *LR Number:* ${b.lr}
-*Status:* ${b.status}
 *Route:* ${b.pickup} ➔ ${b.destination}
-*Vehicle:* ${b.vehicleNo || 'Allocating'}
-*E-Way Bill:* ${b.ewayBill || 'N/A'}
-*Cargo:* ${b.goods} (${b.weight || 'Std Load'})
+*Vehicle:* ${b.vehicleNo}
 -------------------------------
-*Total Freight:* ${formatINR(b.freight)}
-*Pending Balance:* ${formatINR(calcCustomerDue(b))}
+*Total Billed Amount:* ${formatINR(calcTotalBilled(b))}
+*Received Advance:* ${formatINR(totalCustomerReceived(b))}
+*Outstanding Due:* ${formatINR(due)}
 -------------------------------
-For inquiries or coordinates, contact our dispatch desk.`;
+*UPI Payment ID:* ${LOGISTICS_VPA}
+Kindly clear the balance to finalize the accounts ledger.`;
 
   const url = `https://wa.me/${phone ? (phone.length === 10 ? '91' + phone : phone) : ''}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
@@ -1057,14 +1271,14 @@ function showQuickPay(id, type) {
 
   if (type === "customer") {
     titleEl.textContent = `Collect: ${item.customer}`;
-    labelEl.textContent = "Unloading / Balance Advance Received (₹)";
+    labelEl.textContent = "Unloading / Balance Settlement Received (₹)";
     inputEl.value = item.unloadingAdvance || 0;
-    metaEl.textContent = `Billed: ${formatINR(item.freight)} | Current Due: ${formatINR(calcCustomerDue(item))}`;
+    metaEl.textContent = `Total Billed: ${formatINR(calcTotalBilled(item))} | Balance Due: ${formatINR(calcCustomerDue(item))}`;
   } else {
-    titleEl.textContent = `Paid to Truck: ${item.owner || 'Carrier'}`;
-    labelEl.textContent = "Total Amount Paid to Truck (₹)";
+    titleEl.textContent = `Pay Supplier: ${item.owner || 'Truck Carrier'}`;
+    labelEl.textContent = "Total Paid Amount (Cash/Bank) (₹)";
     inputEl.value = item.paid;
-    metaEl.textContent = `Truck Hire: ${formatINR(item.ownerFreight)} | Current Due: ${formatINR(calcOwnerDue(item))}`;
+    metaEl.textContent = `Net Hire (less TDS): ${formatINR(calcNetOwnerPayable(item))} | Balance Due: ${formatINR(calcOwnerDue(item))}`;
   }
 
   document.getElementById("quickPayModal").classList.add("active");
@@ -1092,33 +1306,56 @@ function submitQuickPay() {
   triggerToast("Ledger updated");
 }
 
-function getEwayStatusTag(b) {
-  if (!b.ewayExpiry) return "";
-  const exp = new Date(b.ewayExpiry + "T23:59:59");
+function checkDocumentExpiries() {
+  const alerts = [];
   const now = new Date();
-  const diffDays = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+  
+  fleetData.forEach(b => {
+    const checks = [
+      { name: "E-Way Bill", val: b.ewayExpiry, ref: b.lr },
+      { name: "Fitness", val: b.fitnessExpiry, ref: b.vehicleNo },
+      { name: "National Permit", val: b.permitExpiry, ref: b.vehicleNo },
+      { name: "Insurance/PUC", val: b.insuranceExpiry, ref: b.vehicleNo },
+      { name: "Driver DL", val: b.dlExpiry, ref: b.driver || b.vehicleNo }
+    ];
 
-  if (diffDays < 0) {
-    return `<span class="badge eway-alert"><i class="fa-solid fa-triangle-exclamation"></i> E-Way Expired</span>`;
-  } else if (diffDays <= 1) {
-    return `<span class="badge eway-alert"><i class="fa-solid fa-clock"></i> E-Way Expiring</span>`;
+    checks.forEach(c => {
+      if (!c.val) return;
+      const exp = new Date(c.val + "T23:59:59");
+      const diffDays = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+      if (diffDays < 0) {
+        alerts.push(`<strong>${c.name} EXPIRED:</strong> ${escapeHtml(c.ref)} (${escapeHtml(c.val)})`);
+      } else if (diffDays <= 7) {
+        alerts.push(`<strong>${c.name} Expiring in ${diffDays}d:</strong> ${escapeHtml(c.ref)} (${escapeHtml(c.val)})`);
+      }
+    });
+  });
+
+  const banner = document.getElementById("complianceBanner");
+  const items = document.getElementById("complianceBannerItems");
+  if (banner && items) {
+    if (alerts.length) {
+      items.innerHTML = alerts.join("<br>");
+      banner.style.display = "block";
+    } else {
+      banner.style.display = "none";
+    }
   }
-  return `<span class="badge eway-ok"><i class="fa-solid fa-receipt"></i> E-Way Active</span>`;
 }
 
 function buildDesktopTable(records) {
-  if (!records.length) return `<div style="text-align:center;padding:30px;color:#64748b">No bookings located.</div>`;
+  if (!records.length) return `<div style="text-align:center;padding:30px;color:#64748b">No consignments found.</div>`;
   return `
     <table>
       <thead>
         <tr>
           <th>LR Number</th>
           <th>Date</th>
-          <th>Customer / Party</th>
-          <th>Route Details</th>
-          <th>Vehicle / Driver</th>
-          <th>Freight</th>
-          <th>Customer Due</th>
+          <th>Party & GST</th>
+          <th>Route</th>
+          <th>Vehicle & Driver</th>
+          <th>Billed Total</th>
+          <th>Party Due</th>
           <th>POD</th>
           <th>Status</th>
           <th style="text-align:right">Actions</th>
@@ -1128,24 +1365,22 @@ function buildDesktopTable(records) {
         ${records.map(b => `
           <tr>
             <td>
-              <strong style="color:var(--accent);font-family:var(--font-mono)">${escapeHtml(b.lr)}</strong>
-              <br>${getEwayStatusTag(b)}
+              <strong style="color:var(--accent);font-family:var(--font-mono)">${escapeHtml(b.lr)}</strong>${b.ewayBill ? `<br><small style="color:#64748b">EWB: ${escapeHtml(b.ewayBill)}</small>` : ''}
             </td>
             <td>${escapeHtml(b.bookingDate)}</td>
             <td>
-              <strong>${escapeHtml(b.customer)}</strong>${b.customerMobile ? `<br><a href="tel:${escapeHtml(b.customerMobile)}" style="color:#64748b;text-decoration:none"><i class="fa-solid fa-phone" style="font-size:10px"></i> ${escapeHtml(b.customerMobile)}</a>` : ''}
+              <strong>${escapeHtml(b.customer)}</strong>${b.gstin ? `<br><small style="font-family:var(--font-mono);color:#64748b">${escapeHtml(b.gstin)}</small>` : ''}
             </td>
             <td>
               ${escapeHtml(b.pickup)} ➔${escapeHtml(b.destination)}
               <br><small style="color:#64748b">${escapeHtml(b.goods)}</small>
             </td>
             <td>
-              <strong style="font-family:var(--font-mono)">${escapeHtml(b.vehicleNo || 'ALLOCATING')}</strong>
-${b.driverMobile ? `<br><a href="tel:${escapeHtml(b.driverMobile)}" style="font-size:11px;color:#64748b;text-decoration:none"><i class="fa-solid fa-phone" style="font-size:9px"></i> ${escapeHtml(b.driver)}</a>` : ''}
+              <strong style="font-family:var(--font-mono)">${escapeHtml(b.vehicleNo)}</strong>${b.driver ? `<br><small style="color:#64748b">${escapeHtml(b.driver)}</small>` : ''}
             </td>
-            <td><strong>${formatINR(b.freight)}</strong></td>
+            <td><strong>${formatINR(calcTotalBilled(b))}</strong></td>
             <td style="color:${calcCustomerDue(b) > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">
-              ${formatINR(calcCustomerDue(b))}${calcCustomerDue(b) > 0 ? `<button class="btn secondary sm" style="padding:2px 6px;margin-left:4px" onclick="showUpiQr('${b.id}')"><i class="fa-solid fa-qrcode"></i></button>` : ''}
+              ${formatINR(calcCustomerDue(b))}
             </td>
             <td>
               ${b.podImage ? `<button class="btn secondary sm" onclick="viewPodImage('${b.id}')"><i class="fa-solid fa-receipt text-success"></i> View</button>` : '<span style="color:#64748b;font-size:11px">Pending</span>'}
@@ -1159,8 +1394,9 @@ ${b.driverMobile ? `<br><a href="tel:${escapeHtml(b.driverMobile)}" style="font-
             </td>
             <td style="text-align:right">
               <div style="display:inline-flex;gap:4px">
+                <button class="btn secondary sm" onclick="sendWhatsAppDriver('${b.id}')" title="Driver Slip"><i class="fa-solid fa-truck" style="color:var(--accent)"></i></button>
+                <button class="btn secondary sm" onclick="sendWhatsAppReminder('${b.id}')" title="Party Invoice"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
                 <button class="btn secondary sm" onclick="printStandardBilti('${b.id}')" title="Print Bilti"><i class="fa-solid fa-print"></i></button>
-                <button class="btn secondary sm" onclick="sendWhatsAppBilti('${b.id}')"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
                 <button class="btn secondary sm" onclick="editConsignment('${b.id}')"><i class="fa-solid fa-pen"></i></button>
                 <button class="btn danger sm" onclick="removeConsignment('${b.id}')"><i class="fa-solid fa-trash"></i></button>
               </div>
@@ -1173,7 +1409,7 @@ ${b.driverMobile ? `<br><a href="tel:${escapeHtml(b.driverMobile)}" style="font-
 }
 
 function buildMobileCards(records) {
-  if (!records.length) return `<div style="text-align:center;padding:24px;color:#64748b">No bookings recorded.</div>`;
+  if (!records.length) return `<div style="text-align:center;padding:24px;color:#64748b">No consignments recorded.</div>`;
   return records.map(b => {
     const due = calcCustomerDue(b);
     const prof = calcProfit(b);
@@ -1190,7 +1426,6 @@ function buildMobileCards(records) {
                 `<option value="${s}" ${b.status === s ? 'selected' : ''}>${s}</option>`
               ).join("")}
             </select>
-            <div style="margin-top:4px">${getEwayStatusTag(b)}</div>
           </div>
         </div>
 
@@ -1204,34 +1439,32 @@ function buildMobileCards(records) {
             <i class="fa-solid fa-arrow-right" style="font-size:10px;color:#64748b"></i>
             <span>${escapeHtml(b.destination)}</span>
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b">
-            <span><i class="fa-solid fa-truck" style="font-size:10px"></i> ${escapeHtml(b.vehicleNo || 'No Rig')} · ${escapeHtml(b.goods)}</span>
-            ${b.driverMobile ? `<a href="tel:${escapeHtml(b.driverMobile)}" style="color:var(--accent);text-decoration:none"><i class="fa-solid fa-phone"></i> Driver</a>` : ''}
+          <div style="font-size:12px;color:#64748b">
+            <i class="fa-solid fa-truck"></i> ${escapeHtml(b.vehicleNo)} · ${escapeHtml(b.goods)}
           </div>
         </div>
 
         <div class="trip-card-metrics">
           <div>
-            <span>Freight</span>
-            <strong>${formatINR(b.freight)}</strong>
+            <span>Billed</span>
+            <strong>${formatINR(calcTotalBilled(b))}</strong>
           </div>
           <div>
             <span>Party Due</span>
             <strong style="color:${due > 0 ? 'var(--danger)' : 'var(--success)'}">${formatINR(due)}</strong>
           </div>
           <div>
-            <span>Margin</span>
+            <span>Net Margin</span>
             <strong style="color:${prof >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatINR(prof)}</strong>
           </div>
         </div>
 
         <div class="trip-card-actions">
-          ${due > 0 ? `<button class="btn sm" onclick="showUpiQr('${b.id}')"><i class="fa-solid fa-qrcode"></i> Pay QR</button>` : ''}
-          ${b.podImage ? `<button class="btn secondary sm" onclick="viewPodImage('${b.id}')"><i class="fa-solid fa-receipt"></i> POD</button>` : ''}
+          <button class="btn secondary sm" onclick="sendWhatsAppDriver('${b.id}')"><i class="fa-solid fa-truck"></i> Driver</button>
+          <button class="btn secondary sm" onclick="sendWhatsAppReminder('${b.id}')"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i> Bill</button>
           <button class="btn secondary sm" onclick="printStandardBilti('${b.id}')"><i class="fa-solid fa-print"></i> Bilti</button>
-          <button class="btn secondary sm" onclick="sendWhatsAppBilti('${b.id}')"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></button>
+          ${due > 0 ? `<button class="btn sm" onclick="showUpiQr('${b.id}')"><i class="fa-solid fa-qrcode"></i> QR</button>` : ''}
           <button class="btn secondary sm" onclick="editConsignment('${b.id}')"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn danger sm" onclick="removeConsignment('${b.id}')"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>
     `;
@@ -1244,7 +1477,7 @@ function renderBookingsTable() {
 
   const list = [...fleetData]
     .filter(b => !filterStatus || b.status === filterStatus)
-    .filter(b => [b.lr, b.customer, b.pickup, b.destination, b.vehicleNo, b.goods, b.ewayBill]
+    .filter(b => [b.lr, b.customer, b.pickup, b.destination, b.vehicleNo, b.goods, b.ewayBill, b.driver, b.owner]
       .some(k => String(k || "").toLowerCase().includes(query)))
     .sort((a, b) => String(b.bookingDate).localeCompare(String(a.bookingDate)));
 
@@ -1277,21 +1510,22 @@ function renderCustomerMaster() {
   const group = {};
 
   fleetData.forEach(b => {
-    const rawName = b.customer || "General Walk-In";
+    const rawName = b.customer || "General Consignor";
     const key = rawName.trim().toLowerCase();
     if (!group[key]) {
-      group[key] = { name: rawName, mobile: b.customerMobile || "", trips: 0, freight: 0, received: 0, balance: 0 };
+      group[key] = { name: rawName, mobile: b.customerMobile || "", gstin: b.gstin || "", trips: 0, billed: 0, received: 0, balance: 0 };
     }
     const c = group[key];
     c.trips += 1;
-    c.freight += parseValidNum(b.freight);
+    c.billed += calcTotalBilled(b);
     c.received += totalCustomerReceived(b);
     c.balance += calcCustomerDue(b);
     if (!c.mobile && b.customerMobile) c.mobile = b.customerMobile;
+    if (!c.gstin && b.gstin) c.gstin = b.gstin;
   });
 
   const dataset = Object.values(group)
-    .filter(c => (c.name + " " + c.mobile).toLowerCase().includes(q))
+    .filter(c => (c.name + " " + c.mobile + " " + c.gstin).toLowerCase().includes(q))
     .sort((a, b) => b.balance - a.balance);
 
   const dTable = document.getElementById("customerMasterDesktopTable");
@@ -1301,9 +1535,10 @@ function renderCustomerMaster() {
         <thead>
           <tr>
             <th>Client Name</th>
+            <th>GSTIN</th>
             <th>Mobile</th>
             <th>Trips</th>
-            <th>Billed</th>
+            <th>Total Billed</th>
             <th>Received</th>
             <th>Balance Due</th>
           </tr>
@@ -1312,16 +1547,17 @@ function renderCustomerMaster() {
           ${dataset.map(c => `
             <tr>
               <td><strong>${escapeHtml(c.name)}</strong></td>
+              <td><span style="font-family:var(--font-mono)">${escapeHtml(c.gstin || '-')}</span></td>
               <td>${escapeHtml(c.mobile || '-')}</td>
               <td>${c.trips}</td>
-              <td>${formatINR(c.freight)}</td>
+              <td>${formatINR(c.billed)}</td>
               <td style="color:var(--success)">${formatINR(c.received)}</td>
               <td style="color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'};font-weight:700">${formatINR(c.balance)}</td>
             </tr>
           `).join("")}
         </tbody>
       </table>
-    ` : `<div style="text-align:center;padding:24px;color:#64748b">No clients located.</div>`;
+    ` : `<div style="text-align:center;padding:24px;color:#64748b">No clients found.</div>`;
   }
 
   const mList = document.getElementById("customerMasterMobileList");
@@ -1332,9 +1568,9 @@ function renderCustomerMaster() {
           <strong>${escapeHtml(c.name)}</strong>
           <span style="font-size:12px;color:#64748b">${c.trips} Loads</span>
         </div>
-        <div style="font-size:12px;color:#64748b">${escapeHtml(c.mobile || 'No Contact')}</div>
+        <div style="font-size:12px;color:#64748b">${escapeHtml(c.mobile || 'No Phone')} · GST: ${escapeHtml(c.gstin || 'Unreg')}</div>
         <div class="trip-card-metrics">
-          <div><span>Billed</span><strong>${formatINR(c.freight)}</strong></div>
+          <div><span>Billed</span><strong>${formatINR(c.billed)}</strong></div>
           <div><span>Received</span><strong style="color:var(--success)">${formatINR(c.received)}</strong></div>
           <div><span>Balance</span><strong style="color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'}">${formatINR(c.balance)}</strong></div>
         </div>
@@ -1343,8 +1579,84 @@ function renderCustomerMaster() {
   }
 }
 
+// TRUCK OWNER / BROKER KHATA
+function renderOwnerMaster() {
+  const q = (document.getElementById("ownerSearchInput")?.value || "").toLowerCase();
+  const group = {};
+
+  fleetData.forEach(b => {
+    const rawName = b.owner || "Direct Truck Fleet";
+    const key = rawName.trim().toLowerCase();
+    if (!group[key]) {
+      group[key] = { name: rawName, mobile: b.ownerMobile || "", trips: 0, grossHire: 0, tds: 0, netHire: 0, paid: 0, balance: 0 };
+    }
+    const o = group[key];
+    o.trips += 1;
+    o.grossHire += parseValidNum(b.ownerFreight);
+    o.tds += calcOwnerTDS(b);
+    o.netHire += calcNetOwnerPayable(b);
+    o.paid += parseValidNum(b.paid);
+    o.balance += calcOwnerDue(b);
+    if (!o.mobile && b.ownerMobile) o.mobile = b.ownerMobile;
+  });
+
+  const dataset = Object.values(group)
+    .filter(o => (o.name + " " + o.mobile).toLowerCase().includes(q))
+    .sort((a, b) => b.balance - a.balance);
+
+  const dTable = document.getElementById("ownerMasterDesktopTable");
+  if (dTable) {
+    dTable.innerHTML = dataset.length ? `
+      <table>
+        <thead>
+          <tr>
+            <th>Transporter / Supplier</th>
+            <th>Contact</th>
+            <th>Trips</th>
+            <th>Gross Hire</th>
+            <th>TDS 194C Cut</th>
+            <th>Paid Advance/Fuel</th>
+            <th>Balance Payable</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${dataset.map(o => `
+            <tr>
+              <td><strong>${escapeHtml(o.name)}</strong></td>
+              <td>${escapeHtml(o.mobile || '-')}</td>
+              <td>${o.trips}</td>
+              <td>${formatINR(o.grossHire)}</td>
+              <td style="color:#64748b">${formatINR(o.tds)}</td>
+              <td style="color:var(--success)">${formatINR(o.paid)}</td>
+              <td style="color:${o.balance > 0 ? 'var(--warning)' : 'var(--success)'};font-weight:700">${formatINR(o.balance)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    ` : `<div style="text-align:center;padding:24px;color:#64748b">No truck suppliers found.</div>`;
+  }
+
+  const mList = document.getElementById("ownerMasterMobileList");
+  if (mList) {
+    mList.innerHTML = dataset.map(o => `
+      <div class="trip-card">
+        <div style="display:flex;justify-content:space-between">
+          <strong>${escapeHtml(o.name)}</strong>
+          <span style="font-size:12px;color:#64748b">${o.trips} Trips</span>
+        </div>
+        <div style="font-size:12px;color:#64748b">${escapeHtml(o.mobile || 'No Contact')} · TDS Cut: ${formatINR(o.tds)}</div>
+        <div class="trip-card-metrics">
+          <div><span>Gross Hire</span><strong>${formatINR(o.grossHire)}</strong></div>
+          <div><span>Paid</span><strong style="color:var(--success)">${formatINR(o.paid)}</strong></div>
+          <div><span>Owed</span><strong style="color:${o.balance > 0 ? 'var(--warning)' : 'var(--success)'}">${formatINR(o.balance)}</strong></div>
+        </div>
+      </div>
+    `).join("");
+  }
+}
+
 function renderLedgerOverview() {
-  if (document.getElementById("accGrossFreight")) document.getElementById("accGrossFreight").textContent = formatINR(fleetData.reduce((acc, b) => acc + parseValidNum(b.freight), 0));
+  if (document.getElementById("accGrossFreight")) document.getElementById("accGrossFreight").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcTotalBilled(b), 0));
   if (document.getElementById("accRealizedCollection")) document.getElementById("accRealizedCollection").textContent = formatINR(fleetData.reduce((acc, b) => acc + totalCustomerReceived(b), 0));
   if (document.getElementById("accOutstandingReceivables")) document.getElementById("accOutstandingReceivables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcCustomerDue(b), 0));
   if (document.getElementById("accTruckOwnerPayables")) document.getElementById("accTruckOwnerPayables").textContent = formatINR(fleetData.reduce((acc, b) => acc + calcOwnerDue(b), 0));
@@ -1353,7 +1665,7 @@ function renderLedgerOverview() {
   const ownerDueList = fleetData.filter(b => calcOwnerDue(b) > 0);
 
   function buildDues(list, type) {
-    if (!list.length) return `<p style="padding:12px;color:#64748b;font-size:13px">All payments cleared.</p>`;
+    if (!list.length) return `<p style="padding:12px;color:#64748b;font-size:13px">All ledger balances cleared.</p>`;
     return list.map(b => `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
         <div>
@@ -1394,7 +1706,9 @@ function renderBusinessReports() {
   });
 
   const freightSum = filtered.reduce((s, b) => s + parseValidNum(b.freight), 0);
-  const outflowSum = filtered.reduce((s, b) => s + parseValidNum(b.ownerFreight) + parseValidNum(b.expenses), 0);
+  const hireSum = filtered.reduce((s, b) => s + parseValidNum(b.ownerFreight), 0);
+  const kharchaSum = filtered.reduce((s, b) => s + calcTotalTripExpenses(b), 0);
+  const outflowSum = hireSum + kharchaSum;
 
   if (document.getElementById("repTripVolume")) document.getElementById("repTripVolume").textContent = filtered.length;
   if (document.getElementById("repFreightTotal")) document.getElementById("repFreightTotal").textContent = formatINR(freightSum);
@@ -1407,24 +1721,26 @@ function renderBusinessReports() {
   const summary = document.getElementById("reportAnalyticalSummary");
   if (summary) {
     summary.innerHTML = `
-      <div style="padding:12px;border:1px solid var(--border);border-radius:var(--radius);margin-top:12px;font-size:13px;line-height:1.8">
-        <div>Booked Trips: <strong>${statuses.Booked}</strong></div>
-        <div>In Transit: <strong>${statuses['In Transit']}</strong></div>
-        <div>Delivered (POD): <strong>${statuses.Delivered}</strong></div>
-        <div>Void / Cancelled: <strong>${statuses.Cancelled}</strong></div>
+      <div style="padding:14px;border:1px solid var(--border);border-radius:var(--radius);margin-top:12px;font-size:13px;line-height:1.9">
+        <div><strong>Dispatches Breakdown:</strong> Booked (${statuses.Booked}) | Transit (${statuses['In Transit']}) | Delivered (${statuses.Delivered}) | Void (${statuses.Cancelled})</div>
+        <div><strong>Carrier Direct Hire:</strong> ${formatINR(hireSum)}</div>
+        <div><strong>Trip En-route Kharcha (Fuel/Tolls/Bhatta):</strong> ${formatINR(kharchaSum)}</div>
       </div>
     `;
   }
 }
 
 function renderAllViews() {
+  checkDocumentExpiries();
   renderDashboardView();
   renderBookingsTable();
   renderCustomerMaster();
+  renderOwnerMaster();
   renderLedgerOverview();
   renderBusinessReports();
 }
 
+// BILTI / LORRY RECEIPT PRINT
 function printStandardBilti(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
@@ -1438,32 +1754,32 @@ function printStandardBilti(id) {
       <div class="bilti-header">
         <div>
           <h2 style="font-size:18px;margin:0">SK LOGISTICS</h2>
-          <small>Fleet Transport & Cargo Movers</small>
+          <small>Fleet Transport, Container & Heavy Cargo Carrier</small>
         </div>
         <div style="text-align:right">
           <strong>${copyName}</strong><br>
-          <span>LR: ${escapeHtml(b.lr)}</span><br>
+          <span>LR No: ${escapeHtml(b.lr)}</span><br>
           <small>Date: ${escapeHtml(b.bookingDate)}</small>
         </div>
       </div>
       <table class="grid-table">
         <tr>
-          <td><strong>Party (Sender):</strong> ${escapeHtml(b.customer)}<br>GSTIN: ${escapeHtml(b.gstin || 'N/A')}</td>
+          <td><strong>Consignor (Sender):</strong> ${escapeHtml(b.customer)}<br>GSTIN: ${escapeHtml(b.gstin || 'N/A')}</td>
           <td><strong>Route:</strong> ${escapeHtml(b.pickup)} ➔ ${escapeHtml(b.destination)}<br>E-Way Bill: ${escapeHtml(b.ewayBill || 'N/A')}</td>
         </tr>
         <tr>
-          <td><strong>Vehicle:</strong> ${escapeHtml(b.vehicleNo || 'ALLOCATING')} (${escapeHtml(b.vehicleType)})</td>
-          <td><strong>Cargo:</strong> ${escapeHtml(b.goods)} (${escapeHtml(b.weight || 'Std Load')})</td>
+          <td><strong>Truck No:</strong> ${escapeHtml(b.vehicleNo)} (${escapeHtml(b.vehicleType)})<br>Driver: ${escapeHtml(b.driver || '-')} (${escapeHtml(b.driverMobile || '-')})</td>
+          <td><strong>Cargo / Commodity:</strong> ${escapeHtml(b.goods)}<br>Weight / Units: ${escapeHtml(b.weight || 'Std')}</td>
         </tr>
         <tr>
-          <td><strong>Freight:</strong> ${formatINR(b.freight)}</td>
-          <td><strong>Balance Due:</strong> ${formatINR(calcCustomerDue(b))}</td>
+          <td><strong>Freight Base:</strong> ${formatINR(b.freight)}<br><strong>GST Treatment:</strong> ${escapeHtml(b.gstType || 'RCM 5%')}</td>
+          <td><strong>Total Billed Freight:</strong> ${formatINR(calcTotalBilled(b))}<br><strong>Balance Due:</strong> ${formatINR(calcCustomerDue(b))}</td>
         </tr>
       </table>
       <div class="bilti-signatures">
         <div class="signature-line">Consignor Signature</div>
         <div class="signature-line">Driver Signature</div>
-        <div class="signature-line">SK Logistics Authorized</div>
+        <div class="signature-line">For SK Logistics</div>
       </div>
     </div>
   `).join("");
@@ -1475,17 +1791,17 @@ function printStandardBilti(id) {
 
 function exportCSV() {
   if (!fleetData.length) { alert("No data to export"); return; }
-  const headers = ["LR", "Date", "Customer", "EWayBill", "Pickup", "Destination", "Goods", "Freight", "Customer Due", "Profit", "Status"];
+  const headers = ["LR", "Date", "Customer", "GSTIN", "Pickup", "Destination", "Goods", "VehicleNo", "Freight", "TotalBilled", "CustomerDue", "CarrierHire", "NetProfit", "Status"];
   const rows = fleetData.map(b => [
-    b.lr, b.bookingDate, `"${b.customer}"`, `"${b.ewayBill || ''}"`, `"${b.pickup}"`, `"${b.destination}"`, `"${b.goods}"`,
-    b.freight, calcCustomerDue(b), calcProfit(b), b.status
+    b.lr, b.bookingDate, `"${b.customer}"`, `"${b.gstin || ''}"`, `"${b.pickup}"`, `"${b.destination}"`, `"${b.goods}"`,
+    b.vehicleNo, b.freight, calcTotalBilled(b), calcCustomerDue(b), b.ownerFreight, calcProfit(b), b.status
   ]);
   const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
   const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `SK-Logistics-Ledger-${getTodayDate()}.csv`;
+  a.download = `SK-Logistics-Report-${getTodayDate()}.csv`;
   document.body.appendChild(a);
   a.click();
 }
@@ -1494,7 +1810,7 @@ function exportDataBackup() {
   const blob = new Blob([JSON.stringify(fleetData, null, 2)], {type: "application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `SK-Logistics-FullDB-${getTodayDate()}.json`;
+  a.download = `SK-Logistics-Backup-${getTodayDate()}.json`;
   document.body.appendChild(a);
   a.click();
 }
@@ -1510,7 +1826,7 @@ function importData(e) {
         fleetData = data;
         savePersistence();
         renderAllViews();
-        triggerToast("Ledger restored");
+        triggerToast("Data restored");
       }
     } catch (err) {
       alert("Invalid backup file: " + err.message);
@@ -1519,7 +1835,6 @@ function importData(e) {
   reader.readAsText(file);
 }
 
-// IMMEDIATE SELF-EXECUTION
 window.onload = function() {
   loadPersistence();
   resetEntryForm();
