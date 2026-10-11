@@ -206,7 +206,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
       </div>
     </div>
     <div class="header-actions">
-      <!-- WORKSHOP & FLEET OPERATIONS LINK -->
+      <!-- WORKSHOP LINK -->
       <a href="fleet_operations.html" class="btn secondary sm" style="text-decoration:none" title="Workshop & Fuel Hub">
         <i class="fa-solid fa-wrench"></i> Workshop Hub
       </a>
@@ -220,7 +220,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     </div>
   </div>
 </header>
-
 
 <main class="layout-container no-print">
   <nav class="nav-pills">
@@ -323,7 +322,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
         <input type="hidden" id="entry_podImage">
         
         <div class="form-grid">
-          <!-- 1. Party & Compliance -->
           <div class="form-title"><i class="fa-solid fa-shield-halved"></i> 1. Consignor & E-Way Compliance</div>
           <div class="field">
             <label>Consignment Date *</label>
@@ -339,7 +337,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
           </div>
           <div class="field">
             <label>Party GSTIN</label>
-            <input type="text" id="entry_gstin" placeholder="07AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase" oninput="calcGSTSplit()">
+            <input type="text" id="entry_gstin" placeholder="07AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase">
           </div>
           <div class="field">
             <label>E-Way Bill Number</label>
@@ -350,7 +348,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="date" id="entry_ewayExpiry">
           </div>
 
-          <!-- 2. Route & Cargo -->
           <div class="form-title"><i class="fa-solid fa-route"></i> 2. Origin, Route & Cargo</div>
           <div class="field">
             <label>Loading Hub (Pickup) *</label>
@@ -385,7 +382,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="text" id="entry_vehicleNo" placeholder="HR55AB1234" style="text-transform:uppercase" required>
           </div>
 
-          <!-- 3. Fleet Carrier & Documents Expiry -->
           <div class="form-title"><i class="fa-solid fa-file-contract"></i> 3. Fleet Carrier & Document Expiries</div>
           <div class="field">
             <label>Driver In-Charge</label>
@@ -429,7 +425,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             </select>
           </div>
 
-          <!-- 4. Freight & Tax Commercials -->
           <div class="form-title"><i class="fa-solid fa-indian-rupee-sign"></i> 4. Party Freight & GST Billing</div>
           <div class="field">
             <label>Freight Base (Taxable) (₹) *</label>
@@ -461,7 +456,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="number" id="entry_unloadingAdvance" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
 
-          <!-- 5. Carrier Hire & TDS -->
           <div class="form-title"><i class="fa-solid fa-hand-holding-dollar"></i> 5. Carrier Hire & TDS 194C</div>
           <div class="field">
             <label>Agreed Truck Hire Cost (₹)</label>
@@ -488,7 +482,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="number" id="entry_paid" oninput="recalculateFormMargins()" step="1" min="0" value="0">
           </div>
 
-          <!-- 6. Detailed Trip Kharcha -->
           <div class="form-title"><i class="fa-solid fa-gas-pump"></i> 6. Itemized Trip Kharcha (Fuel & En-Route)</div>
           <div class="field">
             <label>Diesel Liters</label>
@@ -523,7 +516,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
             <input type="number" id="entry_expenses" readonly style="background:#f1f5f9;font-weight:700">
           </div>
 
-          <!-- 7. POD Slip -->
           <div class="form-title"><i class="fa-solid fa-file-arrow-up"></i> 7. Proof of Delivery (POD) Slip</div>
           <div class="field full">
             <input type="file" id="podFileInput" accept="image/*" onchange="handlePodUpload(event)">
@@ -561,7 +553,7 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
     </div>
   </section>
 
-  <!-- TRUCK SUPPLIERS (OWNERS KHATA) -->
+  <!-- TRUCK SUPPLIERS -->
   <section id="owners" class="page">
     <div class="panel">
       <div class="panel-header">
@@ -647,7 +639,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   </section>
 </main>
 
-<!-- Bottom Nav -->
 <nav class="bottom-nav no-print">
   <div class="bottom-nav-inner">
     <button type="button" class="bnav-item active" id="btn_nav_dashboard" onclick="navigateTo('dashboard')">
@@ -673,10 +664,8 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   </div>
 </nav>
 
-<!-- PRINT STATION -->
 <div id="printStation" class="hidden"></div>
 
-<!-- DYNAMIC UPI QR MODAL -->
 <div class="modal-overlay" id="upiModal">
   <div class="modal-card">
     <div class="panel-header">
@@ -688,14 +677,10 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
       <strong id="upiAmountLabel" style="font-size:18px;font-family:var(--font-mono)">₹0</strong>
       <span id="upiPartyLabel" style="font-size:12px;color:#64748b"></span>
     </div>
-    <div style="font-size:11px;color:#64748b;text-align:center;margin:12px 0">
-      Accepts PhonePe, Google Pay, Paytm, BHIM or any UPI banking app.
-    </div>
-    <button class="btn secondary" style="width:100%" onclick="closeModal('upiModal')">Close</button>
+    <button class="btn secondary" style="width:100%;margin-top:12px" onclick="closeModal('upiModal')">Close</button>
   </div>
 </div>
 
-<!-- POD PREVIEW MODAL -->
 <div class="modal-overlay" id="podModal">
   <div class="modal-card">
     <div class="panel-header">
@@ -708,7 +693,6 @@ td{padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
   </div>
 </div>
 
-<!-- QUICK LEDGER SETTLEMENT MODAL -->
 <div class="modal-overlay" id="quickPayModal">
   <div class="modal-card">
     <div class="panel-header">
@@ -802,12 +786,11 @@ function savePersistence() {
   }
 }
 
-// FINANCIAL CALCULATION SUITE
 function calcTotalBilled(b) {
   const base = parseValidNum(b.freight);
   if (b.gstType === "forward_12") return base + Math.round(base * 0.12);
   if (b.gstType === "forward_5") return base + Math.round(base * 0.05);
-  return base; // RCM or exempt
+  return base;
 }
 
 function totalCustomerReceived(b) {
@@ -842,7 +825,7 @@ function calcTotalTripExpenses(b) {
 }
 
 function calcProfit(b) {
-  const netRevenue = parseValidNum(b.freight); // excluding external GST pass-through
+  const netRevenue = parseValidNum(b.freight);
   return netRevenue - parseValidNum(b.ownerFreight) - calcTotalTripExpenses(b);
 }
 
@@ -1018,7 +1001,6 @@ function recalculateFormMargins() {
   if (tdsAmtEl) tdsAmtEl.value = tdsAmt;
   if (netHireEl) netHireEl.value = netHire;
 
-  // Itemized Kharcha
   const dieselCost = parseValidNum(document.getElementById("entry_dieselCost")?.value);
   const tollCost = parseValidNum(document.getElementById("entry_tollCost")?.value);
   const bhatta = parseValidNum(document.getElementById("entry_driverBhatta")?.value);
@@ -1209,7 +1191,6 @@ function viewPodImage(id) {
   document.getElementById("podModal").classList.add("active");
 }
 
-// DRIVER WHATSAPP DISPATCH SLIP
 function sendWhatsAppDriver(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
@@ -1237,7 +1218,6 @@ Drive safely and ensure delivery receipt (POD) signature.`;
   window.open(url, '_blank');
 }
 
-// CLIENT INVOICE & PAYMENT REMINDER
 function sendWhatsAppReminder(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
@@ -1378,7 +1358,7 @@ function buildDesktopTable(records) {
               <strong>${escapeHtml(b.customer)}</strong>${b.gstin ? `<br><small style="font-family:var(--font-mono);color:#64748b">${escapeHtml(b.gstin)}</small>` : ''}
             </td>
             <td>
-              ${escapeHtml(b.pickup)} ➔${escapeHtml(b.destination)}
+              ${escapeHtml(b.pickup)} ➔ ${escapeHtml(b.destination)}
               <br><small style="color:#64748b">${escapeHtml(b.goods)}</small>
             </td>
             <td>
@@ -1585,7 +1565,6 @@ function renderCustomerMaster() {
   }
 }
 
-// TRUCK OWNER / BROKER KHATA
 function renderOwnerMaster() {
   const q = (document.getElementById("ownerSearchInput")?.value || "").toLowerCase();
   const group = {};
@@ -1746,7 +1725,6 @@ function renderAllViews() {
   renderBusinessReports();
 }
 
-// BILTI / LORRY RECEIPT PRINT
 function printStandardBilti(id) {
   const b = fleetData.find(x => String(x.id) === String(id));
   if (!b) return;
